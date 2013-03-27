@@ -1,0 +1,12 @@
+programa prueba {
+
+	crear texto mak;
+
+	funcion entero mak(entero hola){
+		crear decimal sebas;
+		imprimir("hola");
+		regresar 3
+	}
+
+	imprimir("hola");
+}
