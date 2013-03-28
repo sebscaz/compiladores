@@ -4,8 +4,12 @@ programa prueba {
 	crear booleano what;
 
 	funcion entero mak(entero hola){
-		crear decimal sebas;
+		crear entero sebas;
+	
+		sebas := 2 + 2 / 2 * 3 - 4;
+		
 		imprimir("hola");
+		
 		regresar 3
 	}
 

@@ -1022,7 +1022,7 @@ YY_RULE_SETUP
 case 25:
 YY_RULE_SETUP
 #line 58 "lexico.l"
-{printf("_id  \n "); yylval.string = strdup(yytext); return(ctetexto);}
+{printf("_cte texto  \n "); yylval.string = strdup(yytext); return(ctetexto);}
 	YY_BREAK
 case 26:
 YY_RULE_SETUP

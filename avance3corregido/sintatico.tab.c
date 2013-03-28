@@ -74,6 +74,9 @@
 #include "hash.c"
 #include "pila.c"
 
+void checarOperando1();
+void checarOperando2(); 
+
 int yystopparser=0;
 
 struct StrHashTable tbl = {{0},NULL,NULL,foo_strhash,strcmp};
@@ -92,7 +95,7 @@ ptr pilaTipos=NULL;
 
 
 /* Line 268 of yacc.c  */
-#line 96 "sintatico.tab.c"
+#line 99 "sintatico.tab.c"
 
 /* Enabling traces.  */
 #ifndef YYDEBUG
@@ -190,12 +193,12 @@ typedef union YYSTYPE
 {
 
 /* Line 293 of yacc.c  */
-#line 26 "sintatico.y"
+#line 29 "sintatico.y"
 int cteint; float ctefloat; int cteboolean; char *string;
 
 
 /* Line 293 of yacc.c  */
-#line 199 "sintatico.tab.c"
+#line 202 "sintatico.tab.c"
 } YYSTYPE;
 # define YYSTYPE_IS_TRIVIAL 1
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */
@@ -207,7 +210,7 @@ int cteint; float ctefloat; int cteboolean; char *string;
 
 
 /* Line 343 of yacc.c  */
-#line 211 "sintatico.tab.c"
+#line 214 "sintatico.tab.c"
 
 #ifdef short
 # undef short
@@ -548,19 +551,19 @@ static const yytype_int16 yyrhs[] =
 /* YYRLINE[YYN] -- source line where rule number YYN was defined.  */
 static const yytype_uint16 yyrline[] =
 {
-       0,   101,   101,   102,   103,   104,   105,   106,   107,   110,
-     111,   112,   113,   115,   116,   117,   119,   120,   121,   122,
-     123,   124,   125,   127,   128,   129,   130,   131,   132,   133,
-     134,   135,   136,   137,   138,   141,   142,   143,   146,   153,
-     154,   157,   158,   159,   162,   163,   164,   165,   166,   167,
-     168,   169,   176,   178,   180,   182,   183,   187,   189,   195,
-     196,   197,   198,   199,   200,   201,   203,   204,   205,   206,
-     209,   210,   211,   212,   213,   216,   217,   218,   219,   220,
-     221,   222,   224,   224,   225,   226,   227,   228,   230,   230,
-     231,   232,   233,   234,   236,   236,   237,   238,   239,   240,
-     243,   244,   245,   246,   248,   250,   251,   252,   253,   255,
-     257,   260,   262,   264,   266,   268,   270,   272,   274,   276,
-     278,   279,   280
+       0,   104,   104,   105,   106,   107,   108,   109,   110,   113,
+     114,   115,   116,   118,   119,   120,   122,   123,   124,   125,
+     126,   127,   128,   130,   131,   132,   133,   134,   135,   136,
+     137,   138,   139,   140,   141,   144,   145,   146,   149,   156,
+     157,   160,   161,   162,   165,   166,   167,   168,   169,   170,
+     171,   172,   179,   181,   183,   185,   186,   190,   192,   198,
+     199,   200,   201,   202,   203,   204,   206,   207,   208,   209,
+     212,   213,   214,   215,   216,   219,   220,   221,   222,   223,
+     224,   225,   227,   227,   228,   229,   230,   231,   233,   233,
+     234,   235,   236,   237,   239,   239,   240,   241,   242,   243,
+     246,   247,   248,   249,   251,   253,   254,   255,   256,   258,
+     260,   263,   265,   267,   269,   271,   273,   275,   277,   279,
+     281,   282,   283
 };
 #endif
 
@@ -1668,175 +1671,175 @@ yyreduce:
         case 2:
 
 /* Line 1806 of yacc.c  */
-#line 101 "sintatico.y"
+#line 104 "sintatico.y"
     {insert(&tbl,(yyvsp[(2) - (7)].string),(yyvsp[(2) - (7)].string),-1); puts(get(&tbl,(yyvsp[(2) - (7)].string))); }
     break;
 
   case 9:
 
 /* Line 1806 of yacc.c  */
-#line 110 "sintatico.y"
+#line 113 "sintatico.y"
     {tipoOp = generarTipo((yyvsp[(1) - (1)].string)); printf("===========tipo: %i\n", tipoOp); }
     break;
 
   case 10:
 
 /* Line 1806 of yacc.c  */
-#line 111 "sintatico.y"
+#line 114 "sintatico.y"
     {tipoOp = generarTipo((yyvsp[(1) - (1)].string)); printf("===========tipo: %i\n", tipoOp);}
     break;
 
   case 11:
 
 /* Line 1806 of yacc.c  */
-#line 112 "sintatico.y"
+#line 115 "sintatico.y"
     {tipoOp = generarTipo((yyvsp[(1) - (1)].string)); printf("===========tipo: %i\n", tipoOp);}
     break;
 
   case 12:
 
 /* Line 1806 of yacc.c  */
-#line 113 "sintatico.y"
+#line 116 "sintatico.y"
     {tipoOp = generarTipo((yyvsp[(1) - (1)].string)); printf("===========tipo: %i\n", tipoOp);}
     break;
 
   case 35:
 
 /* Line 1806 of yacc.c  */
-#line 141 "sintatico.y"
+#line 144 "sintatico.y"
     {insert(&tbl,(yyvsp[(4) - (5)].string),(yyvsp[(4) - (5)].string),tipoOp); printf("El tipo eeeeeeessssss: %i\n", getType(&tbl,(yyvsp[(4) - (5)].string)));}
     break;
 
   case 63:
 
 /* Line 1806 of yacc.c  */
-#line 199 "sintatico.y"
+#line 202 "sintatico.y"
     {insert(&tbl,(yyvsp[(2) - (3)].string),(yyvsp[(2) - (3)].string),tipoOp);}
     break;
 
   case 77:
 
 /* Line 1806 of yacc.c  */
-#line 218 "sintatico.y"
+#line 221 "sintatico.y"
     {/*  checaroperando3();   */}
     break;
 
   case 78:
 
 /* Line 1806 of yacc.c  */
-#line 219 "sintatico.y"
+#line 222 "sintatico.y"
     {push(&pilaOperando,(yyvsp[(1) - (1)].string),-1);}
     break;
 
   case 79:
 
 /* Line 1806 of yacc.c  */
-#line 220 "sintatico.y"
+#line 223 "sintatico.y"
     {push(&pilaOperando,(yyvsp[(1) - (1)].string), -1);}
     break;
 
   case 80:
 
 /* Line 1806 of yacc.c  */
-#line 221 "sintatico.y"
+#line 224 "sintatico.y"
     {push(&pilaOperando, (yyvsp[(1) - (2)].string), -1);}
     break;
 
   case 81:
 
 /* Line 1806 of yacc.c  */
-#line 222 "sintatico.y"
+#line 225 "sintatico.y"
     {push(&pilaOperando,(yyvsp[(1) - (2)].string), -1);}
     break;
 
   case 82:
 
 /* Line 1806 of yacc.c  */
-#line 224 "sintatico.y"
-    {/*  checaroperando2();   */}
+#line 227 "sintatico.y"
+    {  checarOperando2();   }
     break;
 
   case 86:
 
 /* Line 1806 of yacc.c  */
-#line 227 "sintatico.y"
+#line 230 "sintatico.y"
     {push(&pilaOperando,(yyvsp[(1) - (1)].string),-1);}
     break;
 
   case 87:
 
 /* Line 1806 of yacc.c  */
-#line 228 "sintatico.y"
+#line 231 "sintatico.y"
     {push(&pilaOperando,(yyvsp[(1) - (1)].string),-1);}
     break;
 
   case 88:
 
 /* Line 1806 of yacc.c  */
-#line 230 "sintatico.y"
-    {/*  checaroperando1();   */}
+#line 233 "sintatico.y"
+    {  printf("mmmwgaat"); checarOperando1();   }
     break;
 
   case 92:
 
 /* Line 1806 of yacc.c  */
-#line 233 "sintatico.y"
+#line 236 "sintatico.y"
     {push(&pilaOperando,(yyvsp[(1) - (1)].string),-1);}
     break;
 
   case 93:
 
 /* Line 1806 of yacc.c  */
-#line 234 "sintatico.y"
+#line 237 "sintatico.y"
     {push(&pilaOperando,(yyvsp[(1) - (1)].string),-1);}
     break;
 
   case 94:
 
 /* Line 1806 of yacc.c  */
-#line 236 "sintatico.y"
+#line 239 "sintatico.y"
     { push(&pilaOperando,(yyvsp[(1) - (1)].string),-1); }
     break;
 
   case 97:
 
 /* Line 1806 of yacc.c  */
-#line 238 "sintatico.y"
-    {push(&pilaOperadores, (yyvsp[(1) - (1)].string),tipoOp);}
+#line 241 "sintatico.y"
+    {push(&pilaOperadores, (yyvsp[(1) - (1)].string), getType(&tbl,(yyvsp[(1) - (1)].string)));}
     break;
 
   case 100:
 
 /* Line 1806 of yacc.c  */
-#line 243 "sintatico.y"
-    {push(&pilaOperadores, (yyvsp[(1) - (1)].string), tipoOp);}
+#line 246 "sintatico.y"
+    {printf("nose"); push(&pilaOperadores, (yyvsp[(1) - (1)].string), tipoOp);}
     break;
 
   case 101:
 
 /* Line 1806 of yacc.c  */
-#line 244 "sintatico.y"
+#line 247 "sintatico.y"
     {push(&pilaOperadores, (yyvsp[(1) - (1)].string), tipoOp);}
     break;
 
   case 102:
 
 /* Line 1806 of yacc.c  */
-#line 245 "sintatico.y"
+#line 248 "sintatico.y"
     {push(&pilaOperadores, (yyvsp[(1) - (1)].string), tipoOp);}
     break;
 
   case 103:
 
 /* Line 1806 of yacc.c  */
-#line 246 "sintatico.y"
+#line 249 "sintatico.y"
     {push(&pilaOperadores, (yyvsp[(1) - (1)].string), tipoOp);}
     break;
 
 
 
 /* Line 1806 of yacc.c  */
-#line 1840 "sintatico.tab.c"
+#line 1843 "sintatico.tab.c"
       default: break;
     }
   /* User semantic actions sometimes alter yychar, and that requires
@@ -2067,7 +2070,7 @@ yyreturn:
 
 
 /* Line 2067 of yacc.c  */
-#line 282 "sintatico.y"
+#line 285 "sintatico.y"
 
 int main()
 {
@@ -2091,25 +2094,48 @@ int generarTipo(char *operando){
 		return 4;
 }
 
-/*
-void checarOperando1(char *operando){
-			if(operando=='*' || operando=='/' ){ 
-			//Checar que los tipos sean compatibles para realizar la operacion
-			
-				op = pop(pilaOperandos);
-				operador1 = pop(pilaOperadores);
-				operador2 = pop(pilaOperadores);
-			
-			//cuadruplo(operando,operador1, operador2, res);
-			//Si alguno de los operandos pertenecia a un temporal regresarlo al avail
-			//-meter resultado a pilaOperandos
-			//-meter tipo  a filaTipo si esque fue compatible
-			
+
+void checarOperando1(){
+	ptr op= malloc (sizeof(p_Nodo)); 
+
+	if (op!= NULL){
+		if(pilaOperando!=NULL){
+			op->valor=pilaOperando->valor;
+			if(*pilaOperando->valor=='*' || *pilaOperando->valor=='/' ){ 
+			printf("POP VALORRRSSIISIIISSIS %i, %s", pilaOperando->tipo, pilaOperando->valor);
+			pop(&pilaOperando);
 			}
+		}
 	}
-*/
-/*	
-void checarOperando2(char *operando){
+	/*			
+	if(op->valor=='*' || op->valor=='/' ){ 
+	//Checar que los tipos sean compatibles para realizar la operacion
+			
+	ptr operador1 = pop(pilaOperadores);
+	ptr operador2 = pop(pilaOperadores);
+			
+	//cuadruplo(operando,operador1, operador2, res);
+	//Si alguno de los operandos pertenecia a un temporal regresarlo al avail
+	//-meter resultado a pilaOperandos
+	//-meter tipo  a filaTipo si esque fue compatible
+			
+	}*/
+}
+
+	
+void checarOperando2(){
+
+	ptr op= malloc (sizeof(p_Nodo)); 
+
+	if (op!= NULL){
+		if(pilaOperando!=NULL){
+			op->valor=pilaOperando->valor;
+			if(*pilaOperando->valor=='+' || *pilaOperando->valor=='-' ){ 
+			printf("POP VALORRRSSIISIIISSIS %i, %s", pilaOperando->tipo, pilaOperando->valor);
+			pop(&pilaOperando);
+			}
+		}
+	}/*
 			if(operando=='+' || operando=='-' ){ 
 			//Checar que los tipos sean compatibles para realizar la operacion
 			
@@ -2121,9 +2147,9 @@ void checarOperando2(char *operando){
 			//Si alguno de los operandos pertenecia a un temporal regresarlo al avail
 			//-meter resultado a pilaOperandos
 			//-meter tipo  a filaTipo si esque fue compatible
-			}
+			}*/
 	}
-*/
+
 /*
 void checarOperando3(char *operando){
 			if(operando=='<' || operando=='>' || operando=='='){ 

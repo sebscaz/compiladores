@@ -59,10 +59,10 @@ ctebooleano    [v | f]
 {cteentero}		{printf("_Cte entero\n"); yylval.cteint = atoi(yytext);  return(cteentero);}
 {ctedecimal}	{printf("_Cte decimal\n"); yylval.ctefloat = atof(yytext); return(ctedecimal);}
 {ctebooleano}	{printf("_Cte booleano\n"); yylval.cteint = atoi(yytext); return(ctebooleano);}
-"texto"			{printf("_Palabra reservada texto\n"); yylval.tipo = strdup(yytext); return(texto);}
-"booleano"		{printf("_Palabra reservada booleano\n"); yylval.tipo = strdup(yytext); return(booleano);}
-"entero"		{printf("_Palabra reservada entero\n"); yylval.tipo = strdup(yytext); return(entero);}
-"decimal"		{printf("_Palabra reservada decimal\n"); yylval.tipo = strdup(yytext); return(decimal);}
+"texto"			{printf("_Palabra reservada texto\n"); yylval.string = strdup(yytext); return(texto);}
+"booleano"		{printf("_Palabra reservada booleano\n"); yylval.string = strdup(yytext); return(booleano);}
+"entero"		{printf("_Palabra reservada entero\n"); yylval.string = strdup(yytext); return(entero);}
+"decimal"		{printf("_Palabra reservada decimal\n"); yylval.string = strdup(yytext); return(decimal);}
 
 ";"         {printf("_punto y coma\n");  return(ptocoma);}
 ":"         {printf("_dos puntos\n"); return(dospuntos);}
