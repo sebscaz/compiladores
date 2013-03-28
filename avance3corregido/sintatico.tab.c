@@ -1812,28 +1812,28 @@ yyreduce:
 
 /* Line 1806 of yacc.c  */
 #line 246 "sintatico.y"
-    {printf("nose"); push(&pilaOperadores, (yyvsp[(1) - (1)].string), tipoOp);}
+    {printf("nose"); push(&pilaOperadores, (yyvsp[(1) - (1)].string), 3);}
     break;
 
   case 101:
 
 /* Line 1806 of yacc.c  */
 #line 247 "sintatico.y"
-    {push(&pilaOperadores, (yyvsp[(1) - (1)].string), tipoOp);}
+    {push(&pilaOperadores, (yyvsp[(1) - (1)].string), 1);}
     break;
 
   case 102:
 
 /* Line 1806 of yacc.c  */
 #line 248 "sintatico.y"
-    {push(&pilaOperadores, (yyvsp[(1) - (1)].string), tipoOp);}
+    {push(&pilaOperadores, (yyvsp[(1) - (1)].string), 2);}
     break;
 
   case 103:
 
 /* Line 1806 of yacc.c  */
 #line 249 "sintatico.y"
-    {push(&pilaOperadores, (yyvsp[(1) - (1)].string), tipoOp);}
+    {push(&pilaOperadores, (yyvsp[(1) - (1)].string), 4);}
     break;
 
 
@@ -2097,13 +2097,29 @@ int generarTipo(char *operando){
 
 void checarOperando1(){
 	ptr op= malloc (sizeof(p_Nodo)); 
+	ptr operador1= malloc (sizeof(p_Nodo)); 
+	ptr operador2= malloc (sizeof(p_Nodo)); 
+
 
 	if (op!= NULL){
 		if(pilaOperando!=NULL){
 			op->valor=pilaOperando->valor;
 			if(*pilaOperando->valor=='*' || *pilaOperando->valor=='/' ){ 
-			printf("POP VALORRRSSIISIIISSIS %i, %s", pilaOperando->tipo, pilaOperando->valor);
-			pop(&pilaOperando);
+				printf("Operandoooo  %c",*pilaOperando->valor);
+				pop(&pilaOperando);
+
+				
+				operador1->valor = pilaOperadores->valor;
+				operador1->tipo = pilaOperadores->tipo; 
+				pop(&pilaOperadores);
+
+				operador2->valor = pilaOperadores->valor;
+				operador2->tipo = pilaOperadores->tipo; 
+				pop(&pilaOperadores);
+
+				printf("TIPO op1: %i , op2: %i \n", operador1->tipo, operador2->tipo);
+
+				push(&pilaOperadores,"t",1);
 			}
 		}
 	}
@@ -2126,13 +2142,26 @@ void checarOperando1(){
 void checarOperando2(){
 
 	ptr op= malloc (sizeof(p_Nodo)); 
+	ptr operador1= malloc (sizeof(p_Nodo)); 
+	ptr operador2= malloc (sizeof(p_Nodo)); 
 
 	if (op!= NULL){
 		if(pilaOperando!=NULL){
 			op->valor=pilaOperando->valor;
 			if(*pilaOperando->valor=='+' || *pilaOperando->valor=='-' ){ 
-			printf("POP VALORRRSSIISIIISSIS %i, %s", pilaOperando->tipo, pilaOperando->valor);
-			pop(&pilaOperando);
+				printf("Operandoooo  %c",*pilaOperando->valor);
+				pop(&pilaOperando);
+
+				operador1->valor = pilaOperadores->valor;
+				operador1->tipo = pilaOperadores->tipo; 
+				pop(&pilaOperadores);
+
+				operador2->valor = pilaOperadores->valor;
+				operador2->tipo = pilaOperadores->tipo; 
+				pop(&pilaOperadores);
+
+				printf("TIPO op1: %i , op2: %i \n", operador1->tipo, operador2->tipo);
+push(&pilaOperadores,"t",1);
 			}
 		}
 	}/*

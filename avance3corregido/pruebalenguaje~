@@ -6,7 +6,7 @@ programa prueba {
 	funcion entero mak(entero hola){
 		crear entero sebas;
 	
-		sebas := 2 + 2 / 2;
+		sebas := 2 + 2 / 2 * 3 - 4;
 		
 		imprimir("hola");
 		

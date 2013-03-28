@@ -243,10 +243,10 @@ FACTOR2: /* vacio */
 		|EXP3;
  	
 
-VARCTE: ctetexto			{printf("nose"); push(&pilaOperadores, $1, tipoOp);}
-		|cteentero 		{push(&pilaOperadores, $1, tipoOp);}
-		| ctedecimal 		{push(&pilaOperadores, $1, tipoOp);}
-		| ctebooleano		{push(&pilaOperadores, $1, tipoOp);};
+VARCTE: ctetexto			{printf("nose"); push(&pilaOperadores, $1, 3);}
+		|cteentero 		{push(&pilaOperadores, $1, 1);}
+		| ctedecimal 		{push(&pilaOperadores, $1, 2);}
+		| ctebooleano		{push(&pilaOperadores, $1, 4);};
 		
 DIBUJARFIGURA: dibujarFigura parentesisa FIGURA coma id parentesisc ptocoma;
 
@@ -308,12 +308,29 @@ int generarTipo(char *operando){
 
 void checarOperando1(){
 	ptr op= malloc (sizeof(p_Nodo)); 
+	ptr operador1= malloc (sizeof(p_Nodo)); 
+	ptr operador2= malloc (sizeof(p_Nodo)); 
+
 
 	if (op!= NULL){
 		if(pilaOperando!=NULL){
 			op->valor=pilaOperando->valor;
 			if(*pilaOperando->valor=='*' || *pilaOperando->valor=='/' ){ 
+				printf("Operandoooo  %c",*pilaOperando->valor);
 				pop(&pilaOperando);
+
+				
+				operador1->valor = pilaOperadores->valor;
+				operador1->tipo = pilaOperadores->tipo; 
+				pop(&pilaOperadores);
+
+				operador2->valor = pilaOperadores->valor;
+				operador2->tipo = pilaOperadores->tipo; 
+				pop(&pilaOperadores);
+
+				printf("TIPO op1: %i , op2: %i \n", operador1->tipo, operador2->tipo);
+
+				push(&pilaOperadores,"t",1);
 			}
 		}
 	}
@@ -336,12 +353,26 @@ void checarOperando1(){
 void checarOperando2(){
 
 	ptr op= malloc (sizeof(p_Nodo)); 
+	ptr operador1= malloc (sizeof(p_Nodo)); 
+	ptr operador2= malloc (sizeof(p_Nodo)); 
 
 	if (op!= NULL){
 		if(pilaOperando!=NULL){
 			op->valor=pilaOperando->valor;
 			if(*pilaOperando->valor=='+' || *pilaOperando->valor=='-' ){ 
+				printf("Operandoooo  %c",*pilaOperando->valor);
 				pop(&pilaOperando);
+
+				operador1->valor = pilaOperadores->valor;
+				operador1->tipo = pilaOperadores->tipo; 
+				pop(&pilaOperadores);
+
+				operador2->valor = pilaOperadores->valor;
+				operador2->tipo = pilaOperadores->tipo; 
+				pop(&pilaOperadores);
+
+				printf("TIPO op1: %i , op2: %i \n", operador1->tipo, operador2->tipo);
+push(&pilaOperadores,"t",1);
 			}
 		}
 	}/*
