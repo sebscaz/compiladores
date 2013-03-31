@@ -1,14 +1,26 @@
 %{
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 #include <stdint.h>
 #include "hash.c"
 #include "pila.c"
+#include "matrizSemantica.c"
 
+void inicializarMatriz();
 void checarOperando1();
 void checarOperando2(); 
+int checarSemantica(int op, int op1, int op2);
+
+void secuenciaIf1();
+void secuenciaIf2();
+void secuenciaElse();
+void secuenciaWhile1();
+void secuenciaWhile2();	
 
 int yystopparser=0;
+int matrizSemantica[4][16][10];
+
 
 struct StrHashTable tbl = {{0},NULL,NULL,foo_strhash,strcmp};
 struct StrHashTableProc tblprocs = {{0},NULL,NULL,foo_strhash,strcmp};
@@ -146,11 +158,18 @@ DECLARACION2: ARREGLOS
 		| /*vacio*/;
 
 
+DECLARACIONFUNCIONCICLO: DECLARACIONFUNCION DECLARACIONFUNCIONCICLO2;
+DECLARACIONFUNCIONCICLO2: DECLARACIONFUNCIONCICLO
+			| /*vacio*/;
+
 DECLARACIONFUNCION: crear TIPO DECLARACIONFUNCION2 id	ptocoma  
+
 
 	//{nodeProc.vartable = {{0},NULL,NULL,foo_strhash,strcmp};
 	//insert(nodeProc.vartable,$4,$4); } 
 	;
+
+
 
 
 DECLARACIONFUNCION2: ARREGLOS
@@ -162,7 +181,7 @@ ARREGLOS2: corchetea cteentero corchetec
 	| /*vacio*/;
 	
 
-ASIGNACION: id ASIGNACION2 dospuntos igual ASIGNACION3 ptocoma;
+ASIGNACION: id ASIGNACION2 igual ASIGNACION3 ptocoma;
 ASIGNACION3: LECTURA
 		| EXP;
 ASIGNACION2: ARREGLOSASIG 
@@ -180,16 +199,16 @@ ESCRITURA: imprimir parentesisa EXP parentesisc ptocoma;
 
 LECTURA: leer parentesisa parentesisc ptocoma;
 
-CONDICION: si parentesisa SUPEREXPRESION parentesisc llavea BLOQUE llavec CONDICION2;
+CONDICION: si parentesisa SUPEREXPRESION parentesisc {/*secuenciaIf();*/}  llavea BLOQUE llavec CONDICION2 {/*secuenciaIf2();*/};
 
-CONDICION2: no llavea BLOQUE llavec
+CONDICION2: no {/*secuenciaElse();*/} llavea BLOQUE llavec 
 		| /*vacio*/;
 		
 
 
-CICLO: mientras parentesisa SUPEREXPRESION parentesisc hacer llavea BLOQUE llavec;
+CICLO: mientras {/*secuenciaWhile1();*/} parentesisa SUPEREXPRESION parentesisc hacer {/*secuenciaWhile2();*/}  llavea BLOQUE llavec {/*secuenciaWhile3();*/} ;
 
-CREARFUNCION: funcion CREARFUNCION2 id parentesisa CREARFUNCION3 parentesisc llavea DECLARACIONFUNCION BLOQUE regresar EXP llavec 
+CREARFUNCION: funcion CREARFUNCION2 id parentesisa CREARFUNCION3 parentesisc llavea DECLARACIONFUNCIONCICLO BLOQUE regresar EXP llavec 
 
 	//{insertProc(&tblprocs,$3,$3);
 	//nodeProc=getProcNode(&tblprocs,$3,$3);}
@@ -221,8 +240,18 @@ EXPRESION2: /*vacio*/
 			| EXPRESION3 EXP {/*  checaroperando3();   */}  ;
 EXPRESION3: menor 	{push(&pilaOperando,$1,-1);}
 			| mayor {push(&pilaOperando,$1, -1);}
-			| igual igual {push(&pilaOperando, $1, -1);}
-		 	| diferente igual {push(&pilaOperando,$1, -1);} ;
+			| igual igual {char* str = $1;
+				      char dest[2];
+				      strcpy( dest, str );
+				      strcat( dest, $2 ); 
+				      push(&pilaOperando, str, -1);}
+		 	| diferente igual {char* str = $1;
+				      char dest[2];
+				      strcpy( dest, str );
+				      strcat( dest, $2 ); 
+				      push(&pilaOperando, str, -1);} 
+			| igual {push(&pilaOperando, $1, -1);} ;
+			
 			
 EXP: TERMINO  {  checarOperando2();   } EXP2  ;
 EXP2 : /*vacio*/
@@ -230,15 +259,15 @@ EXP2 : /*vacio*/
 EXP3: mas				{push(&pilaOperando,$1,-1);}
 	 |menos				{push(&pilaOperando,$1,-1);};
 
-TERMINO: FACTOR  {  printf("mmmwgaat"); checarOperando1();   } TERMINO2 ;
+TERMINO: FACTOR  { checarOperando1();   } TERMINO2 ;
 TERMINO2 : /*vacio*/
 	 | TERMINO3 TERMINO;	
 TERMINO3: multiplicacion 	{push(&pilaOperando,$1,-1);}
 	 |division		{push(&pilaOperando,$1,-1);};
 
-FACTOR:  parentesisa  { push(&pilaOperando,$1,-1); } EXPRESION parentesisc  /*se queita el fondo falso*/
+FACTOR:  parentesisa  { push(&pilaOperando,$1,-1); } EXPRESION parentesisc {pop(&pilaOperando);} /*se queita el fondo falso*/
 	| FACTOR2  VARCTE
-	| id 	{push(&pilaOperadores, $1, getType(&tbl,$1));}	;/*Meter en pilaTipos el tipo de id que es*/					
+	| id  ARREGLOSASIG	{push(&pilaOperadores, $1, getType(&tbl,$1));}	;/*Meter en pilaTipos el tipo de id que es*/					
 FACTOR2: /* vacio */
 		|EXP3;
  	
@@ -285,7 +314,9 @@ COLOR: rojo
 %%
 int main()
 {
- 
+	inicializarMatriz();
+	printf("MATRIZZZIIZIZ %i", matrizSemantica[3][3][9]);
+
 	if (yyparse()==0)
 		printf("Sintaxis Correctaa\n");
 	else
@@ -305,21 +336,37 @@ int generarTipo(char *operando){
 		return 4;
 }
 
+int checarSemantica(int op, int op1, int op2){
+
+	if( matrizSemantica[op1-1][op2-1][op] == 0 ){
+		printf("--------------Semantica No Valida!!");
+		return 0;	//Error: no se puede hacer operacion de esos tipos
+	}
+	else {
+		printf("--------------Semantica Valida!! tipo: %i. " , matrizSemantica[op1-1][op2-1][op]);
+		return 1;
+	}
+	
+}
 
 void checarOperando1(){
 	ptr op= malloc (sizeof(p_Nodo)); 
 	ptr operador1= malloc (sizeof(p_Nodo)); 
 	ptr operador2= malloc (sizeof(p_Nodo)); 
-
+	int semanticaValida=-1;
+	int numOp =0;
 
 	if (op!= NULL){
 		if(pilaOperando!=NULL){
 			op->valor=pilaOperando->valor;
 			if(*pilaOperando->valor=='*' || *pilaOperando->valor=='/' ){ 
+
+				if(*pilaOperando->valor=='*' ) numOp=2;
+				else if (*pilaOperando->valor=='/' ) numOp=3;
+
 				printf("Operandoooo  %c",*pilaOperando->valor);
 				pop(&pilaOperando);
 
-				
 				operador1->valor = pilaOperadores->valor;
 				operador1->tipo = pilaOperadores->tipo; 
 				pop(&pilaOperadores);
@@ -329,8 +376,22 @@ void checarOperando1(){
 				pop(&pilaOperadores);
 
 				printf("TIPO op1: %i , op2: %i \n", operador1->tipo, operador2->tipo);
+				semanticaValida = checarSemantica(numOp ,operador1->tipo, operador2->tipo);
 
+				/*
+				if(semanticaValida==1){
+					if (operador1->tipo==1){int op1v = atoi(operador1->valor);}
+					else if (operador1->tipo==2){float op1v = atof(operador1->valor);}
+
+					if (operador2->tipo==1){int op2v = atoi(operador1->valor);}
+					else if (operador2->tipo==2){float op2v = atof(operador1->valor);}
+
+					int res = op1v;
+				}
+				//generar 4 vectores
+				*/
 				push(&pilaOperadores,"t",1);
+				
 			}
 		}
 	}
@@ -355,11 +416,17 @@ void checarOperando2(){
 	ptr op= malloc (sizeof(p_Nodo)); 
 	ptr operador1= malloc (sizeof(p_Nodo)); 
 	ptr operador2= malloc (sizeof(p_Nodo)); 
+	int semanticaValida=-1;
+	int numOp=-1;
 
 	if (op!= NULL){
 		if(pilaOperando!=NULL){
 			op->valor=pilaOperando->valor;
 			if(*pilaOperando->valor=='+' || *pilaOperando->valor=='-' ){ 
+
+				if(*pilaOperando->valor=='+' ) numOp=0;
+				else if (*pilaOperando->valor=='-' ) numOp=1;
+
 				printf("Operandoooo  %c",*pilaOperando->valor);
 				pop(&pilaOperando);
 
@@ -373,6 +440,8 @@ void checarOperando2(){
 
 				printf("TIPO op1: %i , op2: %i \n", operador1->tipo, operador2->tipo);
 push(&pilaOperadores,"t",1);
+				
+				semanticaValida = checarSemantica(numOp ,operador1->tipo, operador2->tipo);
 			}
 		}
 	}/*
@@ -390,28 +459,298 @@ push(&pilaOperadores,"t",1);
 			}*/
 	}
 
-/*
+
 void checarOperando3(char *operando){
-			if(operando=='<' || operando=='>' || operando=='='){ 
-			//Checar que los tipos sean compatibles para realizar la operacion
-			
-				op = pop(pilaOperandos);
-				operador1 = pop(pilaOperadores);
-				operador2 = pop(pilaOperadores);
-			
-			//cuadruplo(operando,operador1, operador2, res);
-			//Si alguno de los operandos pertenecia a un temporal regresarlo al avail
-			//-meter resultado a pilaOperandos
-			//-meter tipo  a filaTipo si esque fue compatible
+	ptr op= malloc (sizeof(p_Nodo)); 
+	ptr operador1= malloc (sizeof(p_Nodo)); 
+	ptr operador2= malloc (sizeof(p_Nodo)); 
+	int semanticaValida=-1;
+	int numOp=-1;
+
+	if (op!= NULL){
+		if(pilaOperando!=NULL){
+			op->valor=pilaOperando->valor;
+			if(*pilaOperando->valor=='>'||*pilaOperando->valor=='<'||*pilaOperando->valor=='='||pilaOperando->valor=="=="||pilaOperando->valor=="!=" ){ 
+
+				if(pilaOperando->valor=="==" ) numOp=4;
+				else if (pilaOperando->valor=="!=") numOp=5;
+				else if (*pilaOperando->valor=='>') numOp=6;
+				else if (*pilaOperando->valor=='<') numOp=7;
+				else if (*pilaOperando->valor=='=') numOp=5;
+
+				printf("Operandoooo  %c",*pilaOperando->valor);
+				pop(&pilaOperando);
+
+				operador1->valor = pilaOperadores->valor;
+				operador1->tipo = pilaOperadores->tipo; 
+				pop(&pilaOperadores);
+
+				operador2->valor = pilaOperadores->valor;
+				operador2->tipo = pilaOperadores->tipo; 
+				pop(&pilaOperadores);
+
+				printf("TIPO op1: %i , op2: %i \n", operador1->tipo, operador2->tipo);
+				push(&pilaOperadores,"t",1);
+				
+				semanticaValida = checarSemantica(numOp ,operador1->tipo, operador2->tipo);
 			}
-			}
+		}
 	}
+}
+
+void secuenciaIf1(){
+	/*
+	aux = pop(&pilaTipos);
+	if(aux->tipo != 4)//dif de boolean
+		printf("Error semantico!!");
+	else	
+		pop(&pilaO);
+		generar(GoToF, resultado, __);
+		push(&pilaSaltos, cont-1);
 	*/
-/*
-void quitarParentesis(ptr *cabeza_ptr){
+}
+void secuenciaIf2(){
+	/*
+	rellenar(pop(&pilaSaltos),cont);
+	*/
+}
+void secuenciaElse(){
+	/*
+	generar(goto ___);
+	rellenar(pop(&pilaSaltos),cont);
+	push(&pilaSaltos, cont-1);
 		
-	}
-*/
+	*/
+}
+void secuenciaWhile1(){
+	/*
+	push(&pilaSaltos,cont);	
+	*/
+}
+void secuenciaWhile2(){
+	/*
+	aux = pop(&pilaTipos);
+	if(aux->tipo != 4)//dif de boolean
+		printf("Error semantico!!");
+	else	
+		pop(&pilaO);
+		generar(GoToF, resultado, __);
+		push(&pilaSaltos, cont-1);
+	*/
+}
+
+void secuenciaWhile3(){
+	/*
+	falso = pop(&pilaSaltos);
+	retorno = pop(&pilaSaltos);
+	generar(goto, retorno);
+	rellenar(falso,cont);
+	*/
+}
+	
+
+
+
+void inicializarMatriz(){
+	matrizSemantica[0][0][0]= 1;	//Entero + entero = entero
+	matrizSemantica[0][1][0]= 2;	//Entero + doble = doble
+	matrizSemantica[0][2][0]= 0;	//Entero + texto = no se puede
+	matrizSemantica[0][3][0]= 0;	//Entero + bool = no se puede
+	matrizSemantica[1][0][0]= 2;	//doble + entero = doble
+	matrizSemantica[1][1][0]= 2;	//doble + doble = doble
+	matrizSemantica[1][2][0]= 0;	//doble + texto = no se puede
+	matrizSemantica[1][3][0]= 0;	//doble + bool = no se puede
+	matrizSemantica[2][0][0]= 0;	//texto + entero = no se puede
+	matrizSemantica[2][1][0]= 0;	//texto + doble = no se puede
+	matrizSemantica[2][2][0]= 3;	//texto + texto = texto
+	matrizSemantica[2][3][0]= 3;	//texto + bool = no se puede
+	matrizSemantica[3][0][0]= 0;	//bool + entero = no se puede
+	matrizSemantica[3][1][0]= 0;	//bool + doble = no se puede
+	matrizSemantica[3][2][0]= 0;	//bool + texto = no se puede
+	matrizSemantica[3][3][0]= 0;	//bool + bool = no se puede
+
+
+	//Z=1 (RESTA)
+	matrizSemantica[0][0][1]= 1;	//Entero - entero = entero
+	matrizSemantica[0][1][1]= 2;	//Entero - doble = doble
+	matrizSemantica[0][2][1]= 0;	//Entero - texto = no se puede
+	matrizSemantica[0][3][1]= 0;	//Entero - bool = no se puede
+	matrizSemantica[1][0][1]= 2;	//doble -entero = doble
+	matrizSemantica[1][1][1]= 2;	//doble - doble = doble
+	matrizSemantica[1][2][1]= 0;	//doble - texto = no se puede
+	matrizSemantica[1][3][1]= 0;	//doble - bool = no se puede
+	matrizSemantica[2][0][1]= 0;	//texto - entero = no se puede
+	matrizSemantica[2][1][1]= 0;	//texto - doble = no se puede
+	matrizSemantica[2][2][1]= 0;	//texto - texto = no se puede
+	matrizSemantica[2][3][1]= 0;	//texto - bool = no se puede
+	matrizSemantica[3][0][1]= 0;	//bool - entero = no se puede
+	matrizSemantica[3][1][1]= 0;	//bool - doble = no se puede
+	matrizSemantica[3][2][1]= 0;	//bool - texto = no se puede
+	matrizSemantica[3][3][1]= 0;	//bool - bool = no se puede
+
+	//Z=2 (MULTIPLICACION)
+	matrizSemantica[0][0][2]= 1;	//Entero * entero = entero
+	matrizSemantica[0][1][2]= 2;	//Entero * doble = doble
+	matrizSemantica[0][2][2]= 0;	//Entero * texto = no se puede
+	matrizSemantica[0][3][2]= 0;	//Entero * bool = no se puede
+	matrizSemantica[1][0][2]= 2;	//doble * entero = doble
+	matrizSemantica[1][1][2]= 2;	//doble * doble = doble
+	matrizSemantica[1][2][2]= 0;	//doble * texto = no se puede
+	matrizSemantica[1][3][2]= 0;	//doble * bool = no se puede
+	matrizSemantica[2][0][2]= 0;	//texto * entero = no se puede
+	matrizSemantica[2][1][2]= 0;	//texto * doble = no se puede
+	matrizSemantica[2][2][2]= 0;	//texto * texto = no se puede
+	matrizSemantica[2][3][2]= 0;	//texto * bool = no se puede
+	matrizSemantica[3][0][2]= 0;	//bool * entero = no se puede
+	matrizSemantica[3][1][2]= 0;	//bool * doble = no se puede
+	matrizSemantica[3][2][2]= 0;	//bool * texto = no se puede
+	matrizSemantica[3][3][2]= 0;	//bool * bool = no se puede
+
+	//Z=3 (DIVISION)
+	matrizSemantica[0][0][3]= 1;	//Entero / entero = entero
+	matrizSemantica[0][1][3]= 2;	//Entero / doble = doble
+	matrizSemantica[0][2][3]= 0;	//Entero / texto = no se puede
+	matrizSemantica[0][3][3]= 0;	//Entero / bool = no se puede
+	matrizSemantica[1][0][3]= 2;	//doble / entero = doble
+	matrizSemantica[1][1][3]= 2;	//doble / doble = doble
+	matrizSemantica[1][2][3]= 0;	//doble / texto = no se puede
+	matrizSemantica[1][3][3]= 0;	//doble / bool = no se puede
+	matrizSemantica[2][0][3]= 0;	//texto / entero = no se puede
+	matrizSemantica[2][1][3]= 0;	//texto / doble = no se puede
+	matrizSemantica[2][2][3]= 0;	//texto / texto = no se puede
+	matrizSemantica[2][3][3]= 0;	//texto / bool = no se puede
+	matrizSemantica[3][0][3]= 0;	//bool / entero = no se puede
+	matrizSemantica[3][1][3]= 0;	//bool / doble = no se puede
+	matrizSemantica[3][2][3]= 0;	//bool / texto = no se puede
+	matrizSemantica[3][3][3]= 0;	//bool / bool = no se puede
+
+	//Z=4 (IGUAL)
+	matrizSemantica[0][0][4]= 4;	//Entero == entero = bool
+	matrizSemantica[0][1][4]= 4;	//Entero ==doble = bool
+	matrizSemantica[0][2][4]= 0;	//Entero == texto = bool
+	matrizSemantica[0][3][4]= 0;	//Entero == bool = bool
+	matrizSemantica[1][0][4]= 4;	//doble == entero = bool
+	matrizSemantica[1][1][4]= 4;	//doble == doble = bool
+	matrizSemantica[1][2][4]= 0;	//doble == texto = no se puede
+	matrizSemantica[1][3][4]= 0;	//doble == bool = no se puede
+	matrizSemantica[2][0][4]= 0;	//texto == entero = no se puede
+	matrizSemantica[2][1][4]= 0;	//texto == doble = no se puede
+	matrizSemantica[2][2][4]= 4;	//texto == texto = bool
+	matrizSemantica[2][3][4]= 0;	//texto == bool = no se puede
+	matrizSemantica[3][0][4]= 0;	//bool == entero = no se puede
+	matrizSemantica[3][1][4]= 0;	//bool == doble = no se puede
+	matrizSemantica[3][2][4]= 0;	//bool == texto = no se puede
+	matrizSemantica[3][3][4]= 4;	//bool == bool = bool
+
+	//Z=5 (DIFERENTE)
+	matrizSemantica[0][0][5]= 4;	//Entero != entero = bool
+	matrizSemantica[0][1][5]= 4;	//Entero !=doble = bool
+	matrizSemantica[0][2][5]= 0;	//Entero != texto = bool
+	matrizSemantica[0][3][5]= 0;	//Entero != bool = bool
+	matrizSemantica[1][0][5]= 4;	//doble != entero = bool
+	matrizSemantica[1][1][5]= 4;	//doble != doble = bool
+	matrizSemantica[1][2][5]= 0;	//doble != texto = no se puede
+	matrizSemantica[1][3][5]= 0;	//doble != bool = no se puede
+	matrizSemantica[2][0][5]= 0;	//texto != entero = no se puede
+	matrizSemantica[2][1][5]= 0;	//texto != doble = no se puede
+	matrizSemantica[2][2][5]= 4;	//texto != texto = bool
+	matrizSemantica[2][3][5]= 0;	//texto != bool = no se puede
+	matrizSemantica[3][0][5]= 0;	//bool != entero = no se puede
+	matrizSemantica[3][1][5]= 0;	//bool != doble = no se puede
+	matrizSemantica[3][2][5]= 0;	//bool != texto = no se puede
+	matrizSemantica[3][3][5]= 4;	//bool != bool = bool
+
+	//Z=6 (MAYOR)
+	matrizSemantica[0][0][6]= 4;	//Entero > entero = bool
+	matrizSemantica[0][1][6]= 4;	//Entero >doble = bool
+	matrizSemantica[0][2][6]= 0;	//Entero > texto = bool
+	matrizSemantica[0][3][6]= 0;	//Entero > bool = bool
+	matrizSemantica[1][0][6]= 4;	//doble > entero = bool
+	matrizSemantica[1][1][6]= 4;	//doble > doble = bool
+	matrizSemantica[1][2][6]= 0;	//doble > texto = no se puede
+	matrizSemantica[1][3][6]= 0;	//doble > bool = no se puede
+	matrizSemantica[2][0][6]= 0;	//texto > entero = no se puede
+	matrizSemantica[2][1][6]= 0;	//texto > doble = no se puede
+	matrizSemantica[2][2][6]= 4;	//texto > texto = bool
+	matrizSemantica[2][3][6]= 0;	//texto > bool = no se puede
+	matrizSemantica[3][0][6]= 0;	//bool > entero = no se puede
+	matrizSemantica[3][1][6]= 0;	//bool > doble = no se puede
+	matrizSemantica[3][2][6]= 0;	//bool > texto = no se puede
+	matrizSemantica[3][3][6]= 4;	//bool > bool = bool
+
+	//Z=7 (MENOR)
+	matrizSemantica[0][0][7]= 4;	//Entero < entero = bool
+	matrizSemantica[0][1][7]= 4;	//Entero <doble = bool
+	matrizSemantica[0][2][7]= 0;	//Entero < texto = bool
+	matrizSemantica[0][3][7]= 0;	//Entero < bool = bool
+	matrizSemantica[1][0][7]= 4;	//doble < entero = bool
+	matrizSemantica[1][1][7]= 4;	//doble < doble = bool
+	matrizSemantica[1][2][7]= 0;	//doble < texto = no se puede
+	matrizSemantica[1][3][7]= 0;	//doble < bool = no se puede
+	matrizSemantica[2][0][7]= 0;	//texto < entero = no se puede
+	matrizSemantica[2][1][7]= 0;	//texto < doble = no se puede
+	matrizSemantica[2][2][7]= 4;	//texto < texto = bool
+	matrizSemantica[2][3][7]= 0;	//texto < bool = no se puede
+	matrizSemantica[3][0][7]= 0;	//bool < entero = no se puede
+	matrizSemantica[3][1][7]= 0;	//bool < doble = no se puede
+	matrizSemantica[3][2][7]= 0;	//bool < texto = no se puede
+	matrizSemantica[3][3][7]= 4;	//bool < bool = bool
+
+	//Z=8 (AND)
+	matrizSemantica[0][0][8]= 4;	//Entero  && entero = bool
+	matrizSemantica[0][1][8]= 4;	//Entero && doble = bool
+	matrizSemantica[0][2][8]= 0;	//Entero && texto = bool
+	matrizSemantica[0][3][8]= 0;	//Entero && bool = bool
+	matrizSemantica[1][0][8]= 4;	//doble && entero = bool
+	matrizSemantica[1][1][8]= 4;	//doble && doble = bool
+	matrizSemantica[1][2][8]= 0;	//doble && texto = no se puede
+	matrizSemantica[1][3][8]= 0;	//doble && bool = no se puede
+	matrizSemantica[2][0][8]= 0;	//texto && entero = no se puede
+	matrizSemantica[2][1][8]= 0;	//texto && doble = no se puede
+	matrizSemantica[2][2][8]= 4;	//texto && texto = bool
+	matrizSemantica[2][3][8]= 0;	//texto && bool = no se puede
+	matrizSemantica[3][0][8]= 0;	//bool && entero = no se puede
+	matrizSemantica[3][1][8]= 0;	//bool && doble = no se puede
+	matrizSemantica[3][2][8]= 0;	//bool && texto = no se puede
+	matrizSemantica[3][3][8]= 4;	//bool && bool = bool
+
+	//Z=9 (OR)
+	matrizSemantica[0][0][9]= 4;	//Entero  || entero = bool
+	matrizSemantica[0][1][9]= 4;	//Entero || doble = bool
+	matrizSemantica[0][2][9]= 0;	//Entero || texto = bool
+	matrizSemantica[0][3][9]= 0;	//Entero || bool = bool
+	matrizSemantica[1][0][9]= 4;	//doble || entero = bool
+	matrizSemantica[1][1][9]= 4;	//doble || doble = bool
+	matrizSemantica[1][2][9]= 0;	//doble || texto = no se puede
+	matrizSemantica[1][3][9]= 0;	//doble || bool = no se puede
+	matrizSemantica[2][0][9]= 0;	//texto || entero = no se puede
+	matrizSemantica[2][1][9]= 0;	//texto || doble = no se puede
+	matrizSemantica[2][2][9]= 4;	//texto || texto = bool
+	matrizSemantica[2][3][9]= 0;	//texto || bool = no se puede
+	matrizSemantica[3][0][9]= 0;	//bool || entero = no se puede
+	matrizSemantica[3][1][9]= 0;	//bool || doble = no se puede
+	matrizSemantica[3][2][9]= 0;	//bool || texto = no se puede
+	matrizSemantica[3][3][9]= 4;	//bool || bool = bool
+
+	//Z=10 (ASIGNACION =)
+	matrizSemantica[0][0][10]= 1;	//Entero  = entero -> entero
+	matrizSemantica[0][1][10]= 0;	//Entero = doble -> no se puede
+	matrizSemantica[0][2][10]= 0;	//Entero =  texto -> no se puede
+	matrizSemantica[0][3][10]= 0;	//Entero = bool -> no se puede
+	matrizSemantica[1][0][10]= 0;	//doble = entero -> no se puede
+	matrizSemantica[1][1][10]= 2;	//doble = doble -> doble
+	matrizSemantica[1][2][10]= 0;	//doble = texto -> no se puede
+	matrizSemantica[1][3][10]= 0;	//doble = bool -> no se puede
+	matrizSemantica[2][0][10]= 0;	//texto = entero -> no se puede
+	matrizSemantica[2][1][10]= 0;	//texto = doble -> no se puede
+	matrizSemantica[2][2][10]= 3;	//texto = texto -> texto
+	matrizSemantica[2][3][10]= 0;	//texto = bool -> no se puede
+	matrizSemantica[3][0][10]= 0;	//bool = entero -> no se puede
+	matrizSemantica[3][1][10]= 0;	//bool = doble -> no se puede
+	matrizSemantica[3][2][10]= 0;	//bool = texto -> no se puede
+	matrizSemantica[3][3][10]= 4;	//bool = bool -> bool
+}
+
 yyerror(s)
 char *s;
 	{

@@ -5,11 +5,13 @@ programa prueba {
 
 	funcion entero mak(entero hola){
 		crear entero sebas;
-	
-		sebas := 2 + 2.0 / 2 * 3 - 4;
-		
+		crear entero [3][3] areglo;		
+
+		sebas = 2 + 2 / (4 * 3) - 4;
+		sebas = 2 + areglo[1][1];
+		si(4>3){
 		imprimir("hola");
-		
+		}
 		regresar 3
 	}
 
