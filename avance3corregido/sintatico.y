@@ -13,6 +13,7 @@ void checarOperando1();
 void checarOperando2(); 
 int checarSemantica(int op, int op1, int op2);
 int generarDireccion(int tipo, int alcance);
+int hacerPush = 1;	//bool para saber si meter variables a la pila - 1:hacer push, 0:no hacer push
 
 void secuenciaIf1();
 void secuenciaIf2();
@@ -207,7 +208,7 @@ ARREGLOS2: corchetea cteentero corchetec
 ASIGNACION: id ASIGNACION2 igual ASIGNACION3 ptocoma;
 ASIGNACION3: LECTURA
 		| EXP;
-ASIGNACION2: ARREGLOSASIG 
+ASIGNACION2: {hacerPush=0; //no meter a la pila las EXP de los arreglos}  ARREGLOSASIG  {hacerPush=1;} 
 	|/*vacio*/;
 ARREGLOSASIG: corchetea EXP corchetec ARREGLOSASIG2;
 ARREGLOSASIG2: corchetea EXP corchetec 
@@ -292,14 +293,14 @@ FACTOR:  parentesisa  { push(&pilaOperando,$1,-1,-1); } EXPRESION parentesisc {p
 	| VARCTE
 	| id  ASIGNACION2	{int tipoId = getType(&tbl,$1);
 				int direccionVirtual = generarDireccion(tipoId, alcanceDireccion);
-				 push(&pilaOperadores, $1, tipoId, direccionVirtual); }	;/*Meter en pilaTipos el tipo de id que es*/					
+				if(hacerPush==1) push(&pilaOperadores, $1, tipoId, direccionVirtual); }	;/*Meter en pilaTipos el tipo de id que es*/					
 
  	
 
-VARCTE: ctetexto			{push(&pilaOperadores, $1, 3, alcanceDireccion);}
-		|cteentero 		{push(&pilaOperadores, $1, 1, alcanceDireccion);}
-		| ctedecimal 		{push(&pilaOperadores, $1, 2, alcanceDireccion);}
-		| ctebooleano		{push(&pilaOperadores, $1, 4, alcanceDireccion);};
+VARCTE: ctetexto			{if(hacerPush==1) push(&pilaOperadores, $1, 3, alcanceDireccion);}
+		|cteentero 			{if(hacerPush==1) push(&pilaOperadores, $1, 1, alcanceDireccion);}
+		| ctedecimal 		{if(hacerPush==1) push(&pilaOperadores, $1, 2, alcanceDireccion);}
+		| ctebooleano		{if(hacerPush==1) push(&pilaOperadores, $1, 4, alcanceDireccion);};
 		
 DIBUJARFIGURA: dibujarFigura parentesisa FIGURA coma id parentesisc ptocoma;
 
