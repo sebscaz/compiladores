@@ -73,8 +73,8 @@ ctebooleano    [v | f]
 ")"         {printf("_parentesis cerrado\n"); return(parentesisc);}
 "{"         {printf("_llave abierta\n"); return(llavea);}
 "}"         {printf("_llave cerrada\n"); return(llavec);}
-"["         {printf("_llave cerrada\n"); return(corchetea);}
-"]"         {printf("_llave cerrada\n"); return(corchetec);}
+"["         {printf("_corchete abierto\n"); return(corchetea);}
+"]"         {printf("_corchete cerrado\n"); return(corchetec);}
 
 "dibujarFigura"		{printf("_funcion dibujarFigura\n"); return(dibujarFigura);}
 "borrarFigura"		{printf("_funcion borrarFigura\n"); return(borrarFigura);}

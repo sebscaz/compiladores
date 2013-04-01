@@ -8,6 +8,7 @@
 struct Nodo{
 	char *valor;
 	int tipo;
+	int direccion;
 	struct Nodo *siguienteNodo;
 };
 
@@ -15,13 +16,14 @@ typedef struct Nodo p_Nodo;
 typedef p_Nodo *ptr;
 
 /*Funcion que mete valores a la pila*/
-void push( ptr *cabeza_ptr, char *valor, int tipo ){
+void push( ptr *cabeza_ptr, char *valor, int tipo, int direccion ){
 	ptr nuevo_ptr;
 	nuevo_ptr= malloc (sizeof(p_Nodo)); /*Define el espacio de memoria*/
 
 	if (nuevo_ptr!= NULL){ /*Si hay memoria inicializa nuevo_ptr con los valores de la estructura*/
 		nuevo_ptr->valor=valor;
 		nuevo_ptr->tipo=tipo;
+		nuevo_ptr->direccion=direccion;
 		nuevo_ptr->siguienteNodo=*cabeza_ptr;
 
 		*cabeza_ptr=nuevo_ptr;

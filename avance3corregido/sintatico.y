@@ -7,10 +7,12 @@
 #include "pila.c"
 #include "matrizSemantica.c"
 
+//Prototipos de metodos
 void inicializarMatriz();
 void checarOperando1();
 void checarOperando2(); 
 int checarSemantica(int op, int op1, int op2);
+int generarDireccion(int tipo, int alcance);
 
 void secuenciaIf1();
 void secuenciaIf2();
@@ -19,9 +21,26 @@ void secuenciaWhile1();
 void secuenciaWhile2();	
 
 int yystopparser=0;
-int matrizSemantica[4][16][10];
+int matrizSemantica[4][16][11];
 
+//Direcciones Virtuales
+int alcanceDireccion=0; // 1: global, 2: local, 3: temp
+int direccionEnteroGlobal=10000;
+int direccionDobleGlobal=20000;
+int direccionTextoGlobal=3000;
+int direccionBooleanoGlobal=4000;
 
+int direccionEnteroLocal=11000;
+int direccionDobleLocal=21000;
+int direccionTextoLocal=31000;
+int direccionBooleanoLocal=41000;
+
+int direccionEnteroTemp=12000;
+int direccionDobleTemp=22000;
+int direccionTextoTemp=32000;
+int direccionBooleanoTemp=42000;
+
+//Tabla de vatiables y procedimientos
 struct StrHashTable tbl = {{0},NULL,NULL,foo_strhash,strcmp};
 struct StrHashTableProc tblprocs = {{0},NULL,NULL,foo_strhash,strcmp};
 struct StrHashNodeProc nodeProc;
@@ -113,13 +132,17 @@ ptr pilaTipos=NULL;
 
 %%
 
-PROGRAMA: programa id llavea PROGRAMA1 PROGRAMA2 BLOQUE llavec	{insert(&tbl,$2,$2,-1); puts(get(&tbl,$2)); } ;
-PROGRAMA1: DECLARACION PROGRAMA12;
+PROGRAMA: programa id llavea PROGRAMA1 PROGRAMASIG PROGRAMA2 BLOQUE llavec	{insert(&tbl,$2,$2,-1); puts(get(&tbl,$2)); } ;
+PROGRAMA1: {alcanceDireccion=1;/*global*/}DECLARACION PROGRAMA12;
 PROGRAMA12: PROGRAMA1
 		  | /*vacio*/;
 PROGRAMA2: CREARFUNCION PROGRAMA22;
 PROGRAMA22: PROGRAMA2
 		  | /*vacio*/;
+
+PROGRAMASIG: ASIGNACION PROGRAMASIG2;
+PROGRAMASIG2: PROGRAMASIG
+	| /*vacio*/
 
 
 TIPO: texto		{tipoOp = generarTipo($1); printf("===========tipo: %i\n", tipoOp); }
@@ -158,7 +181,7 @@ DECLARACION2: ARREGLOS
 		| /*vacio*/;
 
 
-DECLARACIONFUNCIONCICLO: DECLARACIONFUNCION DECLARACIONFUNCIONCICLO2;
+DECLARACIONFUNCIONCICLO: {alcanceDireccion=2;/*local*/}DECLARACIONFUNCION DECLARACIONFUNCIONCICLO2;
 DECLARACIONFUNCIONCICLO2: DECLARACIONFUNCIONCICLO
 			| /*vacio*/;
 
@@ -238,44 +261,45 @@ SUPEREXPRESION3: and
 EXPRESION: EXP EXPRESION2;
 EXPRESION2: /*vacio*/
 			| EXPRESION3 EXP {/*  checaroperando3();   */}  ;
-EXPRESION3: menor 	{push(&pilaOperando,$1,-1);}
-			| mayor {push(&pilaOperando,$1, -1);}
+EXPRESION3: menor 	{push(&pilaOperando,$1,-1, -1);}
+			| mayor {push(&pilaOperando,$1, -1, -1);}
 			| igual igual {char* str = $1;
 				      char dest[2];
 				      strcpy( dest, str );
 				      strcat( dest, $2 ); 
-				      push(&pilaOperando, str, -1);}
+				      push(&pilaOperando, str, -1, -1);}
 		 	| diferente igual {char* str = $1;
 				      char dest[2];
 				      strcpy( dest, str );
 				      strcat( dest, $2 ); 
-				      push(&pilaOperando, str, -1);} 
-			| igual {push(&pilaOperando, $1, -1);} ;
+				      push(&pilaOperando, str, -1, -1);} 
+			| igual {push(&pilaOperando, $1, -1, -1);} ;
 			
 			
 EXP: TERMINO  {  checarOperando2();   } EXP2  ;
 EXP2 : /*vacio*/
 	 | EXP3 EXP;
-EXP3: mas				{push(&pilaOperando,$1,-1);}
-	 |menos				{push(&pilaOperando,$1,-1);};
+EXP3: mas				{push(&pilaOperando,$1,-1, -1);}
+	 |menos				{push(&pilaOperando,$1,-1, -1);};
 
 TERMINO: FACTOR  { checarOperando1();   } TERMINO2 ;
 TERMINO2 : /*vacio*/
 	 | TERMINO3 TERMINO;	
-TERMINO3: multiplicacion 	{push(&pilaOperando,$1,-1);}
-	 |division		{push(&pilaOperando,$1,-1);};
+TERMINO3: multiplicacion 	{push(&pilaOperando,$1,-1, -1);}
+	 |division		{push(&pilaOperando,$1,-1, -1);};
 
-FACTOR:  parentesisa  { push(&pilaOperando,$1,-1); } EXPRESION parentesisc {pop(&pilaOperando);} /*se queita el fondo falso*/
-	| FACTOR2  VARCTE
-	| id  ARREGLOSASIG	{push(&pilaOperadores, $1, getType(&tbl,$1));}	;/*Meter en pilaTipos el tipo de id que es*/					
-FACTOR2: /* vacio */
-		|EXP3;
+FACTOR:  parentesisa  { push(&pilaOperando,$1,-1,-1); } EXPRESION parentesisc {pop(&pilaOperando);} /*se queita el fondo falso*/
+	| VARCTE
+	| id  ASIGNACION2	{int tipoId = getType(&tbl,$1);
+				int direccionVirtual = generarDireccion(tipoId, alcanceDireccion);
+				 push(&pilaOperadores, $1, tipoId, direccionVirtual); }	;/*Meter en pilaTipos el tipo de id que es*/					
+
  	
 
-VARCTE: ctetexto			{printf("nose"); push(&pilaOperadores, $1, 3);}
-		|cteentero 		{push(&pilaOperadores, $1, 1);}
-		| ctedecimal 		{push(&pilaOperadores, $1, 2);}
-		| ctebooleano		{push(&pilaOperadores, $1, 4);};
+VARCTE: ctetexto			{push(&pilaOperadores, $1, 3, alcanceDireccion);}
+		|cteentero 		{push(&pilaOperadores, $1, 1, alcanceDireccion);}
+		| ctedecimal 		{push(&pilaOperadores, $1, 2, alcanceDireccion);}
+		| ctebooleano		{push(&pilaOperadores, $1, 4, alcanceDireccion);};
 		
 DIBUJARFIGURA: dibujarFigura parentesisa FIGURA coma id parentesisc ptocoma;
 
@@ -336,6 +360,49 @@ int generarTipo(char *operando){
 		return 4;
 }
 
+int generarDireccion(int tipo, int alcance){
+	//global	
+	if(alcance==1){ 
+		printf(">>>>>>>>>>>>>>>>>>ALCANCE GLOBAL\n");
+		if(tipo==1) //entero
+			return direccionEnteroGlobal++;
+		else if(tipo==2) //doble
+			return direccionDobleGlobal++;
+		else if(tipo==3) //texto
+			return direccionTextoGlobal++;
+		else if(tipo==4) //booleano
+			return direccionBooleanoGlobal++;
+	}
+	 //local
+	else if(alcance==2){
+		printf(">>>>>>>>>>>>>>>>>>ALCANCE LOCAL\n");
+		if(tipo==1) //entero
+			return direccionEnteroLocal++;
+		else if(tipo==2) //doble
+			return direccionDobleLocal++;
+		else if(tipo==3) //texto
+			return direccionTextoLocal++;
+		else if(tipo==4) //booleano
+			return direccionBooleanoLocal++;
+	}
+	//temp
+	else if (alcance==3){ 
+		printf(">>>>>>>>>>>>>>>>>>ALCANCE TEMPORAL\n");
+		if(tipo==1)// entero
+			return direccionEnteroTemp++;
+		else if(tipo==2) //doble
+			return direccionDobleTemp++;
+		else if(tipo==3) //texto
+			return direccionTextoTemp++;
+		else if(tipo==4) //booleano
+			return direccionBooleanoTemp++;
+	}
+
+}
+
+
+
+
 int checarSemantica(int op, int op1, int op2){
 
 	if( matrizSemantica[op1-1][op2-1][op] == 0 ){
@@ -390,7 +457,8 @@ void checarOperando1(){
 				}
 				//generar 4 vectores
 				*/
-				push(&pilaOperadores,"t",1);
+				push(&pilaOperadores,"t",1,3);//3: direccion temporal
+			
 				
 			}
 		}
@@ -439,7 +507,7 @@ void checarOperando2(){
 				pop(&pilaOperadores);
 
 				printf("TIPO op1: %i , op2: %i \n", operador1->tipo, operador2->tipo);
-push(&pilaOperadores,"t",1);
+				push(&pilaOperadores,"t",1,3);//3: direccion temporal
 				
 				semanticaValida = checarSemantica(numOp ,operador1->tipo, operador2->tipo);
 			}
@@ -490,7 +558,7 @@ void checarOperando3(char *operando){
 				pop(&pilaOperadores);
 
 				printf("TIPO op1: %i , op2: %i \n", operador1->tipo, operador2->tipo);
-				push(&pilaOperadores,"t",1);
+				push(&pilaOperadores,"t",1, 3);//3: direccion temporal
 				
 				semanticaValida = checarSemantica(numOp ,operador1->tipo, operador2->tipo);
 			}

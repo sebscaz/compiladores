@@ -55,7 +55,7 @@ ctebooleano    [v | f]
 "&"         {printf("and\n"); return(and);}
 "|"         {printf("or\n"); return(or);}
 
-{ctetexto}		{printf("_id  \n "); yylval.string = strdup(yytext); return(ctetexto);}
+{ctetexto}		{printf("_cte texto  \n "); yylval.string = strdup(yytext); return(ctetexto);}
 {cteentero}		{printf("_Cte entero\n"); yylval.cteint = atoi(yytext);  return(cteentero);}
 {ctedecimal}	{printf("_Cte decimal\n"); yylval.ctefloat = atof(yytext); return(ctedecimal);}
 {ctebooleano}	{printf("_Cte booleano\n"); yylval.cteint = atoi(yytext); return(ctebooleano);}

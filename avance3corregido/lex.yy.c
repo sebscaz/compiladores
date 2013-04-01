@@ -1102,12 +1102,12 @@ YY_RULE_SETUP
 case 41:
 YY_RULE_SETUP
 #line 76 "lexico.l"
-{printf("_llave cerrada\n"); return(corchetea);}
+{printf("_corchete abierto\n"); return(corchetea);}
 	YY_BREAK
 case 42:
 YY_RULE_SETUP
 #line 77 "lexico.l"
-{printf("_llave cerrada\n"); return(corchetec);}
+{printf("_corchete cerrado\n"); return(corchetec);}
 	YY_BREAK
 case 43:
 YY_RULE_SETUP
