@@ -23,6 +23,7 @@ void secuenciaWhile2();
 
 int yystopparser=0;
 int matrizSemantica[4][16][11];
+int contT=1;
 
 //Direcciones Virtuales
 int alcanceDireccion=0; // 1: global, 2: local, 3: temp
@@ -487,6 +488,8 @@ void checarOperando2(){
 	ptr operador2= malloc (sizeof(p_Nodo)); 
 	int semanticaValida=-1;
 	int numOp=-1;
+	int dirTemp=0;
+	char nombreT[10];
 
 	if (op!= NULL){
 		if(pilaOperando!=NULL){
@@ -508,9 +511,15 @@ void checarOperando2(){
 				pop(&pilaOperadores);
 
 				printf("TIPO op1: %i , op2: %i \n", operador1->tipo, operador2->tipo);
-				push(&pilaOperadores,"t",1,3);//3: direccion temporal
 				
+			    strcpy( nombreT, "t" );
+			    strcpy( nombreT, contT++ );
+			
 				semanticaValida = checarSemantica(numOp ,operador1->tipo, operador2->tipo);
+				res = generarDireccion(semanticaValida,3); //3:direccion temporal
+				generarCuadruplo(numOp ,operador1->tipo, operador2->tipo, res);
+				push(&pilaOperadores,nombreT,semanticaValida,res);//3: direccion temporal
+				
 			}
 		}
 	}/*
