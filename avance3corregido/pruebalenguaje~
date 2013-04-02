@@ -4,7 +4,7 @@ programa prueba {
 	crear booleano what;
 	crear entero aldo;
 
-	aldo=1 + mak[1][1] ;
+	aldo=1 + mak;
 
 	funcion entero mak(entero hola){
 		crear entero sebas;
