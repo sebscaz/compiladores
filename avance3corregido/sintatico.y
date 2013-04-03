@@ -587,6 +587,13 @@ void checarOperando3(char *operando){
 
 void generarCuadruplo(int numOp ,int tipo1, int tipo2, int res){
 
+	//Crear vectores para ir almacenado dinameicamente los cuadruplos
+	//Algo masomenos asi:::
+	//vectorOp.add(numOp);	//agregar un nuevo elemento al final...
+	//vectorOp1.add(tipo1);
+	//vectorOp2.add(tipo2);
+	//vectorRes.add(res);
+	
 	contS++;/*suma contador de saltos*/
 	char intemporal[6];
 	printf("@@@@@@@@@@@@@@@@@Cuadruplo generado: %i \n", res);
@@ -612,26 +619,30 @@ void secuenciaIf1(){
 	{	
 		resultado= pop(&pilaO);  //ultima Dirección de la pila, la cual tiene el resultado del estatuto
 		generarCuadruplo(12, resultado, __,-1); gotoF,12
-		push(&pilaSaltos, contS-1);
+		push(&pilaSaltos, contS-1, -1, contS-1);	//usar el tipo direccion como contador
 	}
 	*/
 }
 void secuenciaIf2(){
 	/*
-	rellenar(pop(&pilaSaltos),contS);
+	ptr fin= malloc (sizeof(p_Nodo)); 
+	fin->direccion = &pilaSaltos; 	//Contador del cuadruplo
+	pop(&pilaSaltos)
+	
+	rellenar(fin->direccion,contS);
 	*/
 }
 void secuenciaElse(){
 	/*
 	generarCuadruplo(10 ,_,-1,-1); goto ,10
 	rellenar(pop(&pilaSaltos),contS);
-	push(&pilaSaltos, contS-1);
+	push(&pilaSaltos, contS-1, -1, contS-1);
 		
 	*/
 }
 void secuenciaWhile1(){
 	/*
-	push(&pilaSaltos,contS);	
+	push(&pilaSaltos, contS-1, -1, contS-1)	;
 	*/
 }
 void secuenciaWhile2(){
@@ -642,7 +653,7 @@ void secuenciaWhile2(){
 	else{	
 		resultado= pop(&pilaO);  //ultima Dirección de la pila la cual tiene el resultado del estatuto
 		generarCuadruplo(GoToF 12, resultado, __);
-		push(&pilaSaltos, contS-1);
+		push(&pilaSaltos, contS-1, -1, contS-1);
 		}
 	*/
 }
@@ -656,8 +667,10 @@ void secuenciaWhile3(){
 	*/
 }
 	
-void rellenar(){
-/* poner numeros en espacios en blanco anteriores   */
+void rellenar(int goTo, int contador){
+	/* poner numeros en espacios en blanco anteriores   */
+	//Usar los vectors globales, algo asi::
+	//vectorRes[goTo].set(contador);
 
 }
 
