@@ -25,6 +25,7 @@ void secuenciaWhile2();
 int yystopparser=0;
 int matrizSemantica[4][16][11];
 int contT=1;
+int contS=0; /*contador de saltos*/ 
 char strCuadruplos[1000];
 
 //Direcciones Virtuales
@@ -55,6 +56,7 @@ int tipoOp=-1;
 ptr pilaOperadores=NULL;
 ptr pilaOperando=NULL;
 ptr pilaTipos=NULL;
+ptr pilaSaltos=NULL;
 
 
 
@@ -365,6 +367,9 @@ int generarTipo(char *operando){
 }
 
 int generarDireccion(int tipo, int alcance){
+
+               
+
 	//global	
 	if(alcance==1){ 
 		printf(">>>>>>>>>>>>>>>>>>ALCANCE GLOBAL\n");
@@ -441,14 +446,14 @@ void checarOperando1(){
 				printf("Operandoooo  %c",*pilaOperando->valor);
 				pop(&pilaOperando);
 
-				operador1->valor = pilaOperadores->valor;
-				operador1->tipo = pilaOperadores->tipo; 
-				operador1->direccion = pilaOperadores->direccion; 
-				pop(&pilaOperadores);
-
 				operador2->valor = pilaOperadores->valor;
 				operador2->tipo = pilaOperadores->tipo; 
 				operador2->direccion = pilaOperadores->direccion; 
+				pop(&pilaOperadores);
+
+				operador1->valor = pilaOperadores->valor;
+				operador1->tipo = pilaOperadores->tipo; 
+				operador1->direccion = pilaOperadores->direccion; 
 				pop(&pilaOperadores);
 
 				printf("TIPO op1: %i, direccion: %i | op2: %i, direccion:%i \n", operador1->tipo, operador1->direccion, operador2->tipo, operador2->direccion);
@@ -503,14 +508,14 @@ void checarOperando2(){
 				printf("Operandoooo  %c",*pilaOperando->valor);
 				pop(&pilaOperando);
 
-				operador1->valor = pilaOperadores->valor;
-				operador1->tipo = pilaOperadores->tipo; 
-				operador1->direccion = pilaOperadores->direccion; 
-				pop(&pilaOperadores);
-
 				operador2->valor = pilaOperadores->valor;
 				operador2->tipo = pilaOperadores->tipo; 
 				operador2->direccion = pilaOperadores->direccion; 
+				pop(&pilaOperadores);
+
+				operador1->valor = pilaOperadores->valor;
+				operador1->tipo = pilaOperadores->tipo; 
+				operador1->direccion = pilaOperadores->direccion; 
 				pop(&pilaOperadores);
 
 				printf("TIPO op1: %i, direccion: %i | op2: %i, direccion:%i \n", operador1->tipo, operador1->direccion, operador2->tipo, operador2->direccion);
@@ -582,6 +587,7 @@ void checarOperando3(char *operando){
 
 void generarCuadruplo(int numOp ,int tipo1, int tipo2, int res){
 
+	contS++;/*suma contador de saltos*/
 	char intemporal[6];
 	printf("@@@@@@@@@@@@@@@@@Cuadruplo generado: %i \n", res);
 
@@ -602,27 +608,30 @@ void secuenciaIf1(){
 	if(aux->tipo != 4)//dif de boolean
 		printf("Error semantico!!");
 	else	
-		pop(&pilaO);
-		generar(GoToF, resultado, __);
-		push(&pilaSaltos, cont-1);
+		
+	{	
+		resultado= pop(&pilaO);  //ultima Dirección de la pila, la cual tiene el resultado del estatuto
+		generarCuadruplo(12, resultado, __,-1); gotoF,12
+		push(&pilaSaltos, contS-1);
+	}
 	*/
 }
 void secuenciaIf2(){
 	/*
-	rellenar(pop(&pilaSaltos),cont);
+	rellenar(pop(&pilaSaltos),contS);
 	*/
 }
 void secuenciaElse(){
 	/*
-	generar(goto ___);
-	rellenar(pop(&pilaSaltos),cont);
-	push(&pilaSaltos, cont-1);
+	generarCuadruplo(10 ,_,-1,-1); goto ,10
+	rellenar(pop(&pilaSaltos),contS);
+	push(&pilaSaltos, contS-1);
 		
 	*/
 }
 void secuenciaWhile1(){
 	/*
-	push(&pilaSaltos,cont);	
+	push(&pilaSaltos,contS);	
 	*/
 }
 void secuenciaWhile2(){
@@ -630,23 +639,27 @@ void secuenciaWhile2(){
 	aux = pop(&pilaTipos);
 	if(aux->tipo != 4)//dif de boolean
 		printf("Error semantico!!");
-	else	
-		pop(&pilaO);
-		generar(GoToF, resultado, __);
-		push(&pilaSaltos, cont-1);
+	else{	
+		resultado= pop(&pilaO);  //ultima Dirección de la pila la cual tiene el resultado del estatuto
+		generarCuadruplo(GoToF 12, resultado, __);
+		push(&pilaSaltos, contS-1);
+		}
 	*/
 }
 
 void secuenciaWhile3(){
 	/*
 	falso = pop(&pilaSaltos);
-	retorno = pop(&pilaSaltos);
-	generar(goto, retorno);
-	rellenar(falso,cont);
+	retorno = pop(&pilaSaltos); direccion
+	generar(goto 10, retorno);
+	rellenar(falso 13,contS);
 	*/
 }
 	
+void rellenar(){
+/* poner numeros en espacios en blanco anteriores   */
 
+}
 
 
 void inicializarMatriz(){
