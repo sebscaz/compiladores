@@ -58,6 +58,12 @@ ptr pilaOperando=NULL;
 ptr pilaTipos=NULL;
 ptr pilaSaltos=NULL;
 
+/*Vectores dinamicos*/
+int* vectorOp;
+int* vectorOp1;
+int* vectorOp2;
+int* vectorRes;
+
 
 
 %}
@@ -595,6 +601,23 @@ void generarCuadruplo(int numOp ,int tipo1, int tipo2, int res){
 	//vectorRes.add(res);
 	
 	contS++;/*suma contador de saltos*/
+	
+	/*Nose si deba ir aqui o en el main para que no este haciendose cada que se llame la función*/
+	 vectorOp=(int*) malloc(sizeof(int));;
+	 vectorOp1=(int*) malloc(sizeof(int));;
+	 vectorOp2=(int*) malloc(sizeof(int));;
+	 vectorRes=(int*) malloc(sizeof(int));;
+	
+	/*El cuadruplo se guarda en la casilla del contador que le toco.*/
+	vectorOp[contS]=numOp;
+	vectorOp1[contS]=tipo1;
+	vectorOp2[contS]=tipo2;
+	vectorRes[contS]=res;
+	
+	
+	/*imprimir para checar si se meten los valores*/
+	printf("Cuadruplo # %i ---(%i,%i,%i,%i)", contS,vectorOp[contS],vectorOp1[contS],vectorOp2[contS],vectorRes[contS]);
+	
 	char intemporal[6];
 	printf("@@@@@@@@@@@@@@@@@Cuadruplo generado: %i \n", res);
 
