@@ -59,6 +59,7 @@ ptr pilaTipos=NULL;
 ptr pilaSaltos=NULL;
 
 /*Vectores dinamicos*/
+int* vectorTemporal;
 int* vectorOp;
 int* vectorOp1;
 int* vectorOp2;
@@ -144,7 +145,7 @@ int* vectorRes;
 
 %%
 
-PROGRAMA: programa id {insert(&tbl,$2,$2,-1); puts(get(&tbl,$2)); }  llavea PROGRAMA1 PROGRAMASIG PROGRAMA2 BLOQUE llavec {printf("\n\n%s", strCuadruplos);};
+PROGRAMA: {inicializarVectores();}programa id {insert(&tbl,$2,$2,-1); puts(get(&tbl,$2)); }  llavea PROGRAMA1 PROGRAMASIG PROGRAMA2 BLOQUE llavec {printf("\n\n%s", strCuadruplos);};
 PROGRAMA1: {alcanceDireccion=1;/*global*/}DECLARACION PROGRAMA12;
 PROGRAMA12: PROGRAMA1
 		  | /*vacio*/;
@@ -592,28 +593,21 @@ void checarOperando3(char *operando){
 
 
 void generarCuadruplo(int numOp ,int tipo1, int tipo2, int res){
-
-	//Crear vectores para ir almacenado dinameicamente los cuadruplos
-	//Algo masomenos asi:::
-	//vectorOp.add(numOp);	//agregar un nuevo elemento al final...
-	//vectorOp1.add(tipo1);
-	//vectorOp2.add(tipo2);
-	//vectorRes.add(res);
 	
-	contS++;/*suma contador de saltos*/
-	
-	/*Nose si deba ir aqui o en el main para que no este haciendose cada que se llame la función*/
-	 vectorOp=(int*) malloc(sizeof(int));;
-	 vectorOp1=(int*) malloc(sizeof(int));;
-	 vectorOp2=(int*) malloc(sizeof(int));;
-	 vectorRes=(int*) malloc(sizeof(int));;
-	
+	//Reajustar el tamano de los vectores 
+	vectorTemporal=realloc(vectorOp,(contS+2)*sizeof(int));
+	if(vectorTemporal != NULL){
+			vectorOp = vectorTemporal;
+			vectorOp1 = vectorTemporal;
+			vectorOp2 = vectorTemporal;
+			vectorRes = vectorTemporal;
+	}
+		
 	/*El cuadruplo se guarda en la casilla del contador que le toco.*/
 	vectorOp[contS]=numOp;
 	vectorOp1[contS]=tipo1;
 	vectorOp2[contS]=tipo2;
 	vectorRes[contS]=res;
-	
 	
 	/*imprimir para checar si se meten los valores*/
 	printf("Cuadruplo # %i ---(%i,%i,%i,%i)", contS,vectorOp[contS],vectorOp1[contS],vectorOp2[contS],vectorRes[contS]);
@@ -630,6 +624,7 @@ void generarCuadruplo(int numOp ,int tipo1, int tipo2, int res){
 	sprintf(intemporal, "%i\n", res);
 	strcat(strCuadruplos, intemporal); 
 
+	contS++;/*suma contador de saltos*/
 }
 
 void secuenciaIf1(){
@@ -692,12 +687,17 @@ void secuenciaWhile3(){
 	
 void rellenar(int goTo, int contador){
 	/* poner numeros en espacios en blanco anteriores   */
-	//Usar los vectors globales, algo asi::
-	//vectorRes[goTo].set(contador);
+	vectorRes[goTo]=contador;
 
 }
 
-
+void inicializarVectores(){
+	 vectorTemporal=(int*) malloc(sizeof(int));
+	 vectorOp=(int*) malloc(sizeof(int));
+	 vectorOp1=(int*) malloc(sizeof(int));
+	 vectorOp2=(int*) malloc(sizeof(int));
+	 vectorRes=(int*) malloc(sizeof(int));
+}
 void inicializarMatriz(){
 	matrizSemantica[0][0][0]= 1;	//Entero + entero = entero
 	matrizSemantica[0][1][0]= 2;	//Entero + doble = doble
