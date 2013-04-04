@@ -11,7 +11,7 @@ programa prueba {
 		crear entero [3][3] areglo;		
 
 		sebas = 2 + 2 / (4 * 3) - 4;
-		sebas = 2 + areglo[1][1] + 2;
+		
 		si(4>3){
 			imprimir("hola");
 		}

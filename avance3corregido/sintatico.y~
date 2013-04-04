@@ -9,8 +9,10 @@
 
 //Prototipos de metodos
 void inicializarMatriz();
+void inicializarVectores();
 void checarOperando1();
 void checarOperando2(); 
+void rellenar(int goTo, int contador);
 int checarSemantica(int op, int op1, int op2);
 int generarDireccion(int tipo, int alcance);
 void generarCuadruplo(int numOp ,int tipo1, int tipo2, int res);
@@ -21,6 +23,7 @@ void secuenciaIf2();
 void secuenciaElse();
 void secuenciaWhile1();
 void secuenciaWhile2();	
+void secuenciaWhile3();
 
 int yystopparser=0;
 int matrizSemantica[4][16][11];
@@ -59,6 +62,7 @@ ptr pilaTipos=NULL;
 ptr pilaSaltos=NULL;
 
 /*Vectores dinamicos*/
+int* vectorTemporal;
 int* vectorOp;
 int* vectorOp1;
 int* vectorOp2;
@@ -234,14 +238,14 @@ ESCRITURA: imprimir parentesisa EXP parentesisc ptocoma;
 
 LECTURA: leer parentesisa parentesisc ptocoma;
 
-CONDICION: si parentesisa SUPEREXPRESION parentesisc {/*secuenciaIf();*/}  llavea BLOQUE llavec CONDICION2 {/*secuenciaIf2();*/};
+CONDICION: si parentesisa SUPEREXPRESION parentesisc {secuenciaIf();}  llavea BLOQUE llavec CONDICION2 {secuenciaIf2();};
 
-CONDICION2: no {/*secuenciaElse();*/} llavea BLOQUE llavec 
+CONDICION2: no {secuenciaElse();} llavea BLOQUE llavec 
 		| /*vacio*/;
 		
 
 
-CICLO: mientras {/*secuenciaWhile1();*/} parentesisa SUPEREXPRESION parentesisc hacer {/*secuenciaWhile2();*/}  llavea BLOQUE llavec {/*secuenciaWhile3();*/} ;
+CICLO: mientras {secuenciaWhile1();} parentesisa SUPEREXPRESION parentesisc hacer {secuenciaWhile2();}  llavea BLOQUE llavec {secuenciaWhile3();} ;
 
 CREARFUNCION: funcion CREARFUNCION2 id parentesisa CREARFUNCION3 parentesisc llavea DECLARACIONFUNCIONCICLO BLOQUE regresar EXP llavec 
 
@@ -352,6 +356,7 @@ COLOR: rojo
 int main()
 {
 	inicializarMatriz();
+	inicializarVectores();
 	printf("MATRIZZZIIZIZ %i", matrizSemantica[3][3][9]);
 
 	if (yyparse()==0)
@@ -592,36 +597,30 @@ void checarOperando3(char *operando){
 
 
 void generarCuadruplo(int numOp ,int tipo1, int tipo2, int res){
-
-	//Crear vectores para ir almacenado dinameicamente los cuadruplos
-	//Algo masomenos asi:::
-	//vectorOp.add(numOp);	//agregar un nuevo elemento al final...
-	//vectorOp1.add(tipo1);
-	//vectorOp2.add(tipo2);
-	//vectorRes.add(res);
 	
-	contS++;/*suma contador de saltos*/
+	//Reajustar el tamano de los vectores 
+	vectorTemporal=realloc(vectorOp,(contS+2)*sizeof(int));
+	if(vectorTemporal != NULL) vectorOp = vectorTemporal;
+	vectorTemporal=realloc(vectorOp1,(contS+2)*sizeof(int));
+	if(vectorTemporal != NULL) vectorOp1 = vectorTemporal;
+	vectorTemporal=realloc(vectorOp2,(contS+2)*sizeof(int));
+	if(vectorTemporal != NULL) vectorOp2 = vectorTemporal;
+	vectorTemporal=realloc(vectorRes,(contS+2)*sizeof(int));
+	if(vectorTemporal != NULL) vectorRes = vectorTemporal;
 	
-	/*Nose si deba ir aqui o en el main para que no este haciendose cada que se llame la función*/
-	 vectorOp=(int*) malloc(sizeof(int));;
-	 vectorOp1=(int*) malloc(sizeof(int));;
-	 vectorOp2=(int*) malloc(sizeof(int));;
-	 vectorRes=(int*) malloc(sizeof(int));;
-	
+		
 	/*El cuadruplo se guarda en la casilla del contador que le toco.*/
 	vectorOp[contS]=numOp;
 	vectorOp1[contS]=tipo1;
 	vectorOp2[contS]=tipo2;
 	vectorRes[contS]=res;
 	
-	
 	/*imprimir para checar si se meten los valores*/
-	printf("Cuadruplo # %i ---(%i,%i,%i,%i)", contS,vectorOp[contS],vectorOp1[contS],vectorOp2[contS],vectorRes[contS]);
+	printf("\nCuadruplo # %i ---(%i,%i,%i,%i)\n", contS,vectorOp[contS],vectorOp1[contS],vectorOp2[contS],vectorRes[contS]);
 	
-	char intemporal[6];
-	printf("@@@@@@@@@@@@@@@@@Cuadruplo generado: %i \n", res);
+	char intemporal[25];
 
-	sprintf(intemporal, "%i - ", numOp);
+	sprintf(intemporal, "Cuadruplo # %i --- %i -", contS,numOp);
 	strcat(strCuadruplos, intemporal); 
 	sprintf(intemporal, "%i - ", tipo1);
 	strcat(strCuadruplos, intemporal); 
@@ -630,73 +629,102 @@ void generarCuadruplo(int numOp ,int tipo1, int tipo2, int res){
 	sprintf(intemporal, "%i\n", res);
 	strcat(strCuadruplos, intemporal); 
 
+	contS++;/*suma contador de saltos*/
 }
 
 void secuenciaIf1(){
-	/*
-	aux = pop(&pilaTipos);
+	
+	ptr aux= malloc (sizeof(p_Nodo)); 
+	aux->tipo = pilaTipos->tipo;
+
 	if(aux->tipo != 4)//dif de boolean
 		printf("Error semantico!!");
-	else	
-		
+	else		
 	{	
-		resultado= pop(&pilaO);  //ultima Dirección de la pila, la cual tiene el resultado del estatuto
-		generarCuadruplo(12, resultado, __,-1); gotoF,12
-		push(&pilaSaltos, contS-1, -1, contS-1);	//usar el tipo direccion como contador
+		pop(&pilaTipos);
+
+		ptr resultado= malloc (sizeof(p_Nodo)); 
+		resultado->direccion = pilaOperadores->direccion;
+		pop(&pilaOperadores);  //ultima Dirección de la pila, la cual tiene el resultado del estatuto
+		
+		generarCuadruplo(12, resultado->direccion, -1,-1);// gotoF,12
+		push(&pilaSaltos, "t", -1, contS-1);	//usar el tipo direccion como contador
 	}
-	*/
+	
 }
 void secuenciaIf2(){
-	/*
-	ptr fin= malloc (sizeof(p_Nodo)); 
-	fin->direccion = &pilaSaltos; 	//Contador del cuadruplo
-	pop(&pilaSaltos)
 	
+	ptr fin= malloc (sizeof(p_Nodo)); 
+	//usar direccion como el salto
+	fin->direccion = pilaSaltos->direccion; 	
+	pop(&pilaSaltos);
 	rellenar(fin->direccion,contS);
-	*/
+	
 }
 void secuenciaElse(){
-	/*
-	generarCuadruplo(10 ,_,-1,-1); goto ,10
-	rellenar(pop(&pilaSaltos),contS);
-	push(&pilaSaltos, contS-1, -1, contS-1);
+	
+	generarCuadruplo(10 ,-1,-1,-1); // goto ,10
+	ptr falso=malloc(sizeof(p_Nodo));
+	falso->direccion=pilaSaltos->direccion;
+
+	pop(&pilaSaltos);
+	rellenar(falso->direccion,contS);
+	push(&pilaSaltos, "t", -1, contS-1);
 		
-	*/
+
 }
 void secuenciaWhile1(){
-	/*
-	push(&pilaSaltos, contS-1, -1, contS-1)	;
-	*/
+	
+	push(&pilaSaltos, "t", -1, contS-1)	;
+	
 }
 void secuenciaWhile2(){
-	/*
-	aux = pop(&pilaTipos);
+	
+	ptr aux= malloc (sizeof(p_Nodo)); 
+	aux->tipo = pilaTipos->tipo;
+
 	if(aux->tipo != 4)//dif de boolean
 		printf("Error semantico!!");
 	else{	
-		resultado= pop(&pilaO);  //ultima Dirección de la pila la cual tiene el resultado del estatuto
-		generarCuadruplo(GoToF 12, resultado, __);
-		push(&pilaSaltos, contS-1, -1, contS-1);
+		ptr resultado= malloc (sizeof(p_Nodo)); 
+		resultado->direccion = pilaOperadores->direccion;
+		pop(&pilaOperadores);  //ultima Dirección de la pila, la cual tiene el resultado del estatuto
+		
+		generarCuadruplo(12, resultado->direccion, -1, -1); //12 : GoToF
+		push(&pilaSaltos, "t", -1, contS-1);
 		}
-	*/
+	
 }
 
 void secuenciaWhile3(){
-	/*
-	falso = pop(&pilaSaltos);
-	retorno = pop(&pilaSaltos); direccion
-	generar(goto 10, retorno);
-	rellenar(falso 13,contS);
-	*/
+	
+	ptr falso= malloc (sizeof(p_Nodo)); 
+	falso->direccion = pilaTipos->direccion;
+	pop(&pilaSaltos);
+
+	ptr retorno= malloc (sizeof(p_Nodo)); 
+	retorno->direccion = pilaTipos->direccion;
+	pop(&pilaSaltos); 
+
+	generarCuadruplo(10, retorno->direccion,-1,-1); //10 : Go To
+	rellenar(falso->direccion,contS);
+	
 }
 	
 void rellenar(int goTo, int contador){
 	/* poner numeros en espacios en blanco anteriores   */
-	//Usar los vectors globales, algo asi::
-	//vectorRes[goTo].set(contador);
+	vectorRes[goTo]=contador;
+	printf("~~~~~GO TO~~[%i]~~  contador ~~~ : %i\n", goTo, contador);
 
 }
 
+void inicializarVectores(){
+	 vectorTemporal=(int*) malloc(sizeof(int));
+	 vectorOp=(int*) malloc(sizeof(int));
+	 vectorOp1=(int*) malloc(sizeof(int));
+	 vectorOp2=(int*) malloc(sizeof(int));
+	 vectorRes=(int*) malloc(sizeof(int));
+}
 
 void inicializarMatriz(){
 	matrizSemantica[0][0][0]= 1;	//Entero + entero = entero

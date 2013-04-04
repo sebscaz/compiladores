@@ -78,8 +78,10 @@
 
 //Prototipos de metodos
 void inicializarMatriz();
+void inicializarVectores();
 void checarOperando1();
 void checarOperando2(); 
+void rellenar(int goTo, int contador);
 int checarSemantica(int op, int op1, int op2);
 int generarDireccion(int tipo, int alcance);
 void generarCuadruplo(int numOp ,int tipo1, int tipo2, int res);
@@ -90,6 +92,7 @@ void secuenciaIf2();
 void secuenciaElse();
 void secuenciaWhile1();
 void secuenciaWhile2();	
+void secuenciaWhile3();
 
 int yystopparser=0;
 int matrizSemantica[4][16][11];
@@ -128,6 +131,7 @@ ptr pilaTipos=NULL;
 ptr pilaSaltos=NULL;
 
 /*Vectores dinamicos*/
+int* vectorTemporal;
 int* vectorOp;
 int* vectorOp1;
 int* vectorOp2;
@@ -138,7 +142,7 @@ int* vectorRes;
 
 
 /* Line 268 of yacc.c  */
-#line 142 "sintatico.tab.c"
+#line 146 "sintatico.tab.c"
 
 /* Enabling traces.  */
 #ifndef YYDEBUG
@@ -236,12 +240,12 @@ typedef union YYSTYPE
 {
 
 /* Line 293 of yacc.c  */
-#line 72 "sintatico.y"
+#line 76 "sintatico.y"
 int cteint; float ctefloat; int cteboolean; char *string;
 
 
 /* Line 293 of yacc.c  */
-#line 245 "sintatico.tab.c"
+#line 249 "sintatico.tab.c"
 } YYSTYPE;
 # define YYSTYPE_IS_TRIVIAL 1
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */
@@ -253,7 +257,7 @@ int cteint; float ctefloat; int cteboolean; char *string;
 
 
 /* Line 343 of yacc.c  */
-#line 257 "sintatico.tab.c"
+#line 261 "sintatico.tab.c"
 
 #ifdef short
 # undef short
@@ -597,20 +601,20 @@ static const yytype_int16 yyrhs[] =
 /* YYRLINE[YYN] -- source line where rule number YYN was defined.  */
 static const yytype_uint16 yyrline[] =
 {
-       0,   147,   147,   147,   148,   148,   149,   150,   151,   152,
-     153,   155,   156,   157,   160,   161,   162,   163,   165,   166,
-     167,   169,   170,   171,   172,   173,   174,   175,   177,   178,
-     179,   180,   181,   182,   183,   184,   185,   186,   187,   188,
-     191,   192,   193,   196,   196,   197,   198,   200,   210,   211,
-     214,   215,   216,   219,   220,   221,   222,   222,   223,   224,
-     225,   226,   233,   235,   237,   237,   239,   239,   240,   244,
-     244,   244,   246,   252,   253,   254,   255,   256,   257,   258,
-     260,   261,   262,   263,   266,   267,   268,   269,   270,   273,
-     274,   275,   276,   277,   278,   283,   288,   291,   291,   292,
-     293,   294,   295,   297,   297,   298,   299,   300,   301,   303,
-     303,   304,   305,   312,   313,   314,   315,   317,   319,   320,
-     321,   322,   324,   326,   329,   331,   333,   335,   337,   339,
-     341,   343,   345,   347,   348,   349
+       0,   151,   151,   151,   152,   152,   153,   154,   155,   156,
+     157,   159,   160,   161,   164,   165,   166,   167,   169,   170,
+     171,   173,   174,   175,   176,   177,   178,   179,   181,   182,
+     183,   184,   185,   186,   187,   188,   189,   190,   191,   192,
+     195,   196,   197,   200,   200,   201,   202,   204,   214,   215,
+     218,   219,   220,   223,   224,   225,   226,   226,   227,   228,
+     229,   230,   237,   239,   241,   241,   243,   243,   244,   248,
+     248,   248,   250,   256,   257,   258,   259,   260,   261,   262,
+     264,   265,   266,   267,   270,   271,   272,   273,   274,   277,
+     278,   279,   280,   281,   282,   287,   292,   295,   295,   296,
+     297,   298,   299,   301,   301,   302,   303,   304,   305,   307,
+     307,   308,   309,   316,   317,   318,   319,   321,   323,   324,
+     325,   326,   328,   330,   333,   335,   337,   339,   341,   343,
+     345,   347,   349,   351,   352,   353
 };
 #endif
 
@@ -1734,154 +1738,154 @@ yyreduce:
         case 2:
 
 /* Line 1806 of yacc.c  */
-#line 147 "sintatico.y"
+#line 151 "sintatico.y"
     {insert(&tbl,(yyvsp[(2) - (2)].string),(yyvsp[(2) - (2)].string),-1); puts(get(&tbl,(yyvsp[(2) - (2)].string))); }
     break;
 
   case 3:
 
 /* Line 1806 of yacc.c  */
-#line 147 "sintatico.y"
+#line 151 "sintatico.y"
     {printf("\n\n%s", strCuadruplos);}
     break;
 
   case 4:
 
 /* Line 1806 of yacc.c  */
-#line 148 "sintatico.y"
+#line 152 "sintatico.y"
     {alcanceDireccion=1;/*global*/}
     break;
 
   case 14:
 
 /* Line 1806 of yacc.c  */
-#line 160 "sintatico.y"
+#line 164 "sintatico.y"
     {tipoOp = generarTipo((yyvsp[(1) - (1)].string)); printf("===========tipo: %i\n", tipoOp); }
     break;
 
   case 15:
 
 /* Line 1806 of yacc.c  */
-#line 161 "sintatico.y"
+#line 165 "sintatico.y"
     {tipoOp = generarTipo((yyvsp[(1) - (1)].string)); printf("===========tipo: %i\n", tipoOp);}
     break;
 
   case 16:
 
 /* Line 1806 of yacc.c  */
-#line 162 "sintatico.y"
+#line 166 "sintatico.y"
     {tipoOp = generarTipo((yyvsp[(1) - (1)].string)); printf("===========tipo: %i\n", tipoOp);}
     break;
 
   case 17:
 
 /* Line 1806 of yacc.c  */
-#line 163 "sintatico.y"
+#line 167 "sintatico.y"
     {tipoOp = generarTipo((yyvsp[(1) - (1)].string)); printf("===========tipo: %i\n", tipoOp);}
     break;
 
   case 40:
 
 /* Line 1806 of yacc.c  */
-#line 191 "sintatico.y"
+#line 195 "sintatico.y"
     {insert(&tbl,(yyvsp[(4) - (5)].string),(yyvsp[(4) - (5)].string),tipoOp); printf("El tipo eeeeeeessssss: %i\n", getType(&tbl,(yyvsp[(4) - (5)].string)));}
     break;
 
   case 43:
 
 /* Line 1806 of yacc.c  */
-#line 196 "sintatico.y"
+#line 200 "sintatico.y"
     {alcanceDireccion=2;/*local*/}
     break;
 
   case 56:
 
 /* Line 1806 of yacc.c  */
-#line 222 "sintatico.y"
+#line 226 "sintatico.y"
     {hacerPush=0; /*no meter a la pila las EXP de los arreglos*/}
     break;
 
   case 57:
 
 /* Line 1806 of yacc.c  */
-#line 222 "sintatico.y"
+#line 226 "sintatico.y"
     {hacerPush=1;}
     break;
 
   case 64:
 
 /* Line 1806 of yacc.c  */
-#line 237 "sintatico.y"
-    {/*secuenciaIf();*/}
+#line 241 "sintatico.y"
+    {secuenciaIf1();}
     break;
 
   case 65:
 
 /* Line 1806 of yacc.c  */
-#line 237 "sintatico.y"
-    {/*secuenciaIf2();*/}
+#line 241 "sintatico.y"
+    {secuenciaIf2();}
     break;
 
   case 66:
 
 /* Line 1806 of yacc.c  */
-#line 239 "sintatico.y"
-    {/*secuenciaElse();*/}
+#line 243 "sintatico.y"
+    {secuenciaElse();}
     break;
 
   case 69:
 
 /* Line 1806 of yacc.c  */
-#line 244 "sintatico.y"
-    {/*secuenciaWhile1();*/}
+#line 248 "sintatico.y"
+    {secuenciaWhile1();}
     break;
 
   case 70:
 
 /* Line 1806 of yacc.c  */
-#line 244 "sintatico.y"
-    {/*secuenciaWhile2();*/}
+#line 248 "sintatico.y"
+    {secuenciaWhile2();}
     break;
 
   case 71:
 
 /* Line 1806 of yacc.c  */
-#line 244 "sintatico.y"
-    {/*secuenciaWhile3();*/}
+#line 248 "sintatico.y"
+    {secuenciaWhile3();}
     break;
 
   case 77:
 
 /* Line 1806 of yacc.c  */
-#line 256 "sintatico.y"
+#line 260 "sintatico.y"
     {insert(&tbl,(yyvsp[(2) - (3)].string),(yyvsp[(2) - (3)].string),tipoOp);}
     break;
 
   case 91:
 
 /* Line 1806 of yacc.c  */
-#line 275 "sintatico.y"
+#line 279 "sintatico.y"
     {/*  checaroperando3();   */}
     break;
 
   case 92:
 
 /* Line 1806 of yacc.c  */
-#line 276 "sintatico.y"
+#line 280 "sintatico.y"
     {push(&pilaOperando,(yyvsp[(1) - (1)].string),-1, -1);}
     break;
 
   case 93:
 
 /* Line 1806 of yacc.c  */
-#line 277 "sintatico.y"
+#line 281 "sintatico.y"
     {push(&pilaOperando,(yyvsp[(1) - (1)].string), -1, -1);}
     break;
 
   case 94:
 
 /* Line 1806 of yacc.c  */
-#line 278 "sintatico.y"
+#line 282 "sintatico.y"
     {char* str = (yyvsp[(1) - (2)].string);
 				      char dest[2];
 				      strcpy( dest, str );
@@ -1892,7 +1896,7 @@ yyreduce:
   case 95:
 
 /* Line 1806 of yacc.c  */
-#line 283 "sintatico.y"
+#line 287 "sintatico.y"
     {char* str = (yyvsp[(1) - (2)].string);
 				      char dest[2];
 				      strcpy( dest, str );
@@ -1903,70 +1907,70 @@ yyreduce:
   case 96:
 
 /* Line 1806 of yacc.c  */
-#line 288 "sintatico.y"
+#line 292 "sintatico.y"
     {push(&pilaOperando, (yyvsp[(1) - (1)].string), -1, -1);}
     break;
 
   case 97:
 
 /* Line 1806 of yacc.c  */
-#line 291 "sintatico.y"
+#line 295 "sintatico.y"
     {  checarOperando2();   }
     break;
 
   case 101:
 
 /* Line 1806 of yacc.c  */
-#line 294 "sintatico.y"
+#line 298 "sintatico.y"
     {push(&pilaOperando,(yyvsp[(1) - (1)].string),-1, -1);}
     break;
 
   case 102:
 
 /* Line 1806 of yacc.c  */
-#line 295 "sintatico.y"
+#line 299 "sintatico.y"
     {push(&pilaOperando,(yyvsp[(1) - (1)].string),-1, -1);}
     break;
 
   case 103:
 
 /* Line 1806 of yacc.c  */
-#line 297 "sintatico.y"
+#line 301 "sintatico.y"
     { checarOperando1();   }
     break;
 
   case 107:
 
 /* Line 1806 of yacc.c  */
-#line 300 "sintatico.y"
+#line 304 "sintatico.y"
     {push(&pilaOperando,(yyvsp[(1) - (1)].string),-1, -1);}
     break;
 
   case 108:
 
 /* Line 1806 of yacc.c  */
-#line 301 "sintatico.y"
+#line 305 "sintatico.y"
     {push(&pilaOperando,(yyvsp[(1) - (1)].string),-1, -1);}
     break;
 
   case 109:
 
 /* Line 1806 of yacc.c  */
-#line 303 "sintatico.y"
+#line 307 "sintatico.y"
     { push(&pilaOperando,(yyvsp[(1) - (1)].string),-1,-1); }
     break;
 
   case 110:
 
 /* Line 1806 of yacc.c  */
-#line 303 "sintatico.y"
+#line 307 "sintatico.y"
     {pop(&pilaOperando);}
     break;
 
   case 112:
 
 /* Line 1806 of yacc.c  */
-#line 305 "sintatico.y"
+#line 309 "sintatico.y"
     {int tipoId = getType(&tbl,(yyvsp[(1) - (2)].string));
 				int direccionVirtual = generarDireccion(tipoId, alcanceDireccion);
 				printf("........................DireccionVirtual %i\n", direccionVirtual);
@@ -1976,35 +1980,35 @@ yyreduce:
   case 113:
 
 /* Line 1806 of yacc.c  */
-#line 312 "sintatico.y"
+#line 316 "sintatico.y"
     {if(hacerPush==1) push(&pilaOperadores, (yyvsp[(1) - (1)].string), 3, generarDireccion(3, alcanceDireccion));}
     break;
 
   case 114:
 
 /* Line 1806 of yacc.c  */
-#line 313 "sintatico.y"
+#line 317 "sintatico.y"
     {if(hacerPush==1) push(&pilaOperadores, (yyvsp[(1) - (1)].string), 1, generarDireccion(1, alcanceDireccion));}
     break;
 
   case 115:
 
 /* Line 1806 of yacc.c  */
-#line 314 "sintatico.y"
+#line 318 "sintatico.y"
     {if(hacerPush==1) push(&pilaOperadores, (yyvsp[(1) - (1)].string), 2, generarDireccion(2, alcanceDireccion));}
     break;
 
   case 116:
 
 /* Line 1806 of yacc.c  */
-#line 315 "sintatico.y"
+#line 319 "sintatico.y"
     {if(hacerPush==1) push(&pilaOperadores, (yyvsp[(1) - (1)].string), 4, generarDireccion(4, alcanceDireccion));}
     break;
 
 
 
 /* Line 1806 of yacc.c  */
-#line 2008 "sintatico.tab.c"
+#line 2012 "sintatico.tab.c"
       default: break;
     }
   /* User semantic actions sometimes alter yychar, and that requires
@@ -2235,11 +2239,12 @@ yyreturn:
 
 
 /* Line 2067 of yacc.c  */
-#line 351 "sintatico.y"
+#line 355 "sintatico.y"
 
 int main()
 {
 	inicializarMatriz();
+	inicializarVectores();
 	printf("MATRIZZZIIZIZ %i", matrizSemantica[3][3][9]);
 
 	if (yyparse()==0)
@@ -2480,36 +2485,30 @@ void checarOperando3(char *operando){
 
 
 void generarCuadruplo(int numOp ,int tipo1, int tipo2, int res){
-
-	//Crear vectores para ir almacenado dinameicamente los cuadruplos
-	//Algo masomenos asi:::
-	//vectorOp.add(numOp);	//agregar un nuevo elemento al final...
-	//vectorOp1.add(tipo1);
-	//vectorOp2.add(tipo2);
-	//vectorRes.add(res);
 	
-	contS++;/*suma contador de saltos*/
+	//Reajustar el tamano de los vectores 
+	vectorTemporal=realloc(vectorOp,(contS+2)*sizeof(int));
+	if(vectorTemporal != NULL) vectorOp = vectorTemporal;
+	vectorTemporal=realloc(vectorOp1,(contS+2)*sizeof(int));
+	if(vectorTemporal != NULL) vectorOp1 = vectorTemporal;
+	vectorTemporal=realloc(vectorOp2,(contS+2)*sizeof(int));
+	if(vectorTemporal != NULL) vectorOp2 = vectorTemporal;
+	vectorTemporal=realloc(vectorRes,(contS+2)*sizeof(int));
+	if(vectorTemporal != NULL) vectorRes = vectorTemporal;
 	
-	/*Nose si deba ir aqui o en el main para que no este haciendose cada que se llame la función*/
-	 vectorOp=(int*) malloc(sizeof(int));;
-	 vectorOp1=(int*) malloc(sizeof(int));;
-	 vectorOp2=(int*) malloc(sizeof(int));;
-	 vectorRes=(int*) malloc(sizeof(int));;
-	
+		
 	/*El cuadruplo se guarda en la casilla del contador que le toco.*/
 	vectorOp[contS]=numOp;
 	vectorOp1[contS]=tipo1;
 	vectorOp2[contS]=tipo2;
 	vectorRes[contS]=res;
 	
-	
 	/*imprimir para checar si se meten los valores*/
-	printf("Cuadruplo # %i ---(%i,%i,%i,%i)", contS,vectorOp[contS],vectorOp1[contS],vectorOp2[contS],vectorRes[contS]);
+	printf("\nCuadruplo # %i ---(%i,%i,%i,%i)\n", contS,vectorOp[contS],vectorOp1[contS],vectorOp2[contS],vectorRes[contS]);
 	
-	char intemporal[6];
-	printf("@@@@@@@@@@@@@@@@@Cuadruplo generado: %i \n", res);
+	char intemporal[25];
 
-	sprintf(intemporal, "%i - ", numOp);
+	sprintf(intemporal, "Cuadruplo # %i --- %i -", contS,numOp);
 	strcat(strCuadruplos, intemporal); 
 	sprintf(intemporal, "%i - ", tipo1);
 	strcat(strCuadruplos, intemporal); 
@@ -2518,73 +2517,102 @@ void generarCuadruplo(int numOp ,int tipo1, int tipo2, int res){
 	sprintf(intemporal, "%i\n", res);
 	strcat(strCuadruplos, intemporal); 
 
+	contS++;/*suma contador de saltos*/
 }
 
 void secuenciaIf1(){
-	/*
-	aux = pop(&pilaTipos);
+	
+	ptr aux= malloc (sizeof(p_Nodo)); 
+	aux->tipo = pilaTipos->tipo;
+
 	if(aux->tipo != 4)//dif de boolean
 		printf("Error semantico!!");
-	else	
-		
+	else		
 	{	
-		resultado= pop(&pilaO);  //ultima Dirección de la pila, la cual tiene el resultado del estatuto
-		generarCuadruplo(12, resultado, __,-1); gotoF,12
-		push(&pilaSaltos, contS-1, -1, contS-1);	//usar el tipo direccion como contador
+		pop(&pilaTipos);
+
+		ptr resultado= malloc (sizeof(p_Nodo)); 
+		resultado->direccion = pilaOperadores->direccion;
+		pop(&pilaOperadores);  //ultima Dirección de la pila, la cual tiene el resultado del estatuto
+		
+		generarCuadruplo(12, resultado->direccion, -1,-1);// gotoF,12
+		push(&pilaSaltos, "t", -1, contS-1);	//usar el tipo direccion como contador
 	}
-	*/
+	
 }
 void secuenciaIf2(){
-	/*
-	ptr fin= malloc (sizeof(p_Nodo)); 
-	fin->direccion = &pilaSaltos; 	//Contador del cuadruplo
-	pop(&pilaSaltos)
 	
+	ptr fin= malloc (sizeof(p_Nodo)); 
+	//usar direccion como el salto
+	fin->direccion = pilaSaltos->direccion; 	
+	pop(&pilaSaltos);
 	rellenar(fin->direccion,contS);
-	*/
+	
 }
 void secuenciaElse(){
-	/*
-	generarCuadruplo(10 ,_,-1,-1); goto ,10
-	rellenar(pop(&pilaSaltos),contS);
-	push(&pilaSaltos, contS-1, -1, contS-1);
+	
+	generarCuadruplo(10 ,-1,-1,-1); // goto ,10
+	ptr falso=malloc(sizeof(p_Nodo));
+	falso->direccion=pilaSaltos->direccion;
+
+	pop(&pilaSaltos);
+	rellenar(falso->direccion,contS);
+	push(&pilaSaltos, "t", -1, contS-1);
 		
-	*/
+
 }
 void secuenciaWhile1(){
-	/*
-	push(&pilaSaltos, contS-1, -1, contS-1)	;
-	*/
+	
+	push(&pilaSaltos, "t", -1, contS-1)	;
+	
 }
 void secuenciaWhile2(){
-	/*
-	aux = pop(&pilaTipos);
+	
+	ptr aux= malloc (sizeof(p_Nodo)); 
+	aux->tipo = pilaTipos->tipo;
+
 	if(aux->tipo != 4)//dif de boolean
 		printf("Error semantico!!");
 	else{	
-		resultado= pop(&pilaO);  //ultima Dirección de la pila la cual tiene el resultado del estatuto
-		generarCuadruplo(GoToF 12, resultado, __);
-		push(&pilaSaltos, contS-1, -1, contS-1);
+		ptr resultado= malloc (sizeof(p_Nodo)); 
+		resultado->direccion = pilaOperadores->direccion;
+		pop(&pilaOperadores);  //ultima Dirección de la pila, la cual tiene el resultado del estatuto
+		
+		generarCuadruplo(12, resultado->direccion, -1, -1); //12 : GoToF
+		push(&pilaSaltos, "t", -1, contS-1);
 		}
-	*/
+	
 }
 
 void secuenciaWhile3(){
-	/*
-	falso = pop(&pilaSaltos);
-	retorno = pop(&pilaSaltos); direccion
-	generar(goto 10, retorno);
-	rellenar(falso 13,contS);
-	*/
+	
+	ptr falso= malloc (sizeof(p_Nodo)); 
+	falso->direccion = pilaTipos->direccion;
+	pop(&pilaSaltos);
+
+	ptr retorno= malloc (sizeof(p_Nodo)); 
+	retorno->direccion = pilaTipos->direccion;
+	pop(&pilaSaltos); 
+
+	generarCuadruplo(10, retorno->direccion,-1,-1); //10 : Go To
+	rellenar(falso->direccion,contS);
+	
 }
 	
 void rellenar(int goTo, int contador){
 	/* poner numeros en espacios en blanco anteriores   */
-	//Usar los vectors globales, algo asi::
-	//vectorRes[goTo].set(contador);
+	vectorRes[goTo]=contador;
+	printf("~~~~~GO TO~~[%i]~~  contador ~~~ : %i\n", goTo, contador);
 
 }
 
+void inicializarVectores(){
+	 vectorTemporal=(int*) malloc(sizeof(int));
+	 vectorOp=(int*) malloc(sizeof(int));
+	 vectorOp1=(int*) malloc(sizeof(int));
+	 vectorOp2=(int*) malloc(sizeof(int));
+	 vectorRes=(int*) malloc(sizeof(int));
+}
 
 void inicializarMatriz(){
 	matrizSemantica[0][0][0]= 1;	//Entero + entero = entero
