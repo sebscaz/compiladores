@@ -14,8 +14,10 @@ programa prueba {
 		
 		si(4>3){
 			imprimir("hola");
+			sebas = 1 * 2;
 		} no {
 			imprimir("adios");
+			sebas = 4 / 2;
 		}
 		sebas = 3 + 3;
 		regresar 3
