@@ -12,6 +12,7 @@ void inicializarMatriz();
 void inicializarVectores();
 void checarOperando1();
 void checarOperando2(); 
+void checarOperando3(); 
 void rellenar(int goTo, int contador);
 int checarSemantica(int op, int op1, int op2);
 int generarDireccion(int tipo, int alcance);
@@ -238,7 +239,7 @@ ESCRITURA: imprimir parentesisa EXP parentesisc ptocoma;
 
 LECTURA: leer parentesisa parentesisc ptocoma;
 
-CONDICION: si parentesisa SUPEREXPRESION parentesisc {secuenciaIf1();}  llavea BLOQUE llavec CONDICION2 {secuenciaIf2();};
+CONDICION: si parentesisa SUPEREXPRESION parentesisc {printf("Entra aqui-1!!\n"); secuenciaIf1();}  llavea BLOQUE llavec CONDICION2 {secuenciaIf2();};
 
 CONDICION2: no {secuenciaElse();} llavea BLOQUE llavec 
 		| /*vacio*/;
@@ -276,7 +277,7 @@ SUPEREXPRESION3: and
 
 EXPRESION: EXP EXPRESION2;
 EXPRESION2: /*vacio*/
-			| EXPRESION3 EXP {/*  checaroperando3();   */}  ;
+			| EXPRESION3 EXP {  checarOperando3();   }  ;
 EXPRESION3: menor 	{push(&pilaOperando,$1,-1, -1);}
 			| mayor {push(&pilaOperando,$1, -1, -1);}
 			| igual igual {char* str = $1;
@@ -431,7 +432,7 @@ int checarSemantica(int op, int op1, int op2){
 	}
 	else {
 		printf("--------------Semantica Valida!! tipo: %i. \n " , matrizSemantica[op1-1][op2-1][op]);
-		return 1;
+		return matrizSemantica[op1-1][op2-1][op];
 	}
 	
 }
@@ -563,6 +564,7 @@ void checarOperando3(char *operando){
 	ptr operador2= malloc (sizeof(p_Nodo)); 
 	int semanticaValida=-1;
 	int numOp=-1;
+	int res=0;
 
 	if (op!= NULL){
 		if(pilaOperando!=NULL){
@@ -580,16 +582,22 @@ void checarOperando3(char *operando){
 
 				operador1->valor = pilaOperadores->valor;
 				operador1->tipo = pilaOperadores->tipo; 
+				operador1->direccion = pilaOperadores->direccion;
 				pop(&pilaOperadores);
 
 				operador2->valor = pilaOperadores->valor;
 				operador2->tipo = pilaOperadores->tipo; 
+				operador2->direccion = pilaOperadores->direccion;
 				pop(&pilaOperadores);
 
 				printf("TIPO op1: %i , op2: %i \n", operador1->tipo, operador2->tipo);
 				push(&pilaOperadores,"t",1, 3);//3: direccion temporal
 				
 				semanticaValida = checarSemantica(numOp ,operador1->tipo, operador2->tipo);
+				res = generarDireccion(semanticaValida,3); //3:direccion temporal
+				generarCuadruplo(numOp ,operador1->direccion, operador2->direccion, res);
+				printf("operando3 semantica %i\n", semanticaValida);
+				push(&pilaOperadores,"t",semanticaValida,res);//3: direccion temporal
 			}
 		}
 	}
@@ -634,19 +642,22 @@ void generarCuadruplo(int numOp ,int tipo1, int tipo2, int res){
 
 void secuenciaIf1(){
 	
+	printf("Entra aqui0!!\n");
 	ptr aux= malloc (sizeof(p_Nodo)); 
-	aux->tipo = pilaTipos->tipo;
+	printf("Entra aqui9!!\n");
+	aux->tipo = pilaOperadores->tipo;
+	aux->direccion = pilaOperadores->direccion;
 
 	if(aux->tipo != 4)//dif de boolean
-		printf("Error semantico!!");
+		printf("Error semantico!! tipo: %i, %i\n", aux->tipo, aux->direccion);
 	else		
-	{	
-		pop(&pilaTipos);
-
+	{	printf("Entra aqui!!\n");
+		//pop(&pilaTipos);
+		printf("Entra aqui2!!\n");
 		ptr resultado= malloc (sizeof(p_Nodo)); 
 		resultado->direccion = pilaOperadores->direccion;
 		pop(&pilaOperadores);  //ultima Dirección de la pila, la cual tiene el resultado del estatuto
-		
+		printf("Entra aqui3!!\n");
 		generarCuadruplo(12, resultado->direccion, -1,-1);// gotoF,12
 		push(&pilaSaltos, "t", -1, contS-1);	//usar el tipo direccion como contador
 	}
