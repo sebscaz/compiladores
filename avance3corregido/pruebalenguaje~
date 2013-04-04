@@ -14,8 +14,12 @@ programa prueba {
 		
 		si(4>3){
 			imprimir("hola");
+		} no {
+			imprimir("adios");
 		}
+		sebas = 3 + 3;
 		regresar 3
+		
 	}
 
 	imprimir("hola");

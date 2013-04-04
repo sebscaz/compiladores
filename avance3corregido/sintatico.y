@@ -221,7 +221,7 @@ ARREGLOS2: corchetea cteentero corchetec
 	| /*vacio*/;
 	
 
-ASIGNACION: id ASIGNACION2 igual ASIGNACION3 ptocoma;
+ASIGNACION: id ASIGNACION2 igual {printf("\n\nIGUAAAL\n\n"); push(&pilaOperando, $3, -1, -1);} ASIGNACION3 ptocoma {/*checarOperando3();*/} ;
 ASIGNACION3: LECTURA
 		| EXP;
 ASIGNACION2: {hacerPush=0; /*no meter a la pila las EXP de los arreglos*/}  ARREGLOSASIG  {hacerPush=1;} 
@@ -279,18 +279,13 @@ EXPRESION: EXP EXPRESION2;
 EXPRESION2: /*vacio*/
 			| EXPRESION3 EXP {  checarOperando3();   }  ;
 EXPRESION3: menor 	{push(&pilaOperando,$1,-1, -1);}
-			| mayor {push(&pilaOperando,$1, -1, -1);}
-			| igual igual {char* str = $1;
-				      char dest[2];
-				      strcpy( dest, str );
-				      strcat( dest, $2 ); 
-				      push(&pilaOperando, str, -1, -1);}
+			| mayor {printf("\n\nMAYOR\n\n"); push(&pilaOperando,$1, -1, -1);}
+			| igual {printf("\n\nIGUAAAL\n\n"); push(&pilaOperando, $1, -1, -1);} 
 		 	| diferente igual {char* str = $1;
 				      char dest[2];
 				      strcpy( dest, str );
 				      strcat( dest, $2 ); 
-				      push(&pilaOperando, str, -1, -1);} 
-			| igual {push(&pilaOperando, $1, -1, -1);} ;
+				      push(&pilaOperando, str, -1, -1);} ;
 			
 			
 EXP: TERMINO  {  checarOperando2();   } EXP2  ;
@@ -571,11 +566,11 @@ void checarOperando3(char *operando){
 			op->valor=pilaOperando->valor;
 			if(*pilaOperando->valor=='>'||*pilaOperando->valor=='<'||*pilaOperando->valor=='='||pilaOperando->valor=="=="||pilaOperando->valor=="!=" ){ 
 
-				if(pilaOperando->valor=="==" ) numOp=4;
+				if(*pilaOperando->valor=='=' ) numOp=9;
 				else if (pilaOperando->valor=="!=") numOp=5;
 				else if (*pilaOperando->valor=='>') numOp=6;
 				else if (*pilaOperando->valor=='<') numOp=7;
-				else if (*pilaOperando->valor=='=') numOp=5;
+				else if (pilaOperando->valor=="==") numOp=4;
 
 				printf("Operandoooo  %c",*pilaOperando->valor);
 				pop(&pilaOperando);
@@ -686,7 +681,7 @@ void secuenciaElse(){
 }
 void secuenciaWhile1(){
 	
-	push(&pilaSaltos, "t", -1, contS-1)	;
+	push(&pilaSaltos, "t", -1, contS-1);
 	
 }
 void secuenciaWhile2(){
@@ -726,6 +721,17 @@ void rellenar(int goTo, int contador){
 	/* poner numeros en espacios en blanco anteriores   */
 	vectorRes[goTo]=contador;
 	printf("~~~~~GO TO~~[%i]~~  contador ~~~ : %i\n", goTo, contador);
+	printf("\nCuadruplo # %i ---(%i,%i,%i,%i)\n", goTo,vectorOp[goTo],vectorOp1[goTo],vectorOp2[goTo],vectorRes[goTo]);
+	char intemporal[25];
+
+	sprintf(intemporal, "Cuadruplo # %i --- %i -", goTo,vectorOp[goTo]);
+	strcat(strCuadruplos, intemporal); 
+	sprintf(intemporal, "%i - ", vectorOp1[goTo]);
+	strcat(strCuadruplos, intemporal); 
+	sprintf(intemporal, "%i - ", vectorOp2[goTo]);
+	strcat(strCuadruplos, intemporal); 
+	sprintf(intemporal, "%i\n", vectorRes[goTo]);
+	strcat(strCuadruplos, intemporal); 
 
 }
 
@@ -810,7 +816,7 @@ void inicializarMatriz(){
 	matrizSemantica[3][2][3]= 0;	//bool / texto = no se puede
 	matrizSemantica[3][3][3]= 0;	//bool / bool = no se puede
 
-	//Z=4 (IGUAL)
+	//Z=4 (IGUAL IGUAL)
 	matrizSemantica[0][0][4]= 4;	//Entero == entero = bool
 	matrizSemantica[0][1][4]= 4;	//Entero ==doble = bool
 	matrizSemantica[0][2][4]= 0;	//Entero == texto = bool
