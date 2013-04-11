@@ -3,7 +3,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdint.h>
-#include "hash.c"
+#include "hash2.c"
 #include "pila.c"
 #include "matrizSemantica.c"
 
@@ -51,8 +51,13 @@ int direccionBooleanoTemp=42000;
 
 //Tabla de vatiables y procedimientos
 struct StrHashTable tbl = {{0},NULL,NULL,foo_strhash,strcmp};
-struct StrHashTableProc tblprocs = {{0},NULL,NULL,foo_strhash,strcmp};
+struct StrHashTableProc tblProc = {{0},NULL,NULL,foo_strhash,strcmp};
 struct StrHashNodeProc nodeProc;
+
+struct StrHashTable tablaGlobal = {{0},NULL,NULL,foo_strhash,strcmp};
+struct StrHashTable tablaLocal = {{0},NULL,NULL,foo_strhash,strcmp};
+struct StrHashTable tablaTemporal = {{0},NULL,NULL,foo_strhash,strcmp};
+struct StrHashTable tablaConstantes = {{0},NULL,NULL,foo_strhash,strcmp};
 
 int tipoOp=-1;
 
@@ -149,7 +154,7 @@ int* vectorRes;
 
 %%
 
-PROGRAMA: programa id {insert(&tbl,$2,$2,-1); puts(get(&tbl,$2)); }  llavea PROGRAMA1 PROGRAMASIG PROGRAMA2 BLOQUE llavec {printf("\n\n%s", strCuadruplos);};
+PROGRAMA: programa id {insertProc(&tblProc,&tablaGlobal,$2,$2);}  llavea PROGRAMA1 PROGRAMASIG PROGRAMA2 BLOQUE llavec {printf("\n\n%s", strCuadruplos);};
 PROGRAMA1: {alcanceDireccion=1;/*global*/}DECLARACION PROGRAMA12;
 PROGRAMA12: PROGRAMA1
 		  | /*vacio*/;
@@ -162,10 +167,10 @@ PROGRAMASIG2: PROGRAMASIG
 	| /*vacio*/
 
 
-TIPO: texto		{tipoOp = generarTipo($1); printf("===========tipo: %i\n", tipoOp); }
-	| entero	{tipoOp = generarTipo($1); printf("===========tipo: %i\n", tipoOp);}
-	| decimal	{tipoOp = generarTipo($1); printf("===========tipo: %i\n", tipoOp);}
-	| booleano	{tipoOp = generarTipo($1); printf("===========tipo: %i\n", tipoOp);};	
+TIPO: texto		{tipoOp = generarTipo($1); /*printf("===========tipo: %i\n", tipoOp);*/ }
+	| entero	{tipoOp = generarTipo($1); /*printf("===========tipo: %i\n", tipoOp);*/ }
+	| decimal	{tipoOp = generarTipo($1); /*printf("===========tipo: %i\n", tipoOp);*/}
+	| booleano	{tipoOp = generarTipo($1); /*printf("===========tipo: %i\n", tipoOp);*/};	
 	
 BLOQUE: ESTATUTO BLOQUE1;
 BLOQUE1: BLOQUE;
@@ -193,7 +198,7 @@ FUNCIONESPECIAL: DIBUJARFIGURA
 				| OBTENERPOSICION;
 
 				
-DECLARACION: crear TIPO DECLARACION2 id	ptocoma  {insert(&tbl,$4,$4,tipoOp); printf("El tipo eeeeeeessssss: %i\n", getType(&tbl,$4));} ;
+DECLARACION: crear TIPO DECLARACION2 id	ptocoma  {insert(&tablaGlobal,$4,$4,tipoOp,generarDireccion(tipoOp,1));} ;
 DECLARACION2: ARREGLOS
 		| /*vacio*/;
 
@@ -202,15 +207,7 @@ DECLARACIONFUNCIONCICLO: {alcanceDireccion=2;/*local*/}DECLARACIONFUNCION DECLAR
 DECLARACIONFUNCIONCICLO2: DECLARACIONFUNCIONCICLO
 			| /*vacio*/;
 
-DECLARACIONFUNCION: crear TIPO DECLARACIONFUNCION2 id	ptocoma  
-
-
-	//{nodeProc.vartable = {{0},NULL,NULL,foo_strhash,strcmp};
-	//insert(nodeProc.vartable,$4,$4); } 
-	;
-
-
-
+DECLARACIONFUNCION: crear TIPO DECLARACIONFUNCION2 id	ptocoma {insert(&tablaLocal,$4,$4,tipoOp,generarDireccion(tipoOp,2));} ;
 
 DECLARACIONFUNCION2: ARREGLOS
 		| /*vacio*/;
@@ -221,7 +218,7 @@ ARREGLOS2: corchetea cteentero corchetec
 	| /*vacio*/;
 	
 
-ASIGNACION: id ASIGNACION2 igual {printf("\n\nIGUAAAL\n\n"); push(&pilaOperando, $3, -1, -1);} ASIGNACION3 ptocoma {/*checarOperando3();*/} ;
+ASIGNACION: id ASIGNACION2 igual {/*printf("\n\nIGUAAAL\n\n");*/ push(&pilaOperando, $3, -1, -1);} ASIGNACION3 ptocoma {/*checarOperando3();*/} ;
 ASIGNACION3: LECTURA
 		| EXP;
 ASIGNACION2: {hacerPush=0; /*no meter a la pila las EXP de los arreglos*/}  ARREGLOSASIG  {hacerPush=1;} 
@@ -229,17 +226,12 @@ ASIGNACION2: {hacerPush=0; /*no meter a la pila las EXP de los arreglos*/}  ARRE
 ARREGLOSASIG: corchetea EXP corchetec ARREGLOSASIG2;
 ARREGLOSASIG2: corchetea EXP corchetec 
 	| /*vacio*/;
-	
-	
-
-				
-
-				
+			
 ESCRITURA: imprimir parentesisa EXP parentesisc ptocoma;
 
 LECTURA: leer parentesisa parentesisc ptocoma;
 
-CONDICION: si parentesisa SUPEREXPRESION parentesisc {printf("Entra aqui-1!!\n"); secuenciaIf1();}  llavea BLOQUE llavec CONDICION2 {secuenciaIf2();};
+CONDICION: si parentesisa SUPEREXPRESION parentesisc {secuenciaIf1();}  llavea BLOQUE llavec CONDICION2 {secuenciaIf2();};
 
 CONDICION2: no {secuenciaElse();} llavea BLOQUE llavec 
 		| /*vacio*/;
@@ -250,15 +242,14 @@ CICLO: mientras {secuenciaWhile1();} parentesisa SUPEREXPRESION parentesisc hace
 
 CREARFUNCION: funcion CREARFUNCION2 id parentesisa CREARFUNCION3 parentesisc llavea DECLARACIONFUNCIONCICLO BLOQUE regresar EXP llavec 
 
-	//{insertProc(&tblprocs,$3,$3);
-	//nodeProc=getProcNode(&tblprocs,$3,$3);}
+{insertProc(&tblProc,&tablaGlobal,$3,$3);}
 	;
 
 CREARFUNCION2: TIPO
 			| neutral; 	
 CREARFUNCION3: /*vacio*/
 		| CREARFUNCION4;
-CREARFUNCION4: TIPO id CREARFUNCION5 {insert(&tbl,$2,$2,tipoOp);};
+CREARFUNCION4: TIPO id CREARFUNCION5 {insert(&tablaLocal,$2,$2,tipoOp,generarDireccion(tipoOp,2));};
 CREARFUNCION5: /*vacio*/
 		| coma CREARFUNCION4;
 				
@@ -279,8 +270,8 @@ EXPRESION: EXP EXPRESION2;
 EXPRESION2: /*vacio*/
 			| EXPRESION3 EXP {  checarOperando3();   }  ;
 EXPRESION3: menor 	{push(&pilaOperando,$1,-1, -1);}
-			| mayor {printf("\n\nMAYOR\n\n"); push(&pilaOperando,$1, -1, -1);}
-			| igual {printf("\n\nIGUAAAL\n\n"); push(&pilaOperando, $1, -1, -1);} 
+			| mayor {push(&pilaOperando,$1, -1, -1);}
+			| igual {push(&pilaOperando, $1, -1, -1);} 
 		 	| diferente igual {char* str = $1;
 				      char dest[2];
 				      strcpy( dest, str );
@@ -353,7 +344,6 @@ int main()
 {
 	inicializarMatriz();
 	inicializarVectores();
-	printf("MATRIZZZIIZIZ %i", matrizSemantica[3][3][9]);
 
 	if (yyparse()==0)
 		printf("Sintaxis Correctaa\n");
@@ -450,7 +440,7 @@ void checarOperando1(){
 				if(*pilaOperando->valor=='*' ) numOp=2;
 				else if (*pilaOperando->valor=='/' ) numOp=3;
 
-				printf("Operandoooo  %c",*pilaOperando->valor);
+				//printf("Operandoooo  %c",*pilaOperando->valor);
 				pop(&pilaOperando);
 
 				operador2->valor = pilaOperadores->valor;
@@ -463,7 +453,7 @@ void checarOperando1(){
 				operador1->direccion = pilaOperadores->direccion; 
 				pop(&pilaOperadores);
 
-				printf("TIPO op1: %i, direccion: %i | op2: %i, direccion:%i \n", operador1->tipo, operador1->direccion, operador2->tipo, operador2->direccion);
+				//printf("TIPO op1: %i, direccion: %i | op2: %i, direccion:%i \n", operador1->tipo, operador1->direccion, operador2->tipo, operador2->direccion);
 				
 			    strcpy( nombreT, "t" );
 			    //itoa(10, nombreT, contT++);
@@ -512,7 +502,7 @@ void checarOperando2(){
 				if(*pilaOperando->valor=='+' ) numOp=0;
 				else if (*pilaOperando->valor=='-' ) numOp=1;
 
-				printf("Operandoooo  %c",*pilaOperando->valor);
+				/*printf("Operandoooo  %c",*pilaOperando->valor);*/
 				pop(&pilaOperando);
 
 				operador2->valor = pilaOperadores->valor;
@@ -525,7 +515,7 @@ void checarOperando2(){
 				operador1->direccion = pilaOperadores->direccion; 
 				pop(&pilaOperadores);
 
-				printf("TIPO op1: %i, direccion: %i | op2: %i, direccion:%i \n", operador1->tipo, operador1->direccion, operador2->tipo, operador2->direccion);
+				//printf("TIPO op1: %i, direccion: %i | op2: %i, direccion:%i \n", operador1->tipo, operador1->direccion, operador2->tipo, operador2->direccion);
 				
 			    strcpy( nombreT, "t" );
 			    //itoa(10, nombreT, contT++);
@@ -572,7 +562,7 @@ void checarOperando3(char *operando){
 				else if (*pilaOperando->valor=='<') numOp=7;
 				else if (pilaOperando->valor=="==") numOp=4;
 
-				printf("Operandoooo  %c",*pilaOperando->valor);
+				//printf("Operandoooo  %c",*pilaOperando->valor);
 				pop(&pilaOperando);
 
 				operador1->valor = pilaOperadores->valor;
@@ -585,13 +575,13 @@ void checarOperando3(char *operando){
 				operador2->direccion = pilaOperadores->direccion;
 				pop(&pilaOperadores);
 
-				printf("TIPO op1: %i , op2: %i \n", operador1->tipo, operador2->tipo);
+				//printf("TIPO op1: %i , op2: %i \n", operador1->tipo, operador2->tipo);
 				push(&pilaOperadores,"t",1, 3);//3: direccion temporal
 				
 				semanticaValida = checarSemantica(numOp ,operador1->tipo, operador2->tipo);
 				res = generarDireccion(semanticaValida,3); //3:direccion temporal
 				generarCuadruplo(numOp ,operador1->direccion, operador2->direccion, res);
-				printf("operando3 semantica %i\n", semanticaValida);
+				//printf("operando3 semantica %i\n", semanticaValida);
 				push(&pilaOperadores,"t",semanticaValida,res);//3: direccion temporal
 			}
 		}
@@ -637,22 +627,18 @@ void generarCuadruplo(int numOp ,int tipo1, int tipo2, int res){
 
 void secuenciaIf1(){
 	
-	printf("Entra aqui0!!\n");
 	ptr aux= malloc (sizeof(p_Nodo)); 
-	printf("Entra aqui9!!\n");
 	aux->tipo = pilaOperadores->tipo;
 	aux->direccion = pilaOperadores->direccion;
 
 	if(aux->tipo != 4)//dif de boolean
 		printf("Error semantico!! tipo: %i, %i\n", aux->tipo, aux->direccion);
 	else		
-	{	printf("Entra aqui!!\n");
+	{	
 		//pop(&pilaTipos);
-		printf("Entra aqui2!!\n");
 		ptr resultado= malloc (sizeof(p_Nodo)); 
 		resultado->direccion = pilaOperadores->direccion;
 		pop(&pilaOperadores);  //ultima Dirección de la pila, la cual tiene el resultado del estatuto
-		printf("Entra aqui3!!\n");
 		generarCuadruplo(12, resultado->direccion, -1,-1);// gotoF,12
 		push(&pilaSaltos, "t", -1, contS-1);	//usar el tipo direccion como contador
 	}

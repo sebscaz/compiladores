@@ -6,12 +6,15 @@ programa prueba {
 
 	aldo=1 + mak;
 
+
 	funcion entero mak(entero hola){
 		crear entero sebas;
 		crear entero [3][3] areglo;		
 
-		sebas = 2 + 2 / (4 * 3) - 4;
+		sebas = 2 + oldo / (4 * 3) - 4;
 		
+		dibujarFigura(perro, prueba1);
+
 		si(4>3){
 			imprimir("hola");
 			sebas = 1 * 2;
