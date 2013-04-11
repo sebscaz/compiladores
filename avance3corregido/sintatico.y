@@ -295,7 +295,7 @@ FACTOR:  parentesisa  { push(&pilaOperando,$1,-1,-1); } EXPRESION parentesisc {p
 	| VARCTE
 	| id  ASIGNACION2	{int tipoId = getType(&tbl,$1);
 				int direccionVirtual = generarDireccion(tipoId, alcanceDireccion);
-				printf("........................DireccionVirtual %i\n", direccionVirtual);
+				//printf("........................DireccionVirtual %i\n", direccionVirtual);
 				if(hacerPush==1) push(&pilaOperadores, $1, tipoId, direccionVirtual); }	;/*Meter en pilaTipos el tipo de id que es*/					
 
  	
@@ -369,7 +369,7 @@ int generarDireccion(int tipo, int alcance){
 
 	//global	
 	if(alcance==1){ 
-		printf(">>>>>>>>>>>>>>>>>>ALCANCE GLOBAL\n");
+		//printf(">>>>>>>>>>>>>>>>>>ALCANCE GLOBAL\n");
 		if(tipo==1) //entero
 			return direccionEnteroGlobal++;
 		else if(tipo==2) //doble
@@ -381,7 +381,7 @@ int generarDireccion(int tipo, int alcance){
 	}
 	 //local
 	else if(alcance==2){
-		printf(">>>>>>>>>>>>>>>>>>ALCANCE LOCAL\n");
+		//printf(">>>>>>>>>>>>>>>>>>ALCANCE LOCAL\n");
 		if(tipo==1) //entero
 			return direccionEnteroLocal++;
 		else if(tipo==2) //doble
@@ -393,7 +393,7 @@ int generarDireccion(int tipo, int alcance){
 	}
 	//temp
 	else if (alcance==3){ 
-		printf(">>>>>>>>>>>>>>>>>>ALCANCE TEMPORAL\n");
+		//printf(">>>>>>>>>>>>>>>>>>ALCANCE TEMPORAL\n");
 		if(tipo==1)// entero
 			return direccionEnteroTemp++;
 		else if(tipo==2) //doble
@@ -455,11 +455,13 @@ void checarOperando1(){
 
 				//printf("TIPO op1: %i, direccion: %i | op2: %i, direccion:%i \n", operador1->tipo, operador1->direccion, operador2->tipo, operador2->direccion);
 				
-			    strcpy( nombreT, "t" );
-			    //itoa(10, nombreT, contT++);
-			
+			    sprintf(nombreT, "t%i", contT++);
+			   
 				semanticaValida = checarSemantica(numOp ,operador1->tipo, operador2->tipo);
 				res = generarDireccion(semanticaValida,3); //3:direccion temporal
+				
+				insert(&tablaTemporal,nombreT,nombreT,semanticaValida,res);
+
 				generarCuadruplo(numOp ,operador1->direccion, operador2->direccion, res);
 				push(&pilaOperadores,nombreT,semanticaValida,res);//3: direccion temporal
 				
@@ -467,19 +469,6 @@ void checarOperando1(){
 		}
 	}
 
-	/*			
-	if(op->valor=='*' || op->valor=='/' ){ 
-	//Checar que los tipos sean compatibles para realizar la operacion
-			
-	ptr operador1 = pop(pilaOperadores);
-	ptr operador2 = pop(pilaOperadores);
-			
-	//cuadruplo(operando,operador1, operador2, res);
-	//Si alguno de los operandos pertenecia a un temporal regresarlo al avail
-	//-meter resultado a pilaOperandos
-	//-meter tipo  a filaTipo si esque fue compatible
-			
-	}*/
 }
 
 	
@@ -517,30 +506,21 @@ void checarOperando2(){
 
 				//printf("TIPO op1: %i, direccion: %i | op2: %i, direccion:%i \n", operador1->tipo, operador1->direccion, operador2->tipo, operador2->direccion);
 				
-			    strcpy( nombreT, "t" );
-			    //itoa(10, nombreT, contT++);
+			    	sprintf(nombreT, "t%i", contT++);
 			
 				semanticaValida = checarSemantica(numOp ,operador1->tipo, operador2->tipo);
 				res = generarDireccion(semanticaValida,3); //3:direccion temporal
+
+				insert(&tablaTemporal,nombreT,nombreT,semanticaValida,res);
+
 				generarCuadruplo(numOp ,operador1->direccion, operador2->direccion, res);
 				push(&pilaOperadores,nombreT,semanticaValida,res);//3: direccion temporal
 				
 			}
 		}
-	}/*
-			if(operando=='+' || operando=='-' ){ 
-			//Checar que los tipos sean compatibles para realizar la operacion
-			
-				op = pop(pilaOperandos);
-				operador1 = pop(pilaOperadores);
-				operador2 = pop(pilaOperadores);
-			
-			//cuadruplo(operando,operador1, operador2, res);
-			//Si alguno de los operandos pertenecia a un temporal regresarlo al avail
-			//-meter resultado a pilaOperandos
-			//-meter tipo  a filaTipo si esque fue compatible
-			}*/
 	}
+
+}
 
 
 void checarOperando3(char *operando){
@@ -550,6 +530,7 @@ void checarOperando3(char *operando){
 	int semanticaValida=-1;
 	int numOp=-1;
 	int res=0;
+	char nombreT[10];
 
 	if (op!= NULL){
 		if(pilaOperando!=NULL){
@@ -578,8 +559,13 @@ void checarOperando3(char *operando){
 				//printf("TIPO op1: %i , op2: %i \n", operador1->tipo, operador2->tipo);
 				push(&pilaOperadores,"t",1, 3);//3: direccion temporal
 				
+				sprintf(nombreT, "t%i", contT++);
+
 				semanticaValida = checarSemantica(numOp ,operador1->tipo, operador2->tipo);
 				res = generarDireccion(semanticaValida,3); //3:direccion temporal
+
+				insert(&tablaTemporal,nombreT,nombreT,semanticaValida,res);
+
 				generarCuadruplo(numOp ,operador1->direccion, operador2->direccion, res);
 				//printf("operando3 semantica %i\n", semanticaValida);
 				push(&pilaOperadores,"t",semanticaValida,res);//3: direccion temporal
@@ -706,7 +692,7 @@ void secuenciaWhile3(){
 void rellenar(int goTo, int contador){
 	/* poner numeros en espacios en blanco anteriores   */
 	vectorRes[goTo]=contador;
-	printf("~~~~~GO TO~~[%i]~~  contador ~~~ : %i\n", goTo, contador);
+	//printf("~~~~~GO TO~~[%i]~~  contador ~~~ : %i\n", goTo, contador);
 	printf("\nCuadruplo # %i ---(%i,%i,%i,%i)\n", goTo,vectorOp[goTo],vectorOp1[goTo],vectorOp2[goTo],vectorRes[goTo]);
 	char intemporal[25];
 
