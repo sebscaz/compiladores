@@ -1815,14 +1815,14 @@ yyreduce:
 
 /* Line 1806 of yacc.c  */
 #line 221 "sintatico.y"
-    {/*int tipoId = getType(&tablaGlobal,$1);
+    {int tipoId = getType(&tablaGlobal,(yyvsp[(1) - (2)].string));
 			    if(tipoId==0)
-				tipoId = getType(&tablaLocal,$1);
-			    int direccionVirtual = getDirection(&tablaGlobal,$1);
+				tipoId = getType(&tablaLocal,(yyvsp[(1) - (2)].string));
+			    int direccionVirtual = getDirection(&tablaGlobal,(yyvsp[(1) - (2)].string));
 			    if(direccionVirtual==0)
-				tipoId = getDirection(&tablaLocal,$1);
-			    push(&pilaOperadores, $1, tipoId, direccionVirtual); 
-				printf("\n\nHIzo pussh\n\n");*/}
+				direccionVirtual = getDirection(&tablaLocal,(yyvsp[(1) - (2)].string));
+			    push(&pilaOperadores, (yyvsp[(1) - (2)].string), tipoId, direccionVirtual); 
+				printf("\n\nHIzo pussh: tipo %i, direcicn %i\n\n",tipoId,direccionVirtual);}
     break;
 
   case 54:
@@ -2482,12 +2482,12 @@ void checarOperando3(char *operando){
 
 				if(numOp==10){
 					pop(&pilaOperando);
-					/*
+					
 					operador2->valor = pilaOperadores->valor;
 					operador2->tipo = pilaOperadores->tipo; 
 					operador2->direccion = pilaOperadores->direccion;
 					pop(&pilaOperadores);
-					*/
+					
 					operador1->valor = pilaOperadores->valor;
 					operador1->tipo = pilaOperadores->tipo; 
 					operador1->direccion = pilaOperadores->direccion;
@@ -2497,11 +2497,11 @@ void checarOperando3(char *operando){
 					sprintf(nombreT, "t%i", contT++);
 
 					semanticaValida = checarSemantica(numOp ,operador1->tipo, operador2->tipo);
-					res = generarDireccion(semanticaValida,3); //3:direccion temporal
+					res = operador1->direccion; //3:direccion temporal
 
 					insert(&tablaTemporal,nombreT,nombreT,semanticaValida,res);
 
-					generarCuadruplo(numOp ,operador1->direccion, -1, res);
+					generarCuadruplo(numOp ,operador2->direccion, -1, res);
 					//printf("operando3 semantica %i\n", semanticaValida);
 					push(&pilaOperadores,nombreT,semanticaValida,res);//3: direccion temporal
 				}
