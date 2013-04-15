@@ -217,8 +217,8 @@ return *node;
 }
 
 
-/*
 
+/*
 int main(int argc,char *argv[])
 {
 
@@ -235,7 +235,7 @@ int main(int argc,char *argv[])
     puts(get(&tbl,"Test"));
     insert(&tbl,"Test","TestValueReplaced",3,2010);
     puts(get(&tbl,"Test"));
-    printf("%i",getDirection(&tbl,"Test"));
+    printf("Tipo: %i\n",getType(&tbl,"Testtt"));
 
 
     return 0;

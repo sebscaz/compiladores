@@ -11,11 +11,14 @@ programa prueba {
 		crear entero sebas;
 		crear entero [3][3] areglo;		
 
-		sebas = 2 + oldo / (4 * 3) - 4;
+		sebas = 2 + 3 / (4 * 3) - 4;
 		
 		dibujarFigura(perro, prueba1);
 
 		si(4>3){
+			si(5>2){
+				imprimir("if anidado");
+			}
 			imprimir("hola");
 			sebas = 1 * 2;
 		} no {

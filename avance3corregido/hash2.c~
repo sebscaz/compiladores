@@ -128,7 +128,7 @@ int insert(struct StrHashTable *table,char *key,void *value, int type, int direc
 		node->type=type;
 		node->direction=direction;
 
-		printf("%s\t%i\t%i\n", node->value , node->type ,node->direction  );
+		printf("%s\t%i\t%i\n", node->key , node->type ,node->direction  );
 	}
     return 0;
 }
@@ -217,7 +217,7 @@ return *node;
 }
 
 
-/*
+
 
 int main(int argc,char *argv[])
 {
@@ -235,10 +235,10 @@ int main(int argc,char *argv[])
     puts(get(&tbl,"Test"));
     insert(&tbl,"Test","TestValueReplaced",3,2010);
     puts(get(&tbl,"Test"));
-    printf("%i",getDirection(&tbl,"Test"));
+    printf("Tipo: %i\n",getType(&tbl,"Testtt"));
 
 
     return 0;
 }
-*/
+
 

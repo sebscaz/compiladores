@@ -218,7 +218,16 @@ ARREGLOS2: corchetea cteentero corchetec
 	| /*vacio*/;
 	
 
-ASIGNACION: id ASIGNACION2 igual {/*printf("\n\nIGUAAAL\n\n");*/ push(&pilaOperando, $3, -1, -1);} ASIGNACION3 ptocoma {/*checarOperando3();*/} ;
+ASIGNACION: id ASIGNACION2 {/*int tipoId = getType(&tablaGlobal,$1);
+			    if(tipoId==0)
+				tipoId = getType(&tablaLocal,$1);
+			    int direccionVirtual = getDirection(&tablaGlobal,$1);
+			    if(direccionVirtual==0)
+				tipoId = getDirection(&tablaLocal,$1);
+			    push(&pilaOperadores, $1, tipoId, direccionVirtual); 
+				printf("\n\nHIzo pussh\n\n");*/}	
+	    igual { push(&pilaOperando, $4, -1, -1);} 
+	    ASIGNACION3 ptocoma {checarOperando3();} ;
 ASIGNACION3: LECTURA
 		| EXP;
 ASIGNACION2: {hacerPush=0; /*no meter a la pila las EXP de los arreglos*/}  ARREGLOSASIG  {hacerPush=1;} 
@@ -295,7 +304,6 @@ FACTOR:  parentesisa  { push(&pilaOperando,$1,-1,-1); } EXPRESION parentesisc {p
 	| VARCTE
 	| id  ASIGNACION2	{int tipoId = getType(&tbl,$1);
 				int direccionVirtual = generarDireccion(tipoId, alcanceDireccion);
-				printf("........................DireccionVirtual %i\n", direccionVirtual);
 				if(hacerPush==1) push(&pilaOperadores, $1, tipoId, direccionVirtual); }	;/*Meter en pilaTipos el tipo de id que es*/					
 
  	
@@ -369,7 +377,7 @@ int generarDireccion(int tipo, int alcance){
 
 	//global	
 	if(alcance==1){ 
-		printf(">>>>>>>>>>>>>>>>>>ALCANCE GLOBAL\n");
+		//printf(">>>>>>>>>>>>>>>>>>ALCANCE GLOBAL\n");
 		if(tipo==1) //entero
 			return direccionEnteroGlobal++;
 		else if(tipo==2) //doble
@@ -381,7 +389,7 @@ int generarDireccion(int tipo, int alcance){
 	}
 	 //local
 	else if(alcance==2){
-		printf(">>>>>>>>>>>>>>>>>>ALCANCE LOCAL\n");
+		//printf(">>>>>>>>>>>>>>>>>>ALCANCE LOCAL\n");
 		if(tipo==1) //entero
 			return direccionEnteroLocal++;
 		else if(tipo==2) //doble
@@ -393,7 +401,7 @@ int generarDireccion(int tipo, int alcance){
 	}
 	//temp
 	else if (alcance==3){ 
-		printf(">>>>>>>>>>>>>>>>>>ALCANCE TEMPORAL\n");
+		//printf(">>>>>>>>>>>>>>>>>>ALCANCE TEMPORAL\n");
 		if(tipo==1)// entero
 			return direccionEnteroTemp++;
 		else if(tipo==2) //doble
@@ -537,38 +545,65 @@ void checarOperando3(char *operando){
 			op->valor=pilaOperando->valor;
 			if(*pilaOperando->valor=='>'||*pilaOperando->valor=='<'||*pilaOperando->valor=='='||pilaOperando->valor=="=="||pilaOperando->valor=="!=" ){ 
 
-				if(*pilaOperando->valor=='=' ) numOp=9;
+				if(*pilaOperando->valor=='=' ) {numOp=10; printf("\n\nIGUAAL\n\n");} 
 				else if (pilaOperando->valor=="!=") numOp=5;
 				else if (*pilaOperando->valor=='>') numOp=6;
 				else if (*pilaOperando->valor=='<') numOp=7;
 				else if (pilaOperando->valor=="==") numOp=4;
 
-				//printf("Operandoooo  %c",*pilaOperando->valor);
-				pop(&pilaOperando);
+				if(numOp==10){
+					pop(&pilaOperando);
+					/*
+					operador2->valor = pilaOperadores->valor;
+					operador2->tipo = pilaOperadores->tipo; 
+					operador2->direccion = pilaOperadores->direccion;
+					pop(&pilaOperadores);
+					*/
+					operador1->valor = pilaOperadores->valor;
+					operador1->tipo = pilaOperadores->tipo; 
+					operador1->direccion = pilaOperadores->direccion;
+					pop(&pilaOperadores);
+					
+					imprimirPila(pilaOperadores);
+					sprintf(nombreT, "t%i", contT++);
 
-				operador1->valor = pilaOperadores->valor;
-				operador1->tipo = pilaOperadores->tipo; 
-				operador1->direccion = pilaOperadores->direccion;
-				pop(&pilaOperadores);
+					semanticaValida = checarSemantica(numOp ,operador1->tipo, operador2->tipo);
+					res = generarDireccion(semanticaValida,3); //3:direccion temporal
 
-				operador2->valor = pilaOperadores->valor;
-				operador2->tipo = pilaOperadores->tipo; 
-				operador2->direccion = pilaOperadores->direccion;
-				pop(&pilaOperadores);
+					insert(&tablaTemporal,nombreT,nombreT,semanticaValida,res);
 
-				//printf("TIPO op1: %i , op2: %i \n", operador1->tipo, operador2->tipo);
-				push(&pilaOperadores,"t",1, 3);//3: direccion temporal
+					generarCuadruplo(numOp ,operador1->direccion, -1, res);
+					//printf("operando3 semantica %i\n", semanticaValida);
+					push(&pilaOperadores,nombreT,semanticaValida,res);//3: direccion temporal
+				}
 				
-				sprintf(nombreT, "t%i", contT++);
+				else{
+					pop(&pilaOperando);
 
-				semanticaValida = checarSemantica(numOp ,operador1->tipo, operador2->tipo);
-				res = generarDireccion(semanticaValida,3); //3:direccion temporal
+					operador1->valor = pilaOperadores->valor;
+					operador1->tipo = pilaOperadores->tipo; 
+					operador1->direccion = pilaOperadores->direccion;
+					pop(&pilaOperadores);
 
-				insert(&tablaTemporal,nombreT,nombreT,semanticaValida,res);
+					operador2->valor = pilaOperadores->valor;
+					operador2->tipo = pilaOperadores->tipo; 
+					operador2->direccion = pilaOperadores->direccion;
+					pop(&pilaOperadores);
 
-				generarCuadruplo(numOp ,operador1->direccion, operador2->direccion, res);
-				//printf("operando3 semantica %i\n", semanticaValida);
-				push(&pilaOperadores,"t",semanticaValida,res);//3: direccion temporal
+					//printf("TIPO op1: %i , op2: %i \n", operador1->tipo, operador2->tipo);
+					//push(&pilaOperadores,"t",1, 3);//3: direccion temporal
+				
+					sprintf(nombreT, "t%i", contT++);
+
+					semanticaValida = checarSemantica(numOp ,operador1->tipo, operador2->tipo);
+					res = generarDireccion(semanticaValida,3); //3:direccion temporal
+
+					insert(&tablaTemporal,nombreT,nombreT,semanticaValida,res);
+
+					generarCuadruplo(numOp ,operador1->direccion, operador2->direccion, res);
+					//printf("operando3 semantica %i\n", semanticaValida);
+					push(&pilaOperadores,nombreT,semanticaValida,res);//3: direccion temporal
+				}
 			}
 		}
 	}
@@ -641,7 +676,7 @@ void secuenciaIf2(){
 }
 void secuenciaElse(){
 	
-	generarCuadruplo(10 ,-1,-1,-1); // goto ,10
+	generarCuadruplo(11 ,-1,-1,-1); // goto ,11
 	ptr falso=malloc(sizeof(p_Nodo));
 	falso->direccion=pilaSaltos->direccion;
 
@@ -684,7 +719,7 @@ void secuenciaWhile3(){
 	retorno->direccion = pilaTipos->direccion;
 	pop(&pilaSaltos); 
 
-	generarCuadruplo(10, retorno->direccion,-1,-1); //10 : Go To
+	generarCuadruplo(11, retorno->direccion,-1,-1); //11 : Go To
 	rellenar(falso->direccion,contS);
 	
 }
@@ -692,7 +727,7 @@ void secuenciaWhile3(){
 void rellenar(int goTo, int contador){
 	/* poner numeros en espacios en blanco anteriores   */
 	vectorRes[goTo]=contador;
-	printf("~~~~~GO TO~~[%i]~~  contador ~~~ : %i\n", goTo, contador);
+	//printf("~~~~~GO TO~~[%i]~~  contador ~~~ : %i\n", goTo, contador);
 	printf("\nCuadruplo # %i ---(%i,%i,%i,%i)\n", goTo,vectorOp[goTo],vectorOp1[goTo],vectorOp2[goTo],vectorRes[goTo]);
 	char intemporal[25];
 
@@ -716,6 +751,9 @@ void inicializarVectores(){
 }
 
 void inicializarMatriz(){
+	//Tipos: entero: 1, doble:2, texto:3, booleano:4	
+
+	//Z=0 (SUMA)
 	matrizSemantica[0][0][0]= 1;	//Entero + entero = entero
 	matrizSemantica[0][1][0]= 2;	//Entero + doble = doble
 	matrizSemantica[0][2][0]= 0;	//Entero + texto = no se puede

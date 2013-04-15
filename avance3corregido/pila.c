@@ -54,7 +54,8 @@ void imprimirPila( ptr actual_ptr){
 		printf("La  Pila esta vacia");
 	else{
 		while (actual_ptr!= NULL){
-			printf("%c -->", *(actual_ptr->valor));
+			//printf("%c -->", *(actual_ptr->valor));
+			printf("%i -->", (actual_ptr->direccion));
 			actual_ptr=actual_ptr->siguienteNodo;
 		}//end while
 		printf("NULL\n");
