@@ -1,5 +1,6 @@
 #include <iostream>
 #include <vector>
+#include <fstream.h>
 
 using namespace std;
 
@@ -36,6 +37,26 @@ int main()
    END
 
    */
+
+/* Lector del archivos de cuiadruplos
+
+   ofstream archivo;  // objeto de la clase ofstream
+
+    archivo.open("cuadruplos.txt");
+
+     if (archivo.is_open()) {
+ while (!archivo.eof()) {
+
+
+    archivo>> output;
+    cout<<output;
+
+
+ }
+}
+archivo.close();
+*/
+
 
 
 /* Contadores de Variables*/
