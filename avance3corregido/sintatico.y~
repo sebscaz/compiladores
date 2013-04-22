@@ -74,6 +74,7 @@ int* vectorOp1;
 int* vectorOp2;
 int* vectorRes;
 
+FILE *file; 
 
 
 %}
@@ -154,7 +155,8 @@ int* vectorRes;
 
 %%
 
-PROGRAMA: programa id {insertProc(&tblProc,&tablaGlobal,$2,$2);}  llavea PROGRAMA1 PROGRAMASIG PROGRAMA2 BLOQUE llavec {printf("\n\n%s", strCuadruplos);};
+PROGRAMA: {file = fopen("cuadruplos.txt","a+"); /* apend file (add text to a file or create a file if it does not exist.*/ }
+	 programa id {insertProc(&tblProc,&tablaGlobal,$3,$3);}  llavea PROGRAMA1 PROGRAMASIG PROGRAMA2 BLOQUE llavec;
 PROGRAMA1: {alcanceDireccion=1;/*global*/}DECLARACION PROGRAMA12;
 PROGRAMA12: PROGRAMA1
 		  | /*vacio*/;
@@ -357,6 +359,9 @@ int main()
 		printf("Sintaxis Correctaa\n");
 	else
 		printf("Sintaxis Incorrecta\n");
+
+	fclose(file); 
+
 return 0;
 }
 
@@ -568,7 +573,7 @@ void checarOperando3(char *operando){
 					sprintf(nombreT, "t%i", contT++);
 
 					semanticaValida = checarSemantica(numOp ,operador1->tipo, operador2->tipo);
-					res = generarDireccion(semanticaValida,3); //3:direccion temporal
+					res = operador1->direccion; //3:direccion temporal
 
 					insert(&tablaTemporal,nombreT,nombreT,semanticaValida,res);
 
@@ -642,6 +647,8 @@ void generarCuadruplo(int numOp ,int tipo1, int tipo2, int res){
 	strcat(strCuadruplos, intemporal); 
 	sprintf(intemporal, "%i\n", res);
 	strcat(strCuadruplos, intemporal); 
+
+	fprintf(file, "%i\t%i\t%i\t%in", numOp,tipo1, tipo2, res);
 
 	contS++;/*suma contador de saltos*/
 }
