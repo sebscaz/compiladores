@@ -41,7 +41,7 @@ int main()
 
 /* Lector del archivos de cuiadruplos
 
-    system(exe param1); // no estoy tan seguro como funecione este
+    system("analizador.exe pruebalenguaje"); // no estoy tan seguro como funecione este
  
 
    ofstream archivo;  // objeto de la clase ofstream
