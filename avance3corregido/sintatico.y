@@ -30,14 +30,16 @@ int yystopparser=0;
 int matrizSemantica[4][16][11];
 int contT=1;
 int contS=0; /*contador de saltos*/ 
-char strCuadruplos[1000];
+char strCuadruplos[2000];
+char strDirecciones[2000];
 
 //Direcciones Virtuales
-int alcanceDireccion=0; // 1: global, 2: local, 3: temp
+int alcanceDireccion=0; // 1: global, 2: local, 3: temp, 5:constante
+
 int direccionEnteroGlobal=10000;
 int direccionDobleGlobal=20000;
 int direccionTextoGlobal=30000;
-int direccionBooleanoGlobal=4000;
+int direccionBooleanoGlobal=40000;
 
 int direccionEnteroLocal=11000;
 int direccionDobleLocal=21000;
@@ -48,6 +50,11 @@ int direccionEnteroTemp=12000;
 int direccionDobleTemp=22000;
 int direccionTextoTemp=32000;
 int direccionBooleanoTemp=42000;
+
+int direccionEnteroConstante=13000;
+int direccionDobleConstante=23000;
+int direccionTextoConstante=33000;
+int direccionBooleanoConstante=43000;
 
 //Tabla de vatiables y procedimientos
 struct StrHashTable tbl = {{0},NULL,NULL,foo_strhash,strcmp};
@@ -75,7 +82,7 @@ int* vectorOp2;
 int* vectorRes;
 
 FILE *file; 
-
+int i; //contador
 
 %}
 
@@ -155,7 +162,7 @@ FILE *file;
 
 %%
 
-PROGRAMA: {file = fopen("cuadruplos.txt","a+"); /* apend file (add text to a file or create a file if it does not exist.*/ }
+PROGRAMA: {file = fopen("cuadruplos.txt","w+"); /* write file (add text to a file or create a file if it does not exist.*/ }
 	 programa id {insertProc(&tblProc,&tablaGlobal,$3,$3);}  llavea PROGRAMA1 PROGRAMASIG PROGRAMA2 BLOQUE llavec;
 PROGRAMA1: {alcanceDireccion=1;/*global*/}DECLARACION PROGRAMA12;
 PROGRAMA12: PROGRAMA1
@@ -310,10 +317,46 @@ FACTOR:  parentesisa  { push(&pilaOperando,$1,-1,-1); } EXPRESION parentesisc {p
 
  	
 
-VARCTE: ctetexto			{if(hacerPush==1) push(&pilaOperadores, $1, 3, generarDireccion(3, alcanceDireccion));}
-		|cteentero 		{if(hacerPush==1) push(&pilaOperadores, $1, 1, generarDireccion(1, alcanceDireccion));}
-		| ctedecimal 		{if(hacerPush==1) push(&pilaOperadores, $1, 2, generarDireccion(2, alcanceDireccion));}
-		| ctebooleano		{if(hacerPush==1) push(&pilaOperadores, $1, 4, generarDireccion(4, alcanceDireccion));};
+VARCTE: ctetexto			{if(hacerPush==1) {
+						  int direccion = generarDireccion(3, 5);
+						  push(&pilaOperadores, $1, 3, direccion);
+						  if(insert(&tablaConstantes,$1,$1,3,direccion)!= -1){
+							  char integer_string[32];
+							  sprintf(integer_string, "%d\t", direccion);
+							  strcat(strDirecciones, integer_string);
+							  strcat(strDirecciones, $1); strcat(strDirecciones,"\n");
+						   }
+					}}
+		|cteentero 		{if(hacerPush==1) {
+						   int direccion = generarDireccion(1, 5);
+						   push(&pilaOperadores, $1, 1, direccion);
+						   if(insert(&tablaConstantes,$1,$1,1,direccion)!= -1){
+							  char integer_string[32];
+							  sprintf(integer_string, "%d\t", direccion);
+							  strcat(strDirecciones, integer_string); 
+							  strcat(strDirecciones,$1); strcat(strDirecciones,"\n"); 
+					          }
+					}}
+		| ctedecimal 		{if(hacerPush==1) {
+						   int direccion = generarDireccion(2, 5);
+						   push(&pilaOperadores, $1, 2, direccion);
+						   if(insert(&tablaConstantes,$1,$1,2,direccion)!=-1){
+							  char integer_string[32];
+							  sprintf(integer_string, "%d\t", direccion);
+							  strcat(strDirecciones, integer_string);
+							  strcat(strDirecciones, $1); strcat(strDirecciones,"\n");  
+						   }
+					}}		  
+		| ctebooleano		{if(hacerPush==1) {
+						  int direccion = generarDireccion(4, 5);
+						  push(&pilaOperadores, $1, 4, direccion);
+						  if(insert(&tablaConstantes,$1,$1,4,direccion)!=-1){
+							  char integer_string[32];
+							  sprintf(integer_string, "%d\t", direccion);
+							  strcat(strDirecciones, integer_string);
+							  strcat(strDirecciones, $1); strcat(strDirecciones,"\n"); 
+						  }
+					}};
 		
 DIBUJARFIGURA: dibujarFigura parentesisa FIGURA coma id parentesisc ptocoma;
 
@@ -350,20 +393,6 @@ COLOR: rojo
 		| verde;
 	
 %%
-int main()
-{
-	inicializarMatriz();
-	inicializarVectores();
-
-	if (yyparse()==0)
-		printf("Sintaxis Correctaa\n");
-	else
-		printf("Sintaxis Incorrecta\n");
-
-	fclose(file); 
-
-return 0;
-}
 
 int generarTipo(char *operando){
 	if(*operando=='e') //entero
@@ -416,6 +445,18 @@ int generarDireccion(int tipo, int alcance){
 		else if(tipo==4) //booleano
 			return direccionBooleanoTemp++;
 	}
+	//Constante
+	else if (alcance==5){ 
+		printf(">>>>>>>>>>>>>>>>>>ALCANCE: COnstante\n");
+		if(tipo==1)// entero
+			return direccionEnteroConstante++;
+		else if(tipo==2) //doble
+			return direccionDobleConstante++;
+		else if(tipo==3) //texto
+			return direccionTextoConstante++;
+		else if(tipo==4) //booleano
+			return direccionBooleanoConstante++;
+	}
 
 }
 
@@ -425,11 +466,11 @@ int generarDireccion(int tipo, int alcance){
 int checarSemantica(int op, int op1, int op2){
 
 	if( matrizSemantica[op1-1][op2-1][op] == 0 ){
-		printf("--------------Semantica No Valida!!\n");
+		/*printf("--------------Semantica No Valida!!\n");*/
 		return 0;	//Error: no se puede hacer operacion de esos tipos
 	}
 	else {
-		printf("--------------Semantica Valida!! tipo: %i. \n " , matrizSemantica[op1-1][op2-1][op]);
+		/*printf("--------------Semantica Valida!! tipo: %i. \n " , matrizSemantica[op1-1][op2-1][op]);*/
 		return matrizSemantica[op1-1][op2-1][op];
 	}
 	
@@ -550,7 +591,7 @@ void checarOperando3(char *operando){
 			op->valor=pilaOperando->valor;
 			if(*pilaOperando->valor=='>'||*pilaOperando->valor=='<'||*pilaOperando->valor=='='||pilaOperando->valor=="=="||pilaOperando->valor=="!=" ){ 
 
-				if(*pilaOperando->valor=='=' ) {numOp=10; printf("\n\nIGUAAL\n\n");} 
+				if(*pilaOperando->valor=='=' ) {numOp=10; } 
 				else if (pilaOperando->valor=="!=") numOp=5;
 				else if (*pilaOperando->valor=='>') numOp=6;
 				else if (*pilaOperando->valor=='<') numOp=7;
@@ -635,20 +676,9 @@ void generarCuadruplo(int numOp ,int tipo1, int tipo2, int res){
 	vectorRes[contS]=res;
 	
 	/*imprimir para checar si se meten los valores*/
-	printf("\nCuadruplo # %i ---(%i,%i,%i,%i)\n", contS,vectorOp[contS],vectorOp1[contS],vectorOp2[contS],vectorRes[contS]);
+	//printf("\nCuadruplo # %i ---(%i,%i,%i,%i)\n", contS,vectorOp[contS],vectorOp1[contS],vectorOp2[contS],vectorRes[contS]);
 	
 	char intemporal[25];
-
-	sprintf(intemporal, "Cuadruplo # %i --- %i -", contS,numOp);
-	strcat(strCuadruplos, intemporal); 
-	sprintf(intemporal, "%i - ", tipo1);
-	strcat(strCuadruplos, intemporal); 
-	sprintf(intemporal, "%i - ", tipo2);
-	strcat(strCuadruplos, intemporal); 
-	sprintf(intemporal, "%i\n", res);
-	strcat(strCuadruplos, intemporal); 
-
-	fprintf(file, "%i\t%i\t%i\t%i\n", numOp,tipo1, tipo2, res);
 
 	contS++;/*suma contador de saltos*/
 }
@@ -735,18 +765,8 @@ void rellenar(int goTo, int contador){
 	/* poner numeros en espacios en blanco anteriores   */
 	vectorRes[goTo]=contador;
 	//printf("~~~~~GO TO~~[%i]~~  contador ~~~ : %i\n", goTo, contador);
-	printf("\nCuadruplo # %i ---(%i,%i,%i,%i)\n", goTo,vectorOp[goTo],vectorOp1[goTo],vectorOp2[goTo],vectorRes[goTo]);
+	//printf("\nCuadruplo # %i ---(%i,%i,%i,%i)\n", goTo,vectorOp[goTo],vectorOp1[goTo],vectorOp2[goTo],vectorRes[goTo]);
 	char intemporal[25];
-
-	sprintf(intemporal, "Cuadruplo # %i --- %i -", goTo,vectorOp[goTo]);
-	strcat(strCuadruplos, intemporal); 
-	sprintf(intemporal, "%i - ", vectorOp1[goTo]);
-	strcat(strCuadruplos, intemporal); 
-	sprintf(intemporal, "%i - ", vectorOp2[goTo]);
-	strcat(strCuadruplos, intemporal); 
-	sprintf(intemporal, "%i\n", vectorRes[goTo]);
-	strcat(strCuadruplos, intemporal); 
-
 }
 
 void inicializarVectores(){
@@ -959,6 +979,39 @@ void inicializarMatriz(){
 	matrizSemantica[3][2][10]= 0;	//bool = texto -> no se puede
 	matrizSemantica[3][3][10]= 4;	//bool = bool -> bool
 }
+
+int main()
+{
+	inicializarMatriz();
+	inicializarVectores();
+
+	if (yyparse()==0){
+		printf("Sintaxis Correctaa\n");
+
+		//Generar cuadruplos.txt
+		for(i=0; i<contS; i++){	
+			char intemporal[25];
+			sprintf(intemporal, "%i/%i/", i,vectorOp[i]);
+			strcat(strCuadruplos, intemporal); 
+			sprintf(intemporal, "%i/", vectorOp1[i]);
+			strcat(strCuadruplos, intemporal); 
+			sprintf(intemporal, "%i/", vectorOp2[i]);
+			strcat(strCuadruplos, intemporal); 
+			sprintf(intemporal, "%i\n", vectorRes[i]);
+			strcat(strCuadruplos, intemporal); 
+		}
+
+		fprintf(file, "%s", strDirecciones);
+		fprintf(file, "%s", strCuadruplos);
+	}
+	else
+		printf("Sintaxis Incorrecta\n");
+
+	fclose(file); 
+
+return 0;
+}
+
 
 yyerror(s)
 char *s;

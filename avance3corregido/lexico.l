@@ -56,9 +56,9 @@ ctebooleano    [v | f]
 "|"         {printf("or\n"); return(or);}
 
 {ctetexto}		{printf("_cte texto  \n "); yylval.string = strdup(yytext); return(ctetexto);}
-{cteentero}		{printf("_Cte entero\n"); yylval.cteint = atoi(yytext);  return(cteentero);}
-{ctedecimal}	{printf("_Cte decimal\n"); yylval.ctefloat = atof(yytext); return(ctedecimal);}
-{ctebooleano}	{printf("_Cte booleano\n"); yylval.cteint = atoi(yytext); return(ctebooleano);}
+{cteentero}		{printf("_Cte entero\n"); /*yylval.cteint = atoi(yytext);*/ yylval.string = strdup(yytext);  return(cteentero);}
+{ctedecimal}	{printf("_Cte decimal\n"); /*yylval.ctefloat = atof(yytext);*/ yylval.string = strdup(yytext); return(ctedecimal);}
+{ctebooleano}	{printf("_Cte booleano\n"); /*yylval.cteint = atoi(yytext);*/ yylval.string = strdup(yytext); return(ctebooleano);}
 "texto"			{printf("_Palabra reservada texto\n"); yylval.string = strdup(yytext); return(texto);}
 "booleano"		{printf("_Palabra reservada booleano\n"); yylval.string = strdup(yytext); return(booleano);}
 "entero"		{printf("_Palabra reservada entero\n"); yylval.string = strdup(yytext); return(entero);}

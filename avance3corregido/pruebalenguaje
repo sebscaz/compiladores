@@ -3,9 +3,10 @@ programa prueba {
 	crear texto mak;
 	crear booleano what;
 	crear entero aldo;
-
-	aldo=1 + 2;
-
+	
+	mak="probando";
+	aldo=1;
+	what=v;
 
 	funcion entero mak(entero hola){
 		crear entero sebas;

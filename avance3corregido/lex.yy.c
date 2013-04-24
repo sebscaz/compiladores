@@ -1027,17 +1027,17 @@ YY_RULE_SETUP
 case 26:
 YY_RULE_SETUP
 #line 59 "lexico.l"
-{printf("_Cte entero\n"); yylval.cteint = atoi(yytext);  return(cteentero);}
+{printf("_Cte entero\n"); /*yylval.cteint = atoi(yytext);*/ yylval.string = strdup(yytext);  return(cteentero);}
 	YY_BREAK
 case 27:
 YY_RULE_SETUP
 #line 60 "lexico.l"
-{printf("_Cte decimal\n"); yylval.ctefloat = atof(yytext); return(ctedecimal);}
+{printf("_Cte decimal\n"); /*yylval.ctefloat = atof(yytext);*/ yylval.string = strdup(yytext); return(ctedecimal);}
 	YY_BREAK
 case 28:
 YY_RULE_SETUP
 #line 61 "lexico.l"
-{printf("_Cte booleano\n"); yylval.cteint = atoi(yytext); return(ctebooleano);}
+{printf("_Cte booleano\n"); /*yylval.cteint = atoi(yytext);*/ yylval.string = strdup(yytext); return(ctebooleano);}
 	YY_BREAK
 case 29:
 YY_RULE_SETUP

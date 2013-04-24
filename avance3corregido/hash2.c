@@ -120,6 +120,7 @@ int insert(struct StrHashTable *table,char *key,void *value, int type, int direc
 	
 	if(node->key != NULL) {
 		printf("ID Repetida: \n");
+		return -1;
 	}
 	else
 	{
