@@ -83,6 +83,7 @@ int* vectorRes;
 
 FILE *file; 
 int i; //contador
+int contadorConstantes =0;
 
 %}
 
@@ -321,8 +322,9 @@ VARCTE: ctetexto			{if(hacerPush==1) {
 						  int direccion = generarDireccion(3, 5);
 						  push(&pilaOperadores, $1, 3, direccion);
 						  if(insert(&tablaConstantes,$1,$1,3,direccion)!= -1){
+							  contadorConstantes++;
 							  char integer_string[32];
-							  sprintf(integer_string, "%d\t", direccion);
+							  sprintf(integer_string, "%d/", direccion);
 							  strcat(strDirecciones, integer_string);
 							  strcat(strDirecciones, $1); strcat(strDirecciones,"\n");
 						   }
@@ -331,8 +333,9 @@ VARCTE: ctetexto			{if(hacerPush==1) {
 						   int direccion = generarDireccion(1, 5);
 						   push(&pilaOperadores, $1, 1, direccion);
 						   if(insert(&tablaConstantes,$1,$1,1,direccion)!= -1){
+							  contadorConstantes++;
 							  char integer_string[32];
-							  sprintf(integer_string, "%d\t", direccion);
+							  sprintf(integer_string, "%d/", direccion);
 							  strcat(strDirecciones, integer_string); 
 							  strcat(strDirecciones,$1); strcat(strDirecciones,"\n"); 
 					          }
@@ -341,8 +344,9 @@ VARCTE: ctetexto			{if(hacerPush==1) {
 						   int direccion = generarDireccion(2, 5);
 						   push(&pilaOperadores, $1, 2, direccion);
 						   if(insert(&tablaConstantes,$1,$1,2,direccion)!=-1){
+							  contadorConstantes++;
 							  char integer_string[32];
-							  sprintf(integer_string, "%d\t", direccion);
+							  sprintf(integer_string, "%d/", direccion);
 							  strcat(strDirecciones, integer_string);
 							  strcat(strDirecciones, $1); strcat(strDirecciones,"\n");  
 						   }
@@ -351,8 +355,9 @@ VARCTE: ctetexto			{if(hacerPush==1) {
 						  int direccion = generarDireccion(4, 5);
 						  push(&pilaOperadores, $1, 4, direccion);
 						  if(insert(&tablaConstantes,$1,$1,4,direccion)!=-1){
+							  contadorConstantes++;
 							  char integer_string[32];
-							  sprintf(integer_string, "%d\t", direccion);
+							  sprintf(integer_string, "%d/", direccion);
 							  strcat(strDirecciones, integer_string);
 							  strcat(strDirecciones, $1); strcat(strDirecciones,"\n"); 
 						  }
@@ -1000,7 +1005,7 @@ int main()
 			sprintf(intemporal, "%i\n", vectorRes[i]);
 			strcat(strCuadruplos, intemporal); 
 		}
-
+		fprintf(file, "%i\n", contadorConstantes);	
 		fprintf(file, "%s", strDirecciones);
 		fprintf(file, "%s", strCuadruplos);
 	}
