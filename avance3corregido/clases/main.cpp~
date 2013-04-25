@@ -1,7 +1,7 @@
 #include <iostream>
 #include <vector>
-#include <fstream.h>
-#include <stdlib.h> 
+#include <fstream>
+#include <stdlib.h>
 
 using namespace std;
 
@@ -10,23 +10,24 @@ int main()
 {
   /*
 
-   +
-   -
-   *
-   /
-   <
-   >
-   !=
-   ==
-   AND
-   OR
+   + 0
+   - 1
+   * 2
+   / 3
+   < 7
+   > 6
+   != 5
+   == 4
+   AND 8
+   OR 9
    (
    )
+   = 10
 
-   GOTO
-   GOTOF
-   GOTOV
-   GOTOSUB
+   GOTO 11
+   GOTOF 12
+   GOTOV  13
+   GOTOSUB  14
 
    ERA    20
           21
@@ -39,27 +40,48 @@ int main()
 
    */
 
-/* Lector del archivos de cuiadruplos
 
-    system(exe param1); // no estoy tan seguro como funecione este
- 
+   /*Inicializar vectores
 
-   ofstream archivo;  // objeto de la clase ofstream
+
+   vector<int> enterosGlobales(contEnterosGlobales);
+
+
+
+
+   */
+
+ //Lector del archivos de cuiadruplos
+
+   // system("analizador.exe pruebalenguaje"); // no estoy tan seguro como funecione este
+
+  string output;
+   
+   ifstream archivo;  // objeto de la clase ofstream
 
     archivo.open("cuadruplos.txt");
 
-     if (archivo.is_open()) {
+     //archivo<< "Writing this to a file.\n";
+     
+ 
+
+
+     
+
+
+   if (archivo.is_open()) {
  while (!archivo.eof()) {
 
 
-    archivo>> output;
-    cout<<output;
+    getline (archivo,output);
+    //archivo>> output;
+    cout<<output <<"\n" ;
 
 
  }
 }
 archivo.close();
-*/
+
 
 
 
@@ -100,9 +122,16 @@ int boleanoLocal_I=12000, boleanoLocal_F=12999;
 
 
 
+/*Empieza el Switch*/
+
+//switch(    ){
 
 
 
+
+
+
+/*Termina el switch*/
 
 
 

@@ -1,7 +1,7 @@
 #include <iostream>
 #include <vector>
-#include <fstream.h>
-#include <stdlib.h> 
+#include <fstream>
+#include <stdlib.h>
 
 using namespace std;
 
@@ -10,24 +10,23 @@ int main()
 {
   /*
 
-   +
-   -
-   *
-   /
-   <
-   >
-   !=
-   ==
-   AND
-   OR
+   + 0
+   - 1
+   * 2
+   / 3
+   < 7
+   > 6
+   != 5
+   == 4
+   AND 8
+   OR 9
    (
    )
-
-   GOTO
-   GOTOF
-   GOTOV
-   GOTOSUB
-
+   = 10
+   GOTO 11
+   GOTOF 12
+   GOTOV  13
+   GOTOSUB  14
    ERA    20
           21
    RET    22
@@ -35,31 +34,75 @@ int main()
    Return 24
    write  25
    PRINT  26
-   END
+   END   30
 
    */
 
-/* Lector del archivos de cuiadruplos
 
-    system("analizador.exe pruebalenguaje"); // no estoy tan seguro como funecione este
- 
+   /*Inicializar vectores
 
-   ofstream archivo;  // objeto de la clase ofstream
+   //Vector de contadores
+   vector<int> contCuadruplos(16);
+
+
+
+    vector<int> enterosGlobales(contEnterosGlobales);
+    vector<int> enterosLocales(contEnterosLocales);
+    vector<int> enterosTemporales(contEnterosTemporales);
+    vector<int> enterosConstantes(contEnterosConstantes);
+
+
+    vector<double> flotantesGlobales(contFlotantesGlobales);
+    vector<double> flotantesLocales(contFlotantesLocales);
+    vector<double> flotantesTemporales(contFlotantesTemporales);
+    vector<double> flotantesConstantes(contFlotantesConstantes);
+
+    vector<string> stringGlobales(contStringGlobales);
+    vector<string> stringLocales(contStringLocales);
+    vector<string> stringTemporales(contStringTemporales);
+    vector<string> stringConstantes(contStringConstantes);
+
+    vector<string> booleanoGlobales(contBooleanoGlobales);
+    vector<string> booleanoLocales(contBooleanoLocales);
+    vector<string> boolenoTemporales(contBooleanoTemporales);
+    vector<string> booleanoConstantes(contBooleanoConstantes);
+
+
+
+
+   */
+
+ //Lector del archivos de cuiadruplos
+
+   // system("analizador.exe pruebalenguaje"); // no estoy tan seguro como funecione este
+
+  string output;
+
+   ifstream archivo;  // objeto de la clase ofstream
 
     archivo.open("cuadruplos.txt");
 
-     if (archivo.is_open()) {
+     //archivo<< "Writing this to a file.\n";
+
+
+
+
+
+
+
+   if (archivo.is_open()) {
  while (!archivo.eof()) {
 
 
-    archivo>> output;
-    cout<<output;
+    getline (archivo,output);
+    //archivo>> output;
+    cout<<output <<"\n" ;
 
 
  }
 }
 archivo.close();
-*/
+
 
 
 
@@ -98,11 +141,81 @@ int boleanoLocal_I=12000, boleanoLocal_F=12999;
    int boleanoTemp_I=18000, boleanoTemp_F=18999;
 
 
+int valor;// primer numero del cuadruplo
 
+/*Empieza el Switch*/
 
+switch(valor){
+case 0 /*Suma*/: //instrucciones
+break;
 
+case 1/*Resta*/://instrucciones
+break;
 
+case 2/*multiplicación*/://instrucciones
+break;
 
+case 3/*división*/://instrucciones
+break;
+
+case 4 /*==*/://instrucciones
+break;
+
+case 5 /* !=*/://instrucciones
+break;
+
+case 6 /*> */://instrucciones
+break;
+
+case 7 /*<*/://instrucciones
+break;
+
+case 8 /*AND*/://instrucciones
+break;
+
+case 9 /*OR*/://instrucciones
+break;
+
+case 10 /*=*/://instrucciones
+break;
+
+case 11 /*GOTO*/://instrucciones
+break;
+
+case 12 /*GOTOF*/://instrucciones
+break;
+
+case 13 /*GOTOV*/://instrucciones
+break;
+
+case 14 /*GOTOSUB*/://instrucciones
+break;
+
+case 20 /*ERA*/://instrucciones
+break;
+
+case 21 /**/://instrucciones
+break;
+
+case 22 /*RET*/: //instrucciones
+break;
+
+case 23 /*param*/://instrucciones
+break;
+
+case 24 /*Return*/: //instrucciones
+break;
+
+case 25 /*write*/://instrucciones
+break;
+
+case 26 /*PRINT*/://instrucciones
+break;
+
+case 30 /*END*/: //instrucciones
+break;
+
+}/*Termina el switch*/
 
 
 
