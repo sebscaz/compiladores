@@ -37,23 +37,23 @@ char strDirecciones[2000];
 int alcanceDireccion=0; // 1: global, 2: local, 3: temp, 5:constante
 
 int direccionEnteroGlobal=10000;
-int direccionDobleGlobal=20000;
-int direccionTextoGlobal=30000;
-int direccionBooleanoGlobal=40000;
-
 int direccionEnteroLocal=11000;
-int direccionDobleLocal=21000;
-int direccionTextoLocal=31000;
-int direccionBooleanoLocal=41000;
-
 int direccionEnteroTemp=12000;
-int direccionDobleTemp=22000;
-int direccionTextoTemp=32000;
-int direccionBooleanoTemp=42000;
-
 int direccionEnteroConstante=13000;
+
+int direccionDobleGlobal=20000;
+int direccionDobleLocal=21000;
+int direccionDobleTemp=22000;
 int direccionDobleConstante=23000;
+
+int direccionTextoGlobal=30000;
+int direccionTextoLocal=31000;
+int direccionTextoTemp=32000;
 int direccionTextoConstante=33000;
+
+int direccionBooleanoGlobal=40000;
+int direccionBooleanoLocal=41000;
+int direccionBooleanoTemp=42000;
 int direccionBooleanoConstante=43000;
 
 //Tabla de vatiables y procedimientos
