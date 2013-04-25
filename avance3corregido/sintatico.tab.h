@@ -108,7 +108,7 @@ typedef union YYSTYPE
 {
 
 /* Line 2068 of yacc.c  */
-#line 90 "sintatico.y"
+#line 91 "sintatico.y"
 int cteint; float ctefloat; int cteboolean; char *string;
 
 
