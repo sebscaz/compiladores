@@ -1,7 +1,9 @@
 #include <iostream>
 #include <vector>
 #include <fstream>
+#include <string.h>
 #include <stdlib.h>
+#include <sstream>
 
 using namespace std;
 
@@ -76,7 +78,8 @@ int main()
 
    // system("analizador.exe pruebalenguaje"); // no estoy tan seguro como funecione este
 
-  string output;
+  string linea;
+  int numLinea=0;
 
    ifstream archivo;  // objeto de la clase ofstream
 
@@ -89,20 +92,131 @@ int main()
 
 
 
+    // lee segunda linea
+
+
+
+/*
+
+
+while(!archivo.eof()){
+/*
+getline (archivo,linea);
+
+	if(numLinea<=numeroConstantes+1 ){	//+1 porque los constantes empeizan en la linea 2, nomas recorre de linea 2 hasta que haya constantes
+		int pos = linea.find("/");
+
+		int direccion =  atoi(linea.substr(0,pos).c_str()) ;  // del principio hasta "/"
+		int valor = atoi(linea.substr(pos).c_str()) ;
+	}
+	else{	// es cuadruplo
+		string texto = linea;	//texto para ir cortandolo y encontrar los "/"
+
+		int pos = texto.find("/");
+		texto = texto.substr(pos+1);
+		int pos2 = texto.find("/");
+		texto = texto.substr(pos2+1);
+		int pos3 = texto.find("/");
+		texto = texto.substr(pos3+1);
+
+		int op = atoi(linea.substr(0,pos).c_str()) ;   // del principio hasta "/"
+		int op1 = atoi(linea.substr(pos,pos2).c_str()) ;  // del 1 / al 2 /
+		int op2  = atoi(linea.substr(pos2,pos3).c_str()) ; // del 2/ al 3/
+		int temp = atoi(linea.substr(pos3).c_str()) ; // del 3/ en adelante
+	}
+
+
+
+
+}
+*/
+
+
+/*iniicializar variables*/
+        int pos,pos2,pos3,pos4;
+        string valores;
+        string op;
+        string l;
+		string op1 ;
+		string op2;
+		string temp ;
+		int numeroConstantes;
+		int direccion;
+		string texto;
+
 
    if (archivo.is_open()) {
  while (!archivo.eof()) {
+      numLinea++;
+      getline (archivo,linea);
+
+      if (numLinea==1){
+
+          numeroConstantes= atoi(linea.c_str());
+          cout<<"Primera Linea "<<numLinea<<"\n";
+          cout<<"Numero de constantes"<<numeroConstantes<<"\n"; //imprime 1 Linea
+
+          }
 
 
-    getline (archivo,output);
+
+
+
+
+    else if (numLinea<10 && numLinea>1){
+
+        pos = linea.find("/");
+        cout<<"Pos de linea"<<pos<<"\n";
+
+        direccion =  atoi(linea.substr(0,pos).c_str()) ;
+        valores= linea.substr(pos+1) ;
+
+        cout<< direccion<<" ";
+        cout<<valores<<"\n";
+
+}else {
+        texto = linea;
+        pos = texto.find("/");
+        texto = texto.substr(pos+1);
+
+        //empieza cuadruplos
+		 pos2 = texto.find("/");
+		 texto = texto.substr(pos2+1);
+
+		 pos3 = texto.find("/");
+		texto = texto.substr(pos3+1);
+
+		 pos4 = texto.find("/");
+		texto = texto.substr(pos4+1);
+
+
+        l= linea.substr(0,pos);
+        op = linea.substr(pos+1,pos2);   // del principio hasta "/"
+		op1 = linea.substr(pos2+1,pos3) ;  // del 1 / al 2 /
+		op2  = linea.substr(pos3+1,pos4) ; // del 2/ al 3/
+		temp =linea.substr(pos4+1) ; // del 3/ en adelante
+
+
+        cout<<l<<" ";
+        cout<<op<<" ";
+        cout<<op1<<" ";
+        cout<<op2<<" ";
+        cout<<temp<<"\n";
+
+
+}
+
+
     //archivo>> output;
-    cout<<output <<"\n" ;
+    cout<<linea <<"\n" ;
+
 
 
  }
 }
-archivo.close();
 
+archivo.close();
+cout<<" Numero de Lineas "<<numLinea;
 
 
 
