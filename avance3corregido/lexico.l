@@ -33,6 +33,7 @@ ctebooleano    [v | f]
 [\t\r\f]    	{}
 
 "programa"	{printf("_Palabra reservada programa\n"); return(programa);}
+"principal"	{printf("_Palabra reservada principal\n"); return(principal);}
 "si"		{printf("_Palabra reservada si\n"); return(si);}
 "no"		{printf("_Palabra reservada no\n"); return(no);}
 "imprimir"	{printf("_Palabra reservada imprimir\n"); return(imprimir);}
