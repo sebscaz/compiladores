@@ -31,5 +31,7 @@ programa prueba {
 		
 	}
 
-	imprimir("hola");
+	principal(){
+		imprimir("hola");
+	}
 }

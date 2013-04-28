@@ -91,6 +91,7 @@ int contadorConstantes =0;
 %union {int cteint; float ctefloat; int cteboolean; char *string;} 
 
 %token programa
+%token principal
 %token si
 %token no
 %token imprimir
@@ -164,7 +165,7 @@ int contadorConstantes =0;
 %%
 
 PROGRAMA: {file = fopen("cuadruplos.txt","w+"); /* write file (add text to a file or create a file if it does not exist.*/ }
-	 programa id {insertProc(&tblProc,&tablaGlobal,$3,$3);}  llavea PROGRAMA1 PROGRAMASIG PROGRAMA2 BLOQUE llavec;
+	 programa id {insertProc(&tblProc,&tablaGlobal,$3,$3);}  llavea PROGRAMA1 PROGRAMASIG PROGRAMA2 PRINCIPAL llavec;
 PROGRAMA1: {alcanceDireccion=1;/*global*/}DECLARACION PROGRAMA12;
 PROGRAMA12: PROGRAMA1
 		  | /*vacio*/;
@@ -181,6 +182,8 @@ TIPO: texto		{tipoOp = generarTipo($1); /*printf("===========tipo: %i\n", tipoOp
 	| entero	{tipoOp = generarTipo($1); /*printf("===========tipo: %i\n", tipoOp);*/ }
 	| decimal	{tipoOp = generarTipo($1); /*printf("===========tipo: %i\n", tipoOp);*/}
 	| booleano	{tipoOp = generarTipo($1); /*printf("===========tipo: %i\n", tipoOp);*/};	
+
+PRINCIPAL: principal parentesisa parentesisc llavea BLOQUE llavec;
 	
 BLOQUE: ESTATUTO BLOQUE1;
 BLOQUE1: BLOQUE;
