@@ -130,6 +130,80 @@ int main(){
 				cout<<op1<<" - ";
 				cout<<op2<<" - ";
 				cout<<temp<<"\n";  
+				
+                /*Empieza el Switch*/
+                switch(op){
+                	case 0 /*Suma*/: //instrucciones
+                	break;
+                 
+                	case 1/*Resta*/://instrucciones
+                	break;
+                
+                	case 2/*multiplicación*/://instrucciones
+                	break;
+                
+                	case 3/*división*/://instrucciones
+                	break;
+                
+                	case 4 /*==*/://instrucciones
+                	break;
+                
+                	case 5 /* !=*/://instrucciones
+                	break;
+                
+                	case 6 /*> */://instrucciones
+                	break;
+                
+                	case 7 /*<*/://instrucciones
+                	break;
+                
+                	case 8 /*AND*/://instrucciones
+                	break;
+                
+                	case 9 /*OR*/://instrucciones
+                	break;
+                
+                	case 10 /*=*/://instrucciones
+                	break;
+                
+                	case 11 /*GOTO*/://instrucciones
+                	break;
+                
+                	case 12 /*GOTOF*/://instrucciones
+                	break;
+                
+                	case 13 /*GOTOV*/://instrucciones
+                	break;
+                
+                	case 14 /*GOTOSUB*/://instrucciones
+                	break;
+                
+                	case 20 /*ERA*/://instrucciones
+                	break;
+                
+                	case 21 /**/://instrucciones
+                	break;
+                
+                	case 22 /*RET*/: //instrucciones
+                	break;
+                
+                	case 23 /*param*/://instrucciones
+                	break;
+                
+                	case 24 /*Return*/: //instrucciones
+                	break;
+                
+                	case 25 /*write*/://instrucciones
+                	break;
+                
+                	case 26 /*PRINT*/://instrucciones
+                	break;
+                
+                	case 30 /*END*/: //instrucciones
+                	break;
+                
+                }/*Termina el switch*/
+
 			}            
 		}//while
 
@@ -172,82 +246,7 @@ int main(){
 	int boleanoTemp_I=18000, boleanoTemp_F=18999;
 
 
-	int valor;// primer numero del cuadruplo
-
-	/*Empieza el Switch*/
-
-	switch(valor){
-		case 0 /*Suma*/: //instrucciones
-		break;
-
-		case 1/*Resta*/://instrucciones
-		break;
-
-		case 2/*multiplicación*/://instrucciones
-		break;
-
-		case 3/*división*/://instrucciones
-		break;
-
-		case 4 /*==*/://instrucciones
-		break;
-
-		case 5 /* !=*/://instrucciones
-		break;
-
-		case 6 /*> */://instrucciones
-		break;
-
-		case 7 /*<*/://instrucciones
-		break;
-
-		case 8 /*AND*/://instrucciones
-		break;
-
-		case 9 /*OR*/://instrucciones
-		break;
-
-		case 10 /*=*/://instrucciones
-		break;
-
-		case 11 /*GOTO*/://instrucciones
-		break;
-
-		case 12 /*GOTOF*/://instrucciones
-		break;
-
-		case 13 /*GOTOV*/://instrucciones
-		break;
-
-		case 14 /*GOTOSUB*/://instrucciones
-		break;
-
-		case 20 /*ERA*/://instrucciones
-		break;
-
-		case 21 /**/://instrucciones
-		break;
-
-		case 22 /*RET*/: //instrucciones
-		break;
-
-		case 23 /*param*/://instrucciones
-		break;
-
-		case 24 /*Return*/: //instrucciones
-		break;
-
-		case 25 /*write*/://instrucciones
-		break;
-
-		case 26 /*PRINT*/://instrucciones
-		break;
-
-		case 30 /*END*/: //instrucciones
-		break;
-
-	}/*Termina el switch*/
-
+	
     return 0;
 }
 
