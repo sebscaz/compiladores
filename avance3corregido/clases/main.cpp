@@ -5,64 +5,129 @@
 #include <stdlib.h>
 #include <sstream>
 
+/*
++ 0
+- 1
+* 2
+/ 3
+< 7
+> 6
+!= 5
+== 4
+AND 8
+OR 9
+(
+)
+= 10
+GOTO 11
+GOTOF 12
+GOTOV  13
+GOTOSUB  14
+ERA    20
+		21
+RET    22
+param  23
+Return 24
+write  25
+PRINT  26
+END   30
+*/
+
 using namespace std;
 
+/* Contadores de Variables*/
+int contIntG=0, contIntL=0, contIntT=0, contIntC=0;
+int contFloatG=0, contFloatL=0, contFloatT=0, contFloatC=0;
+int contStringG=0, contStringL=0, contStringT=0, contStringC=0;
+int contBoolG=0, contBoolL=0, contBoolC=0, contBoolT=0;
+
+//Inicializar vectores
+
+//Vector de contadores
+//vector<int> contCuadruplos();
+
+vector<int> enterosGlobales(contIntG);
+vector<int> enterosLocales(contIntL);
+vector<int> enterosTemporales(contIntT);
+vector<int> enterosConstantes(contIntC);
+
+vector<double> flotantesGlobales(contFloatG);
+vector<double> flotantesLocales(contFloatL);
+vector<double> flotantesTemporales(contFloatT);
+vector<double> flotantesConstantes(contFloatC);
+
+vector<string> stringGlobales(contStringG);
+vector<string> stringLocales(contStringL);
+vector<string> stringTemporales(contStringT);
+vector<string> stringConstantes(contStringC);
+
+vector<string> booleanoGlobales(contBoolG);
+vector<string> booleanoLocales(contBoolL);
+vector<string> boolenoTemporales(contBoolT);
+vector<string> booleanoConstantes(contBoolC);
+
+void generarMemoria(int direccion, string valor){
+    
+    //Almacenar enteros 
+     if(direccion >= 10000 && direccion <= 10999){
+          enterosGlobales[direccion-1000];          
+     }
+     else if(direccion >= 11000 && direccion <= 11999){
+          enterosLocales[direccion-11000];
+     }
+     else if(direccion >= 12000 && direccion <= 12999){
+          enterosTemporales[direccion-12000];
+     }
+     else if(direccion >= 13000 && direccion <= 13999){
+          enterosConstantes[direccion-13000];
+     }
+     
+     //Almacenar floats 
+     if(direccion >= 20000 && direccion <= 20999){
+          enterosGlobales[direccion-2000];          
+     }
+     else if(direccion >= 21000 && direccion <= 21999){
+          enterosLocales[direccion-21000];
+     }
+     else if(direccion >= 22000 && direccion <= 22999){
+          enterosTemporales[direccion-22000];
+     }
+     else if(direccion >= 23000 && direccion <= 23999){
+          enterosConstantes[direccion-23000];
+     }
+     
+     //Almacenar strings 
+     if(direccion >= 30000 && direccion <= 30999){
+          enterosGlobales[direccion-3000];          
+     }
+     else if(direccion >= 31000 && direccion <= 31999){
+          enterosLocales[direccion-31000];
+     }
+     else if(direccion >= 32000 && direccion <= 32999){
+          enterosTemporales[direccion-32000];
+     }
+     else if(direccion >= 33000 && direccion <= 33999){
+          enterosConstantes[direccion-33000];
+     }
+     
+     //Almacenar booleans 
+     if(direccion >= 40000 && direccion <= 40999){
+          enterosGlobales[direccion-4000];          
+     }
+     else if(direccion >= 41000 && direccion <= 41999){
+          enterosLocales[direccion-41000];
+     }
+     else if(direccion >= 42000 && direccion <= 42999){
+          enterosTemporales[direccion-42000];
+     }
+     else if(direccion >= 43000 && direccion <= 43999){
+          enterosConstantes[direccion-43000];
+     }
+     
+     
+}
 
 int main(){
-	/*
-	+ 0
-	- 1
-	* 2
-	/ 3
-	< 7
-	> 6
-	!= 5
-	== 4
-	AND 8
-	OR 9
-	(
-	)
-	= 10
-	GOTO 11
-	GOTOF 12
-	GOTOV  13
-	GOTOSUB  14
-	ERA    20
-			21
-	RET    22
-	param  23
-	Return 24
-	write  25
-	PRINT  26
-	END   30
-	*/
-
-   //Inicializar vectores
-
-    //Vector de contadores
-    vector<int> contCuadruplos(16);
-
-    vector<int> enterosGlobales;
-    vector<int> enterosLocales;
-    vector<int> enterosTemporales;
-    vector<int> enterosConstantes;
-
-
-    vector<double> flotantesGlobales;
-    vector<double> flotantesLocales;
-    vector<double> flotantesTemporales;
-    vector<double> flotantesConstantes;
-
-    vector<string> stringGlobales;
-    vector<string> stringLocales;
-    vector<string> stringTemporales;
-    vector<string> stringConstantes;
-
-    vector<string> booleanoGlobales;
-    vector<string> booleanoLocales;
-    vector<string> boolenoTemporales;
-    vector<string> booleanoConstantes;
-   
 
    //Lector del archivos de cuiadruplos
    // system("analizador.exe pruebalenguaje"); // no estoy tan seguro como funecione este
@@ -99,9 +164,9 @@ int main(){
 				pos = linea.find("/");
 				//cout<<"Pos de linea"<<pos<<"\n";
 				direccion =  atoi(linea.substr(0,pos).c_str()) ;
-				valores= linea.substr(pos+1) ;
-				//cout<< direccion<<" ";
-				//cout<<valores<<"\n";
+				valores= linea.substr(pos+1);  
+	
+	            //generarMemoria(direccion,valores);
 			} 
 			//Cuadruplos
             else {
@@ -132,7 +197,7 @@ int main(){
 				cout<<temp<<"\n";  
 				
                 /*Empieza el Switch*/
-                switch(op){
+                switch(atoi(op.c_str())){
                 	case 0 /*Suma*/: //instrucciones
                 	break;
                  
@@ -212,13 +277,7 @@ int main(){
 	cout<<" Numero de Lineas "<<numLinea;
 	 int acabar;
 	cin>>acabar;
-
-	/* Contadores de Variables*/
-	int contIntG=0, contIntL=0, contIntT=0, contIntC=0;
-	int contFloatG=0, contFloatL=0, contFloatT=0, contFloatC=0;
-	int contConstG=0, contConstL=0, contConstT=0, contConstC=0;
-	int contBoolG=0, contBoolL=0, contBoolC=0, contBoolT=0;
-
+	
 	//Indice de Memoria
 
 	/*Dir. Globales*/
@@ -251,6 +310,4 @@ int main(){
 }
 
 
-void generarMemoria(int direccion, string valor){
-     
-     }
+
