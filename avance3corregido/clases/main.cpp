@@ -37,32 +37,32 @@ int main(){
 	END   30
 	*/
 
-   /*Inicializar vectores
+   //Inicializar vectores
 
     //Vector de contadores
     vector<int> contCuadruplos(16);
 
-    vector<int> enterosGlobales(contEnterosGlobales);
-    vector<int> enterosLocales(contEnterosLocales);
-    vector<int> enterosTemporales(contEnterosTemporales);
-    vector<int> enterosConstantes(contEnterosConstantes);
+    vector<int> enterosGlobales;
+    vector<int> enterosLocales;
+    vector<int> enterosTemporales;
+    vector<int> enterosConstantes;
 
 
-    vector<double> flotantesGlobales(contFlotantesGlobales);
-    vector<double> flotantesLocales(contFlotantesLocales);
-    vector<double> flotantesTemporales(contFlotantesTemporales);
-    vector<double> flotantesConstantes(contFlotantesConstantes);
+    vector<double> flotantesGlobales;
+    vector<double> flotantesLocales;
+    vector<double> flotantesTemporales;
+    vector<double> flotantesConstantes;
 
-    vector<string> stringGlobales(contStringGlobales);
-    vector<string> stringLocales(contStringLocales);
-    vector<string> stringTemporales(contStringTemporales);
-    vector<string> stringConstantes(contStringConstantes);
+    vector<string> stringGlobales;
+    vector<string> stringLocales;
+    vector<string> stringTemporales;
+    vector<string> stringConstantes;
 
-    vector<string> booleanoGlobales(contBooleanoGlobales);
-    vector<string> booleanoLocales(contBooleanoLocales);
-    vector<string> boolenoTemporales(contBooleanoTemporales);
-    vector<string> booleanoConstantes(contBooleanoConstantes);
-   */
+    vector<string> booleanoGlobales;
+    vector<string> booleanoLocales;
+    vector<string> boolenoTemporales;
+    vector<string> booleanoConstantes;
+   
 
    //Lector del archivos de cuiadruplos
    // system("analizador.exe pruebalenguaje"); // no estoy tan seguro como funecione este
@@ -250,3 +250,8 @@ int main(){
 
     return 0;
 }
+
+
+void generarMemoria(int direccion, string valor){
+     
+     }
