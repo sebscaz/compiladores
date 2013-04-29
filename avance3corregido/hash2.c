@@ -75,6 +75,7 @@ int getDirection(struct StrHashTable *table,const char *key)
             return node->direction;
         return node->direction;
     } 
+	return -1;
 }
 
 struct StrHashTable *getPointerTbl(struct StrHashTableProc *table,const char *key)

@@ -346,7 +346,8 @@ FACTOR:  parentesisa  { push(&pilaOperando,$1,-1,-1); } EXPRESION parentesisc {p
  	
 
 VARCTE: ctetexto			{if(hacerPush==1) {
-						  int direccion = generarDireccion(3, 5);
+							int direccion= getDirection(&tablaConstantes,$1);
+							if (direccion == -1)direccion=generarDireccion(3, 5);
 						  push(&pilaOperadores, $1, 3, direccion);
 						  if(insert(&tablaConstantes,$1,$1,3,direccion)!= -1){
 							  contadorConstantes++;
@@ -357,7 +358,8 @@ VARCTE: ctetexto			{if(hacerPush==1) {
 						   }
 					}}
 		|cteentero 		{if(hacerPush==1) {
-						   int direccion = generarDireccion(1, 5);
+						   	int direccion= getDirection(&tablaConstantes,$1);
+							if (direccion == -1)direccion=generarDireccion(1, 5);
 						   push(&pilaOperadores, $1, 1, direccion);
 						   if(insert(&tablaConstantes,$1,$1,1,direccion)!= -1){
 							  contadorConstantes++;
@@ -368,7 +370,8 @@ VARCTE: ctetexto			{if(hacerPush==1) {
 					          }
 					}}
 		| ctedecimal 		{if(hacerPush==1) {
-						   int direccion = generarDireccion(2, 5);
+						  	int direccion= getDirection(&tablaConstantes,$1);
+							if (direccion == -1)direccion=generarDireccion(2, 5);
 						   push(&pilaOperadores, $1, 2, direccion);
 						   if(insert(&tablaConstantes,$1,$1,2,direccion)!=-1){
 							  contadorConstantes++;
@@ -379,7 +382,8 @@ VARCTE: ctetexto			{if(hacerPush==1) {
 						   }
 					}}		  
 		| ctebooleano		{if(hacerPush==1) {
-						  int direccion = generarDireccion(4, 5);
+						  	int direccion= getDirection(&tablaConstantes,$1);
+							if (direccion == -1)direccion=generarDireccion(4, 5);
 						  push(&pilaOperadores, $1, 4, direccion);
 						  if(insert(&tablaConstantes,$1,$1,4,direccion)!=-1){
 							  contadorConstantes++;
