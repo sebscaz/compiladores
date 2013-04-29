@@ -35,6 +35,16 @@ END   30
 
 using namespace std;
 
+
+int checarRango(int operandoEntero, string operando){
+
+if (operando[1]=='1'){ return 1;}
+else if (operando[1]=='2'){return 2;}
+else { cout << "Conflictos de Tipos"; }
+
+
+}
+
 /* Contadores de Variables*/
 int contIntG=0, contIntL=0, contIntT=0, contIntC=0;
 int contFloatG=0, contFloatL=0, contFloatT=0, contFloatC=0;
