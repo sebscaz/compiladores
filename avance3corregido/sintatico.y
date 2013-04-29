@@ -33,6 +33,29 @@ int contS=0; /*contador de saltos*/
 char strCuadruplos[2000];
 char strDirecciones[2000];
 
+
+//contadores 
+
+int contEnteroGlobal=0;
+int contEnteroLocal=0;
+int contEnteroTemp=0;
+int contEnteroConstante=0;
+
+int contDobleGlobal=0;
+int contDobleLocal=0;
+int contDobleTemp=0;
+int contDobleConstante=0;
+
+int contTextoGlobal=0;
+int contTextoLocal=0;
+int contTextoTemp=0;
+int contTextoConstante=0;
+
+int contBooleanoGlobal=0;
+int contBooleanoLocal=0;
+int contBooleanoTemp=0;
+int contBooleanoConstante=0;
+
 //Direcciones Virtuales
 int alcanceDireccion=0; // 1: global, 2: local, 3: temp, 5:constante
 
@@ -40,6 +63,7 @@ int direccionEnteroGlobal=10000;
 int direccionEnteroLocal=11000;
 int direccionEnteroTemp=12000;
 int direccionEnteroConstante=13000;
+
 
 int direccionDobleGlobal=20000;
 int direccionDobleLocal=21000;
@@ -421,49 +445,66 @@ int generarDireccion(int tipo, int alcance){
 	if(alcance==1){ 
 		//printf(">>>>>>>>>>>>>>>>>>ALCANCE GLOBAL\n");
 		if(tipo==1) //entero
-			return direccionEnteroGlobal++;
-		else if(tipo==2) //doble
-			return direccionDobleGlobal++;
-		else if(tipo==3) //texto
-			return direccionTextoGlobal++;
-		else if(tipo==4) //booleano
-			return direccionBooleanoGlobal++;
+			{ contEnteroGlobal++;
+			  return direccionEnteroGlobal++;}
+		else if(tipo==2){ //doble
+			contDobleGlobal++;
+			return direccionDobleGlobal++;}
+		else if(tipo==3) {//texto
+			contTextoGlobal++;			
+			return direccionTextoGlobal++;}
+		else if(tipo==4){ //booleano
+			contBooleanoGlobal++;
+			return direccionBooleanoGlobal++;}
 	}
 	 //local
 	else if(alcance==2){
 		//printf(">>>>>>>>>>>>>>>>>>ALCANCE LOCAL\n");
-		if(tipo==1) //entero
-			return direccionEnteroLocal++;
-		else if(tipo==2) //doble
-			return direccionDobleLocal++;
-		else if(tipo==3) //texto
-			return direccionTextoLocal++;
-		else if(tipo==4) //booleano
-			return direccionBooleanoLocal++;
+		if(tipo==1) {//entero
+			contEnteroLocal++;
+			return direccionEnteroLocal++;}
+			
+		else if(tipo==2){ //doble
+			contDobleLocal++;
+			return direccionDobleLocal++;}
+		else if(tipo==3) {//texto
+			contTextoLocal++;
+			return direccionTextoLocal++;}
+		else if(tipo==4) {//booleano
+			contBooleanoLocal++;
+			return direccionBooleanoLocal++;}
 	}
 	//temp
 	else if (alcance==3){ 
 		//printf(">>>>>>>>>>>>>>>>>>ALCANCE TEMPORAL\n");
-		if(tipo==1)// entero
-			return direccionEnteroTemp++;
-		else if(tipo==2) //doble
-			return direccionDobleTemp++;
-		else if(tipo==3) //texto
-			return direccionTextoTemp++;
-		else if(tipo==4) //booleano
-			return direccionBooleanoTemp++;
+		if(tipo==1){// entero
+			contEnteroTemp++;
+			return direccionEnteroTemp++;}
+		else if(tipo==2) {//doble
+			contDobleTemp++;
+			return direccionDobleTemp++;}
+		else if(tipo==3){ //texto
+			contTextoTemp++;
+			return direccionTextoTemp++;}
+		else if(tipo==4){ //booleano
+			contBooleanoTemp++;
+			return direccionBooleanoTemp++;}
 	}
 	//Constante
 	else if (alcance==5){ 
 		printf(">>>>>>>>>>>>>>>>>>ALCANCE: COnstante\n");
-		if(tipo==1)// entero
-			return direccionEnteroConstante++;
-		else if(tipo==2) //doble
-			return direccionDobleConstante++;
-		else if(tipo==3) //texto
-			return direccionTextoConstante++;
-		else if(tipo==4) //booleano
-			return direccionBooleanoConstante++;
+		if(tipo==1){// entero
+			contEnteroConstante++;
+			return direccionEnteroConstante++;}
+		else if(tipo==2) {//doble
+			contDobleConstante++;
+			return direccionDobleConstante++;}
+		else if(tipo==3){ //texto
+			contTextoConstante++;
+			return direccionTextoConstante++;}
+		else if(tipo==4) {//booleano
+			contBooleanoConstante++;
+			return direccionBooleanoConstante++;}
 	}
 
 }
@@ -1008,6 +1049,24 @@ int main()
 			sprintf(intemporal, "%i\n", vectorRes[i]);
 			strcat(strCuadruplos, intemporal); 
 		}
+		
+		fprintf(file, "%i\n", contEnteroGlobal);
+		fprintf(file, "%i\n", contEnteroLocal);
+		fprintf(file, "%i\n", contEnteroTemp);
+		fprintf(file, "%i\n", contEnteroConstante);
+		fprintf(file, "%i\n", contDobleGlobal);
+		fprintf(file, "%i\n", contDobleLocal);
+		fprintf(file, "%i\n", contDobleTemp);
+		fprintf(file, "%i\n", contDobleConstante);
+		fprintf(file, "%i\n", contTextoGlobal);
+		fprintf(file, "%i\n", contTextoLocal);
+		fprintf(file, "%i\n", contTextoTemp);
+		fprintf(file, "%i\n", contTextoConstante);
+		fprintf(file, "%i\n", contBooleanoGlobal);
+		fprintf(file, "%i\n", contBooleanoLocal);
+		fprintf(file, "%i\n", contBooleanoTemp);
+		fprintf(file, "%i\n", contBooleanoConstante);
+		
 		fprintf(file, "%i\n", contadorConstantes);	
 		fprintf(file, "%s", strDirecciones);
 		fprintf(file, "%s", strCuadruplos);
