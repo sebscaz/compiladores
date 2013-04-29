@@ -66,6 +66,30 @@ vector<string> booleanoLocales(contBoolL);
 vector<string> boolenoTemporales(contBoolT);
 vector<string> booleanoConstantes(contBoolC);
 
+void generarVectores(){
+     
+    enterosGlobales.resize(contIntG);
+    enterosLocales.resize(contIntL);
+    enterosTemporales.resize(contIntT);
+    enterosConstantes.resize(contIntC);
+    
+    flotantesGlobales.resize(contFloatG);
+    flotantesLocales.resize(contFloatL);
+    flotantesTemporales.resize(contFloatT);
+    flotantesConstantes.resize(contFloatC);
+    
+    stringGlobales.resize(contStringG);
+    stringLocales.resize(contStringL);
+    stringTemporales.resize(contStringT);
+    stringConstantes.resize(contStringC);
+    
+    booleanoGlobales.resize(contBoolG);
+    booleanoLocales.resize(contBoolL);
+    boolenoTemporales.resize(contBoolT);
+    booleanoConstantes.resize(contBoolC);    
+         
+}
+
 void generarMemoria(int direccion, string valor){
     
     //Almacenar enteros 
@@ -172,7 +196,7 @@ int main(){
             else if (numLinea==14) contBoolG= atoi(linea.c_str());
             else if (numLinea==15) contBoolL= atoi(linea.c_str());
             else if (numLinea==16) contIntT= atoi(linea.c_str());
-            else if (numLinea==17) contIntC= atoi(linea.c_str());
+            else if (numLinea==17) {contIntC= atoi(linea.c_str()); generarVectores();}
             
 			//Constantes
 			else if (numLinea<=numeroConstantes + 1 && numLinea>17){
