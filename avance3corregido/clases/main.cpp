@@ -51,10 +51,10 @@ vector<int> enterosLocales(contIntL);
 vector<int> enterosTemporales(contIntT);
 vector<int> enterosConstantes(contIntC);
 
-vector<double> flotantesGlobales(contFloatG);
-vector<double> flotantesLocales(contFloatL);
-vector<double> flotantesTemporales(contFloatT);
-vector<double> flotantesConstantes(contFloatC);
+vector<float> flotantesGlobales(contFloatG);
+vector<float> flotantesLocales(contFloatL);
+vector<float> flotantesTemporales(contFloatT);
+vector<float> flotantesConstantes(contFloatC);
 
 vector<string> stringGlobales(contStringG);
 vector<string> stringLocales(contStringL);
@@ -63,7 +63,7 @@ vector<string> stringConstantes(contStringC);
 
 vector<string> booleanoGlobales(contBoolG);
 vector<string> booleanoLocales(contBoolL);
-vector<string> boolenoTemporales(contBoolT);
+vector<string> booleanoTemporales(contBoolT);
 vector<string> booleanoConstantes(contBoolC);
 
 void generarVectores(){
@@ -85,67 +85,67 @@ void generarVectores(){
     
     booleanoGlobales.resize(contBoolG);
     booleanoLocales.resize(contBoolL);
-    boolenoTemporales.resize(contBoolT);
+    booleanoTemporales.resize(contBoolT);
     booleanoConstantes.resize(contBoolC);    
          
 }
 
 void generarMemoria(int direccion, string valor){
-    
+    cout<<"\n"<<direccion<<"\n";
     //Almacenar enteros 
      if(direccion >= 10000 && direccion <= 10999){
-          enterosGlobales[direccion-1000];          
+          enterosGlobales[direccion-10000]=atoi(valor.c_str());          
      }
      else if(direccion >= 11000 && direccion <= 11999){
-          enterosLocales[direccion-11000];
+          enterosLocales[direccion-11000]=atoi(valor.c_str());
      }
      else if(direccion >= 12000 && direccion <= 12999){
-          enterosTemporales[direccion-12000];
+          enterosTemporales[direccion-12000]=atoi(valor.c_str());
      }
      else if(direccion >= 13000 && direccion <= 13999){
-          enterosConstantes[direccion-13000];
+          enterosConstantes[direccion-13000]=atoi(valor.c_str());
      }
      
      //Almacenar floats 
-     if(direccion >= 20000 && direccion <= 20999){
-          enterosGlobales[direccion-2000];          
+     else if(direccion >= 20000 && direccion <= 20999){
+          flotantesGlobales[direccion-2000]=atof(valor.c_str());        
      }
      else if(direccion >= 21000 && direccion <= 21999){
-          enterosLocales[direccion-21000];
+          flotantesLocales[direccion-21000]=atof(valor.c_str());
      }
      else if(direccion >= 22000 && direccion <= 22999){
-          enterosTemporales[direccion-22000];
+          flotantesTemporales[direccion-22000]=atof(valor.c_str());
      }
      else if(direccion >= 23000 && direccion <= 23999){
-          enterosConstantes[direccion-23000];
+          flotantesConstantes[direccion-23000]=atof(valor.c_str());
      }
      
      //Almacenar strings 
-     if(direccion >= 30000 && direccion <= 30999){
-          enterosGlobales[direccion-3000];          
+     else if(direccion >= 30000 && direccion <= 30999){
+          stringGlobales[direccion-3000]=valor;         
      }
      else if(direccion >= 31000 && direccion <= 31999){
-          enterosLocales[direccion-31000];
+          stringLocales[direccion-31000]=valor;
      }
      else if(direccion >= 32000 && direccion <= 32999){
-          enterosTemporales[direccion-32000];
+          stringTemporales[direccion-32000]=valor;
      }
      else if(direccion >= 33000 && direccion <= 33999){
-          enterosConstantes[direccion-33000];
+          stringConstantes[direccion-33000]=valor;
      }
      
      //Almacenar booleans 
-     if(direccion >= 40000 && direccion <= 40999){
-          enterosGlobales[direccion-4000];          
+     else if(direccion >= 40000 && direccion <= 40999){
+          booleanoGlobales[direccion-4000]=valor;          
      }
      else if(direccion >= 41000 && direccion <= 41999){
-          enterosLocales[direccion-41000];
+          booleanoLocales[direccion-41000]=valor;
      }
      else if(direccion >= 42000 && direccion <= 42999){
-          enterosTemporales[direccion-42000];
+          booleanoTemporales[direccion-42000]=valor;
      }
      else if(direccion >= 43000 && direccion <= 43999){
-          enterosConstantes[direccion-43000];
+          booleanoConstantes[direccion-43000]=valor;
      }
      
      
@@ -199,13 +199,13 @@ int main(){
             else if (numLinea==17) {contIntC= atoi(linea.c_str()); generarVectores();}
             
 			//Constantes
-			else if (numLinea<=numeroConstantes + 1 && numLinea>17){
+			else if (numLinea<=numeroConstantes + 17 && numLinea>17){
 				pos = linea.find("/");
 				//cout<<"Pos de linea"<<pos<<"\n";
 				direccion =  atoi(linea.substr(0,pos).c_str()) ;
 				valores= linea.substr(pos+1);  
 	
-	            //generarMemoria(direccion,valores);
+	            generarMemoria(direccion,valores);
 			} 
 			//Cuadruplos
             else {
@@ -314,6 +314,8 @@ int main(){
 	}//if
 	archivo.close();
 	cout<<" Numero de Lineas "<<numLinea;
+	cout<<enterosConstantes[0]<<"\n";
+	cout<<enterosConstantes[1]<<"\n";
 	 int acabar;
 	cin>>acabar;
 	
