@@ -313,9 +313,7 @@ int main(){
 
 	}//if
 	archivo.close();
-	cout<<" Numero de Lineas "<<numLinea;
-	cout<<enterosConstantes[0]<<"\n";
-	cout<<enterosConstantes[1]<<"\n";
+
 	 int acabar;
 	cin>>acabar;
 	
