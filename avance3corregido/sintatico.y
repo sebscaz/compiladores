@@ -1050,6 +1050,7 @@ int main()
 			strcat(strCuadruplos, intemporal); 
 		}
 		
+		fprintf(file, "%i\n", contadorConstantes);
 		fprintf(file, "%i\n", contEnteroGlobal);
 		fprintf(file, "%i\n", contEnteroLocal);
 		fprintf(file, "%i\n", contEnteroTemp);
@@ -1067,7 +1068,7 @@ int main()
 		fprintf(file, "%i\n", contBooleanoTemp);
 		fprintf(file, "%i\n", contBooleanoConstante);
 		
-		fprintf(file, "%i\n", contadorConstantes);	
+			
 		fprintf(file, "%s", strDirecciones);
 		fprintf(file, "%s", strCuadruplos);
 	}
