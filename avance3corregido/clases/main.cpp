@@ -156,11 +156,26 @@ int main(){
 			getline (archivo,linea);
 
 			//Numero de constantes
-			if (numLinea==1){
-				numeroConstantes= atoi(linea.c_str());
-			}    
+			if (numLinea==1) numeroConstantes= atoi(linea.c_str());
+            else if (numLinea==2) contIntG= atoi(linea.c_str());
+            else if (numLinea==3) contIntL= atoi(linea.c_str());
+            else if (numLinea==4) contIntT= atoi(linea.c_str());
+            else if (numLinea==5) contIntC= atoi(linea.c_str());
+            else if (numLinea==6) contFloatG= atoi(linea.c_str());
+            else if (numLinea==7) contFloatL= atoi(linea.c_str());
+            else if (numLinea==8) contFloatT= atoi(linea.c_str());
+            else if (numLinea==9) contFloatC= atoi(linea.c_str());
+            else if (numLinea==10) contStringG= atoi(linea.c_str());
+            else if (numLinea==11) contStringL= atoi(linea.c_str());
+            else if (numLinea==12) contStringT= atoi(linea.c_str());
+            else if (numLinea==13) contStringC= atoi(linea.c_str());
+            else if (numLinea==14) contBoolG= atoi(linea.c_str());
+            else if (numLinea==15) contBoolL= atoi(linea.c_str());
+            else if (numLinea==16) contIntT= atoi(linea.c_str());
+            else if (numLinea==17) contIntC= atoi(linea.c_str());
+            
 			//Constantes
-			else if (numLinea<=numeroConstantes + 1 && numLinea>1){
+			else if (numLinea<=numeroConstantes + 1 && numLinea>17){
 				pos = linea.find("/");
 				//cout<<"Pos de linea"<<pos<<"\n";
 				direccion =  atoi(linea.substr(0,pos).c_str()) ;
