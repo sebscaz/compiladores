@@ -38,10 +38,9 @@ using namespace std;
 
 int checarRango(int operandoEntero, string operando){
 
-if (operando[1]=='1'){ return 1;}
-else if (operando[1]=='2'){return 2;}
-else { cout << "Conflictos de Tipos"; }
-
+    if (operando[1]=='1'){ return 1;}
+    else if (operando[1]=='2'){return 2;}
+    else { cout << "Conflictos de Tipos"; }
 
 }
 
@@ -248,40 +247,40 @@ int main(){
                 /*Empieza el Switch*/
                 switch(atoi(op.c_str())){
                 	case 0 /*Suma*/: //instrucciones
-                	
-                	 bool ope=true;
-                         bool ope2=true;
-		         int dirOp1, dirOp2;
-
-		/*Checar rangos de la direeciones para saber que tipo son*/
-                    if (checarRango(op1)==1)  {
-                      dirOp1= op1Entera-10000;
-                     /*op1RealEntero= vector enteroGlobal[dirOp1]*/  }
-             
-                    else {dirOp1=op1Entera-20000; 
-                    ope=false;
-                   /*op1RealFlotante= vector flotanteGlobal[dirOp1]*/}
-                   
-  		if (checarRango(op2)==1)  {
-  		  dirOp2=op2Entera-10000;
-            	 /*op2RealEntero= vector flGlobal[dirOp2]*/ }
-               
-                   else {
-                    dirOp2=op2Entera-20000;
-                    ope2=false;
-                    /*op2RealFlotante= vector flotanteGlobal[dirOp2]*/ }
-
-
-                if (ope==true && ope2==true ){ /*Resultado= op1RealEntero + op2RealEntero*/}
-                else if (ope==false && ope2==true ){ /*Resultado= op1RealFlotante + op2RealEntero*/}
-                else if (ope==true && ope2==false ){ /*Resultado= op1RealEntero + op2RealFlotante*/}
-                else /* /*Resultado= op1RealFLotante + op2RealFlotante*/}*/
-
-
-                /*Meter el resultado en la dirreccion indicada */
-                cout<< "La suma de los numeros es "<</*resultado*/;
-
-                	
+                        bool ope=true;
+                        bool ope2=true;
+                        int dirOp1, dirOp2;
+                        
+                        /*Checar rangos de la direeciones para saber que tipo son*/
+                        if (checarRango(op1)==1)  {
+                            dirOp1= op1Entera-10000;
+                            /*op1RealEntero= vector enteroGlobal[dirOp1]*/  
+                        }
+                        
+                        else {
+                            dirOp1=op1Entera-20000; 
+                            ope=false;
+                            /*op1RealFlotante= vector flotanteGlobal[dirOp1]*/
+                        }
+                        
+                        if (checarRango(op2)==1)  {
+                            dirOp2=op2Entera-10000;
+                            /*op2RealEntero= vector flGlobal[dirOp2]*/ 
+                        }
+                        
+                        else {
+                            dirOp2=op2Entera-20000;
+                            ope2=false;
+                            /*op2RealFlotante= vector flotanteGlobal[dirOp2]*/
+                        }
+                        
+                        if (ope==true && ope2==true ){ /*Resultado= op1RealEntero + op2RealEntero*/}
+                        else if (ope==false && ope2==true ){ /*Resultado= op1RealFlotante + op2RealEntero*/}
+                        else if (ope==true && ope2==false ){ /*Resultado= op1RealEntero + op2RealFlotante*/}
+                        else /* /*Resultado= op1RealFLotante + op2RealFlotante*/}*/
+                        
+                        /*Meter el resultado en la dirreccion indicada */
+                        cout<< "La suma de los numeros es "<</*resultado*/;
                 	break;
                  
                 	case 1/*Resta*/://instrucciones
