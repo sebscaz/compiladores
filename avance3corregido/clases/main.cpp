@@ -36,12 +36,68 @@ END   30
 using namespace std;
 
 
-int checarRango(int operandoEntero, string operando){
 
-    if (operando[1]=='1'){ return 1;}
-    else if (operando[1]=='2'){return 2;}
-    else { cout << "Conflictos de Tipos"; }
 
+int getBase(int direccion){
+    int base;
+    
+     if(direccion >= 10000 && direccion <= 10999){
+          base=10000;      
+     }
+     else if(direccion >= 11000 && direccion <= 11999){
+          base=11000;   
+     }
+     else if(direccion >= 12000 && direccion <= 12999){
+          base=12000;   
+     }
+     else if(direccion >= 13000 && direccion <= 13999){
+          base=13000;   
+     }
+     
+     //Almacenar floats 
+     else if(direccion >= 20000 && direccion <= 20999){
+          base=20000;   
+     }
+     else if(direccion >= 21000 && direccion <= 21999){
+          base=21000;
+     }
+     else if(direccion >= 22000 && direccion <= 22999){
+          base=22000;
+     }
+     else if(direccion >= 23000 && direccion <= 23999){
+          base=23000;
+     }
+     
+     //Almacenar strings 
+     else if(direccion >= 30000 && direccion <= 30999){
+          base=30000;      
+     }
+     else if(direccion >= 31000 && direccion <= 31999){
+          base=31000;
+     }
+     else if(direccion >= 32000 && direccion <= 32999){
+          base=32000;
+     }
+     else if(direccion >= 33000 && direccion <= 33999){
+          base=33000;
+     }
+     
+     //Almacenar booleans 
+     else if(direccion >= 40000 && direccion <= 40999){
+          base=40000;          
+     }
+     else if(direccion >= 41000 && direccion <= 41999){
+          base=41000;
+     }
+     else if(direccion >= 42000 && direccion <= 42999){
+          base=42000;
+     }
+     else if(direccion >= 43000 && direccion <= 43999){
+          base=43000;
+     }
+     
+     return base;
+     
 }
 
 /* Contadores de Variables*/
@@ -74,6 +130,23 @@ vector<string> booleanoGlobales(contBoolG);
 vector<string> booleanoLocales(contBoolL);
 vector<string> booleanoTemporales(contBoolT);
 vector<string> booleanoConstantes(contBoolC);
+
+int checarRango(string operando){
+
+    if (operando.at(0)=='1'){ return 1;}
+    else if (operando.at(0)=='2'){return 2;}
+    else { cout << "Conflictos de Tipos"; }
+
+}
+
+int getValorVectorInt(string operando, int direccion, int base){
+    cout<<"METODO"<<operando<<" "<<direccion<<" "<<base<<"\n";
+    if (operando.at(1)=='1'){ return enterosGlobales[direccion-base];}
+    else if (operando.at(1)=='2'){return enterosLocales[direccion-base];}
+    else if (operando.at(1)=='3'){return enterosConstantes[direccion-base];}
+    else if (operando.at(1)=='4'){return enterosTemporales[direccion-base];}
+
+}
 
 void generarVectores(){
      
@@ -246,42 +319,68 @@ int main(){
 				
                 /*Empieza el Switch*/
                 switch(atoi(op.c_str())){
-                	case 0 /*Suma*/: //instrucciones
+              		case 0 /*Suma*/:{ //instrucciones
+         		        int base; //varaible para mapear direccion;
                         bool ope=true;
                         bool ope2=true;
                         int dirOp1, dirOp2;
-                        
+                        int op1Entera, op2Entera;
+						float op1Float, op2Float ;
+						
+						int op1RealEntero, op2RealEntero;
+						float op1RealFlotante, op2RealFlotante;
+						
+						int resultadoInt;
+						float resultadoFloat;
+						
                         /*Checar rangos de la direeciones para saber que tipo son*/
-                        if (checarRango(op1)==1)  {
-                            dirOp1= op1Entera-10000;
-                            /*op1RealEntero= vector enteroGlobal[dirOp1]*/  
+						//Checar si op1 es int o float
+                        if (checarRango(op1)==1)  {	//es int
+							op1Entera=atoi(op1.c_str());
+							cout<<"Op entera "<<op1Entera<<"\n";
+                            dirOp1= op1Entera-getBase(op1Entera);
+                            op1RealEntero= getValorVectorInt(op1, op1Entera, getBase(op1Entera));
+                            //op1RealEntero= enterosGlobales[dirOp1];  
+                            cout<<"Es int "<<dirOp1<<" real: "<<op1RealEntero<<"\n";
                         }
-                        
-                        else {
-                            dirOp1=op1Entera-20000; 
+                        else {	//es float
+						    op1Float=atof(op1.c_str());
+                            dirOp1=(int)(op1Float-getBase(op1Float)); 
                             ope=false;
-                            /*op1RealFlotante= vector flotanteGlobal[dirOp1]*/
+                            op1RealFlotante= getValorVectorInt(op1, op1Float, getBase(op1Float));
                         }
                         
+						//Checar si op2 es int o float
                         if (checarRango(op2)==1)  {
-                            dirOp2=op2Entera-10000;
-                            /*op2RealEntero= vector flGlobal[dirOp2]*/ 
+							op2Entera=atoi(op2.c_str());
+                            dirOp2= op2Entera-getBase(op2Entera);
+                            op2RealEntero= getValorVectorInt(op2, op2Entera, getBase(op2Entera));
+                            //op2RealEntero=  enterosGlobales[dirOp2];  
                         }
-                        
                         else {
-                            dirOp2=op2Entera-20000;
+                            op2Float=atof(op2.c_str());
+                            dirOp2=(int)(op1Float-getBase(op2Float)); 
                             ope2=false;
-                            /*op2RealFlotante= vector flotanteGlobal[dirOp2]*/
+                            op2RealFlotante= getValorVectorInt(op1, op1Float, getBase(op1Float));
                         }
+						
+						//Checar que tipo sera el resultado
+						if(checarRango(temp)==1){
+							resultadoInt = op1RealEntero + op2RealEntero;
+								cout<<"op1: "<< op1RealEntero << " op2: "<< op2RealEntero<<"\n" ;
+						}
                         
-                        if (ope==true && ope2==true ){ /*Resultado= op1RealEntero + op2RealEntero*/}
-                        else if (ope==false && ope2==true ){ /*Resultado= op1RealFlotante + op2RealEntero*/}
-                        else if (ope==true && ope2==false ){ /*Resultado= op1RealEntero + op2RealFlotante*/}
-                        else /* /*Resultado= op1RealFLotante + op2RealFlotante*/}*/
+                        //if (ope==true && ope2==true ){ /*Resultado= op1RealEntero + op2RealEntero*/}
+                        //else if (ope==false && ope2==true ){ /*Resultado= op1RealFlotante + op2RealEntero*/}
+                        //else if (ope==true && ope2==false ){ /*Resultado= op1RealEntero + op2RealFlotante*/}
+                        //else /* /*Resultado= op1RealFLotante + op2RealFlotante*/}*/
                         
                         /*Meter el resultado en la dirreccion indicada */
-                        cout<< "La suma de los numeros es "<</*resultado*/;
+                        //cout<< "La suma de los numeros es "<</*resultado*/;
+						cout<<"Num linea "<<numLinea<<" op1: "<< op1RealEntero << " op2: "<< op2RealEntero <<"Resultado: " <<resultadoInt<<"\n";
+                    }
                 	break;
+                 
                  
                 	case 1/*Resta*/://instrucciones
                 	break;
