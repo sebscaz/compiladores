@@ -140,11 +140,20 @@ int checarRango(string operando){
 }
 
 int getValorVectorInt(string operando, int direccion, int base){
-    cout<<"METODO"<<operando<<" "<<direccion<<" "<<base<<"\n";
-    if (operando.at(1)=='1'){ return enterosGlobales[direccion-base];}
-    else if (operando.at(1)=='2'){return enterosLocales[direccion-base];}
+
+    if (operando.at(1)=='0'){ return enterosGlobales[direccion-base];}
+    else if (operando.at(1)=='1'){return enterosLocales[direccion-base];}
+    else if (operando.at(1)=='2'){return enterosTemporales[direccion-base];}
     else if (operando.at(1)=='3'){return enterosConstantes[direccion-base];}
-    else if (operando.at(1)=='4'){return enterosTemporales[direccion-base];}
+
+}
+
+float getValorVectorFloat(string operando, int direccion, int base){
+
+    if (operando.at(1)=='0'){ return flotantesGlobales[direccion-base];}
+    else if (operando.at(1)=='1'){return flotantesLocales[direccion-base];}
+    else if (operando.at(1)=='2'){return flotantesTemporales[direccion-base];}
+    else if (operando.at(1)=='3'){return flotantesConstantes[direccion-base];}
 
 }
 
@@ -173,7 +182,7 @@ void generarVectores(){
 }
 
 void generarMemoria(int direccion, string valor){
-    cout<<"\n"<<direccion<<"\n";
+    //cout<<"\n"<<direccion<<"\n";
     //Almacenar enteros 
      if(direccion >= 10000 && direccion <= 10999){
           enterosGlobales[direccion-10000]=atoi(valor.c_str());          
@@ -183,6 +192,7 @@ void generarMemoria(int direccion, string valor){
      }
      else if(direccion >= 12000 && direccion <= 12999){
           enterosTemporales[direccion-12000]=atoi(valor.c_str());
+          //cout<<"\nDIRECCION!! " <<enterosTemporales[direccion-12000]<<"\n";
      }
      else if(direccion >= 13000 && direccion <= 13999){
           enterosConstantes[direccion-13000]=atoi(valor.c_str());
@@ -231,6 +241,104 @@ void generarMemoria(int direccion, string valor){
      }
      
      
+}
+
+void hacerOperacion(int operacion, string op1, string op2 , string temp){
+    
+    int base1, base2;			 //varaible para mapear direccion;
+    int op1dir, op2dir;			 //almacena en forma de entero la direccion virtual
+    int op1mapeo, op2mapeo;		 //posicion en el vector 				
+    float op1ValorReal, op2ValorReal;	//Almacenar el valor real del operando, en forma de float y despues se convierte a int si es necesario
+    
+    int resultadoInt;
+    float resultadoFloat;
+    
+    op1dir = atoi(op1.c_str());
+    op2dir = atoi(op2.c_str());
+    
+    base1 = getBase(op1dir); 
+    base2 = getBase(op2dir); 
+    
+    op1mapeo= op1dir-base1;
+    op2mapeo= op2dir-base2;
+    
+    /*Checar rangos de la direeciones para saber que tipo son*/
+    //Checar si op1 es int o float
+    if (checarRango(op1)==1)  {	//es int
+        op1ValorReal= (float)getValorVectorInt(op1, op1dir, base1);
+    }
+    else {	//es float
+        op1ValorReal= getValorVectorFloat(op1, op1dir, base1);
+    }
+    
+    //Checar si op2 es int o float
+    if (checarRango(op2)==1)  {
+        op2ValorReal= (float)getValorVectorInt(op2, op2dir, base2);
+    }
+    else {
+        op2ValorReal= getValorVectorFloat(op2, op2dir, base2);
+    }
+    
+    //Hacer operacion
+    //SUMA
+    if(operacion==0){ 
+        //Checar que tipo sera el resultado
+        if(checarRango(temp)==1){
+        	resultadoInt = (int)(op1ValorReal + op2ValorReal);
+        	//Meter valor del temporal en memoria, hay que convertir a string el resultado
+            generarMemoria(atoi(temp.c_str()), static_cast<ostringstream*>( &(ostringstream() << resultadoInt) )->str());
+         	cout<<"suma "<<"op1 "<<op1ValorReal<<" op2 "<<op2ValorReal<<" temp " << temp <<" Resultado: " <<resultadoInt<<"\n";	
+        } else if (checarRango(temp)==2){
+            resultadoFloat = op1ValorReal + op2ValorReal;
+            //Meter valor del temporal en memoria, hay que convertir a string el resultado
+            generarMemoria(atoi(temp.c_str()), static_cast<ostringstream*>( &(ostringstream() << resultadoInt) )->str());
+        	cout<<"suma "<<"op1 "<<op1ValorReal<<" op2 "<<op2ValorReal<<" temp " << temp <<" Resultado: " <<resultadoInt<<"\n";
+        }
+    }
+    else if (operacion==1){ 
+        //Checar que tipo sera el resultado
+        if(checarRango(temp)==1){
+        	resultadoInt = (int)(op1ValorReal - op2ValorReal);
+        	//Meter valor del temporal en memoria, hay que convertir a string el resultado
+            generarMemoria(atoi(temp.c_str()), static_cast<ostringstream*>( &(ostringstream() << resultadoInt) )->str());
+         	cout<<"resta "<<"op1 "<<op1ValorReal<<" op2 "<<op2ValorReal<<" temp " << temp <<" Resultado: " <<resultadoInt<<"\n";	
+        } else if (checarRango(temp)==2){
+            resultadoFloat = op1ValorReal - op2ValorReal;
+            //Meter valor del temporal en memoria, hay que convertir a string el resultado
+            generarMemoria(atoi(temp.c_str()), static_cast<ostringstream*>( &(ostringstream() << resultadoInt) )->str());
+        	cout<<"resta "<<"op1 "<<op1ValorReal<<" op2 "<<op2ValorReal<<" temp " << temp <<" Resultado: " <<resultadoInt<<"\n";
+        }
+    }
+    else if (operacion==2){ 
+        //Checar que tipo sera el resultado
+        if(checarRango(temp)==1){
+        	resultadoInt = (int)(op1ValorReal * op2ValorReal);
+        	//Meter valor del temporal en memoria, hay que convertir a string el resultado
+            generarMemoria(atoi(temp.c_str()), static_cast<ostringstream*>( &(ostringstream() << resultadoInt) )->str());
+         	cout<<"multipl "<<"op1 "<<op1ValorReal<<" op2 "<<op2ValorReal<<" temp " << temp <<" Resultado: " <<resultadoInt<<"\n";	
+        } else if (checarRango(temp)==2){
+            resultadoFloat = op1ValorReal * op2ValorReal;
+            //Meter valor del temporal en memoria, hay que convertir a string el resultado
+            generarMemoria(atoi(temp.c_str()), static_cast<ostringstream*>( &(ostringstream() << resultadoInt) )->str());
+        	cout<<"multipl "<<"op1 "<<op1ValorReal<<" op2 "<<op2ValorReal<<" temp " << temp <<" Resultado: " <<resultadoInt<<"\n";
+        }
+    }
+    else if (operacion==3){ 
+        //Checar que tipo sera el resultado
+        if(checarRango(temp)==1){
+            resultadoInt = (int)op1ValorReal / op2ValorReal;
+        	//resultadoFloat = (op1ValorReal / op2ValorReal);
+        	//Meter valor del temporal en memoria, hay que convertir a string el resultado
+            generarMemoria(atoi(temp.c_str()), static_cast<ostringstream*>( &(ostringstream() << resultadoInt) )->str());
+         	cout<<"divsion "<<"op1 "<<op1ValorReal<<" op2 "<<op2ValorReal<<" temp " << temp <<" Resultado: " <<resultadoInt<<"\n";	
+        } else if (checarRango(temp)==2){
+            resultadoFloat = op1ValorReal / op2ValorReal;
+            //Meter valor del temporal en memoria, hay que convertir a string el resultado
+            generarMemoria(atoi(temp.c_str()), static_cast<ostringstream*>( &(ostringstream() << resultadoInt) )->str());
+        	cout<<"division "<<"op1 "<<op1ValorReal<<" op2 "<<op2ValorReal<<" temp " << temp <<" Resultado: " <<resultadoInt<<"\n";
+        }
+    }
+						
 }
 
 int main(){
@@ -320,75 +428,23 @@ int main(){
                 /*Empieza el Switch*/
                 switch(atoi(op.c_str())){
               		case 0 /*Suma*/:{ //instrucciones
-         		        int base; //varaible para mapear direccion;
-                        bool ope=true;
-                        bool ope2=true;
-                        int dirOp1, dirOp2;
-                        int op1Entera, op2Entera;
-						float op1Float, op2Float ;
-						
-						int op1RealEntero, op2RealEntero;
-						float op1RealFlotante, op2RealFlotante;
-						
-						int resultadoInt;
-						float resultadoFloat;
-						
-                        /*Checar rangos de la direeciones para saber que tipo son*/
-						//Checar si op1 es int o float
-                        if (checarRango(op1)==1)  {	//es int
-							op1Entera=atoi(op1.c_str());
-							cout<<"Op entera "<<op1Entera<<"\n";
-                            dirOp1= op1Entera-getBase(op1Entera);
-                            op1RealEntero= getValorVectorInt(op1, op1Entera, getBase(op1Entera));
-                            //op1RealEntero= enterosGlobales[dirOp1];  
-                            cout<<"Es int "<<dirOp1<<" real: "<<op1RealEntero<<"\n";
-                        }
-                        else {	//es float
-						    op1Float=atof(op1.c_str());
-                            dirOp1=(int)(op1Float-getBase(op1Float)); 
-                            ope=false;
-                            op1RealFlotante= getValorVectorInt(op1, op1Float, getBase(op1Float));
-                        }
-                        
-						//Checar si op2 es int o float
-                        if (checarRango(op2)==1)  {
-							op2Entera=atoi(op2.c_str());
-                            dirOp2= op2Entera-getBase(op2Entera);
-                            op2RealEntero= getValorVectorInt(op2, op2Entera, getBase(op2Entera));
-                            //op2RealEntero=  enterosGlobales[dirOp2];  
-                        }
-                        else {
-                            op2Float=atof(op2.c_str());
-                            dirOp2=(int)(op1Float-getBase(op2Float)); 
-                            ope2=false;
-                            op2RealFlotante= getValorVectorInt(op1, op1Float, getBase(op1Float));
-                        }
-						
-						//Checar que tipo sera el resultado
-						if(checarRango(temp)==1){
-							resultadoInt = op1RealEntero + op2RealEntero;
-								cout<<"op1: "<< op1RealEntero << " op2: "<< op2RealEntero<<"\n" ;
-						}
-                        
-                        //if (ope==true && ope2==true ){ /*Resultado= op1RealEntero + op2RealEntero*/}
-                        //else if (ope==false && ope2==true ){ /*Resultado= op1RealFlotante + op2RealEntero*/}
-                        //else if (ope==true && ope2==false ){ /*Resultado= op1RealEntero + op2RealFlotante*/}
-                        //else /* /*Resultado= op1RealFLotante + op2RealFlotante*/}*/
-                        
-                        /*Meter el resultado en la dirreccion indicada */
-                        //cout<< "La suma de los numeros es "<</*resultado*/;
-						cout<<"Num linea "<<numLinea<<" op1: "<< op1RealEntero << " op2: "<< op2RealEntero <<"Resultado: " <<resultadoInt<<"\n";
+         		       hacerOperacion(0, op1, op2 ,temp);
                     }
                 	break;
                  
-                 
-                	case 1/*Resta*/://instrucciones
+                	case 1/*Resta*/:{//instrucciones
+                    	hacerOperacion(1, op1, op2 ,temp);
+                    }
                 	break;
                 
-                	case 2/*multiplicación*/://instrucciones
+                	case 2/*multiplicación*/:{//instrucciones
+                         hacerOperacion(2, op1, op2 ,temp);
+                    }
                 	break;
                 
-                	case 3/*división*/://instrucciones
+                	case 3/*división*/:{//instrucciones
+                	      hacerOperacion(3, op1, op2 ,temp);
+                    }
                 	break;
                 
                 	case 4 /*==*/://instrucciones
