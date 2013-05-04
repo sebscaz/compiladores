@@ -19,6 +19,7 @@ void checarOperando3();
 void generarImprimir();
 void generarLectura();
 void generarMain();
+void llenarMain(); //llenar el cuadruplo del main
 void rellenar(int goTo, int contador);
 void generarCuadruplo(int numOp ,int tipo1, int tipo2, int res);
 
@@ -193,8 +194,8 @@ int contadorConstantes =0;
 
 %%
 
-PROGRAMA: {file = fopen("cuadruplos.txt","w+"); /* write file (add text to a file or create a file if it does not exist.*/ }
-	 programa id {insertProc(&tblProc,&tablaGlobal,$3,$3);}  llavea PROGRAMA1 PROGRAMASIG PROGRAMA2 PRINCIPAL llavec;
+PROGRAMA: {file = fopen("cuadruplos.txt","w+"); generarMain();}
+	 programa id {insertProc(&tblProc,&tablaGlobal,$3,$3);}  llavea PROGRAMA1 PROGRAMASIG PROGRAMA2 PRINCIPAL  llavec;
 PROGRAMA1: {alcanceDireccion=1;/*global*/}DECLARACION PROGRAMA12;
 PROGRAMA12: PROGRAMA1
 		  | /*vacio*/;
@@ -212,7 +213,7 @@ TIPO: texto		{tipoOp = generarTipo($1); /*printf("===========tipo: %i\n", tipoOp
 	| decimal	{tipoOp = generarTipo($1); /*printf("===========tipo: %i\n", tipoOp);*/}
 	| booleano	{tipoOp = generarTipo($1); /*printf("===========tipo: %i\n", tipoOp);*/};	
 
-PRINCIPAL: principal parentesisa parentesisc llavea BLOQUE llavec;
+PRINCIPAL: principal {llenarMain();} parentesisa parentesisc llavea BLOQUE llavec;
 	
 BLOQUE: ESTATUTO BLOQUE1;
 BLOQUE1: BLOQUE;
@@ -853,6 +854,16 @@ void generarLectura(){
 	direccionTextoTemp++;
 	generarCuadruplo(numeroRead ,direccionTextoTemp, -1, -1);
 }
+
+void generarMain(){
+	int numeroGoTo = 11;
+	generarCuadruplo(numeroGoTo ,-1, -1, -1);
+}
+
+void llenarMain(){
+	vectorRes[0]=contS;
+}
+
 
 void inicializarMatriz(){
 	//Tipos: entero: 1, doble:2, texto:3, booleano:4	
