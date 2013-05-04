@@ -19,6 +19,7 @@ programa prueba {
 		si(4>3){
 			si(5>2){
 				imprimir("if anidado");
+				sebas = leer();
 			}
 			imprimir("hola");
 			sebas = 1 * 2;

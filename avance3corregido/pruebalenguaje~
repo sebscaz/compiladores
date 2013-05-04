@@ -19,6 +19,7 @@ programa prueba {
 		si(4>3){
 			si(5>2){
 				imprimir("if anidado");
+				leer();
 			}
 			imprimir("hola");
 			sebas = 1 * 2;
@@ -31,7 +32,7 @@ programa prueba {
 		
 	}
 
-	principal{
+	principal(){
 		imprimir("hola");
 	}
 }

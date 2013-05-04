@@ -10,13 +10,18 @@
 //Prototipos de metodos
 void inicializarMatriz();
 void inicializarVectores();
+int checarSemantica(int op, int op1, int op2);
+int generarDireccion(int tipo, int alcance);
+//Funciones para generar cuadruplos
 void checarOperando1();
 void checarOperando2(); 
 void checarOperando3(); 
+void generarImprimir();
+void generarLectura();
+void generarMain();
 void rellenar(int goTo, int contador);
-int checarSemantica(int op, int op1, int op2);
-int generarDireccion(int tipo, int alcance);
 void generarCuadruplo(int numOp ,int tipo1, int tipo2, int res);
+
 int hacerPush = 1;	//bool para saber si meter variables a la pila - 1:hacer push, 0:no hacer push
 
 void secuenciaIf1();
@@ -273,9 +278,9 @@ ARREGLOSASIG: corchetea EXP corchetec ARREGLOSASIG2;
 ARREGLOSASIG2: corchetea EXP corchetec 
 	| /*vacio*/;
 			
-ESCRITURA: imprimir parentesisa EXP parentesisc ptocoma;
+ESCRITURA: imprimir parentesisa EXP parentesisc ptocoma {generarImprimir();};
 
-LECTURA: leer parentesisa parentesisc ptocoma;
+LECTURA: leer parentesisa parentesisc {generarLectura();};
 
 CONDICION: si parentesisa SUPEREXPRESION parentesisc {secuenciaIf1();}  llavea BLOQUE llavec CONDICION2 {secuenciaIf2();};
 
@@ -346,6 +351,7 @@ FACTOR:  parentesisa  { push(&pilaOperando,$1,-1,-1); } EXPRESION parentesisc {p
  	
 
 VARCTE: ctetexto			{if(hacerPush==1) {
+							//Generar direccion en tabla de constantes si no existe	
 							int direccion= getDirection(&tablaConstantes,$1);
 							if (direccion == -1)direccion=generarDireccion(3, 5);
 						  push(&pilaOperadores, $1, 3, direccion);
@@ -358,6 +364,7 @@ VARCTE: ctetexto			{if(hacerPush==1) {
 						   }
 					}}
 		|cteentero 		{if(hacerPush==1) {
+							//Generar direccion en tabla de constantes si no existe	
 						   	int direccion= getDirection(&tablaConstantes,$1);
 							if (direccion == -1)direccion=generarDireccion(1, 5);
 						   push(&pilaOperadores, $1, 1, direccion);
@@ -370,6 +377,7 @@ VARCTE: ctetexto			{if(hacerPush==1) {
 					          }
 					}}
 		| ctedecimal 		{if(hacerPush==1) {
+							//Generar direccion en tabla de constantes si no existe	
 						  	int direccion= getDirection(&tablaConstantes,$1);
 							if (direccion == -1)direccion=generarDireccion(2, 5);
 						   push(&pilaOperadores, $1, 2, direccion);
@@ -382,6 +390,7 @@ VARCTE: ctetexto			{if(hacerPush==1) {
 						   }
 					}}		  
 		| ctebooleano		{if(hacerPush==1) {
+							//Generar direccion en tabla de constantes si no existe	
 						  	int direccion= getDirection(&tablaConstantes,$1);
 							if (direccion == -1)direccion=generarDireccion(4, 5);
 						  push(&pilaOperadores, $1, 4, direccion);
@@ -828,6 +837,21 @@ void inicializarVectores(){
 	 vectorOp1=(int*) malloc(sizeof(int));
 	 vectorOp2=(int*) malloc(sizeof(int));
 	 vectorRes=(int*) malloc(sizeof(int));
+}
+
+void generarImprimir(){
+	int numeroPrint = 26;
+
+	int direccionImprimir = pilaOperadores->direccion;
+	pop(&pilaOperadores);
+
+	generarCuadruplo(numeroPrint ,direccionImprimir, -1, -1);
+}
+
+void generarLectura(){
+	int numeroRead = 25;
+	direccionTextoTemp++;
+	generarCuadruplo(numeroRead ,direccionTextoTemp, -1, -1);
 }
 
 void inicializarMatriz(){
