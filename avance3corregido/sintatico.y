@@ -889,7 +889,7 @@ void inicializarMatriz(){
 	matrizSemantica[3][3][2]= 0;	//bool * bool = no se puede
 
 	//Z=3 (DIVISION)
-	matrizSemantica[0][0][3]= 1;	//Entero / entero = entero
+	matrizSemantica[0][0][3]= 2;	//Entero / entero = doble
 	matrizSemantica[0][1][3]= 2;	//Entero / doble = doble
 	matrizSemantica[0][2][3]= 0;	//Entero / texto = no se puede
 	matrizSemantica[0][3][3]= 0;	//Entero / bool = no se puede
