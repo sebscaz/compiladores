@@ -113,8 +113,9 @@ void setNumberParameters(struct StrHashTableProc *table,const char *key, int num
     node = table->buckets[bucket];
     while(node) {
         if(table->cmp(key,node->key) == 0)
-            {return ;}
+            {}
         node->numberParameters = numberParameters;
+	return ;
     }
 	return ;
 
@@ -127,8 +128,9 @@ void setNumberLocalVars(struct StrHashTableProc *table,const char *key, int numb
     node = table->buckets[bucket];
     while(node) {
         if(table->cmp(key,node->key) == 0)
-            {return ;}
+            { }
         node->numberLocalVars = numberLocalVars;
+	return ;
     }
 	return ;
 }
@@ -140,8 +142,9 @@ void setCuadruploInicial(struct StrHashTableProc *table,const char *key, int cua
     node = table->buckets[bucket];
     while(node) {
         if(table->cmp(key,node->key) == 0)
-            {return ;}
+            {}
         node->cuadruploInicial = cuadruploInicial;
+	return;
     }
 	return ;
 }

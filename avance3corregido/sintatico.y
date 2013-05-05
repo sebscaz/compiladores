@@ -24,6 +24,7 @@ void generarRetorno();
 void rellenar(int goTo, int contador);
 void generarCuadruplo(int numOp ,int tipo1, int tipo2, int res);
 void generarEra(int tamano);
+void generarParametro();
 
 int hacerPush = 1;	//bool para saber si meter variables a la pila - 1:hacer push, 0:no hacer push
 
@@ -107,6 +108,7 @@ int numeroIntLocales = 0;
 int numeroFloatLocales = 0;
 int numeroStringLocales = 0;
 int idProc;
+int apuntadorParametro;
 
 int arg;
 int tipoArg;
@@ -313,16 +315,14 @@ CREARFUNCION: funcion CREARFUNCION2 id {numeroParametros=0;
 					struct StrHashTable tablaParametros = {{0},NULL,NULL,foo_strhash,strcmp};
 					insertProc(&tblProc,&tablaLocalFuncion,&tablaParametros,nombreFuncion,nombreFuncion,0,0,0);	
 					numeroFunciones++;
-					printf("\n\n\n\num Funciones %i\n", numeroFunciones);
 					} 
 	parentesisa CREARFUNCION3 parentesisc {
 					setNumberParameters(&tblProc,nombreFuncion,numeroParametros);
-					 printf("\n\nNum param%i\n\n", numeroParametros);
-					} llavea DECLARACIONFUNCIONCICLO
+					 } llavea DECLARACIONFUNCIONCICLO
 					 {setNumberLocalVars(&tblProc,nombreFuncion,numeroVarLocales);
-					 printf("\n\nNum Local Var%i\n\n", numeroVarLocales);
+					 
 					setCuadruploInicial(&tblProc,nombreFuncion,contS);
-					 printf("\n\nCuadruplo Inicial%i\n\n", contS);}
+					 }
 					BLOQUE regresar EXP llavec {generarRetorno();};
 
 CREARFUNCION2: TIPO
@@ -330,24 +330,26 @@ CREARFUNCION2: TIPO
 CREARFUNCION3: /*vacio*/
 		| CREARFUNCION4;
 CREARFUNCION4: TIPO id  {int direccion = generarDireccion(tipoOp,2);
+			char numeroParametrosString[3];
 			printf("\n-----Nombe Funcion:%s\n\n", nombreFuncion);
-			insert(getPointerParTbl(&tblProc,nombreFuncion),$2,$2,tipoOp,direccion);
 			numeroParametros++;
-			printf("\n\nDIRECCION PARAMETRO %i, %i\n\n", direccion, getType(getPointerParTbl(&tblProc,nombreFuncion),$2));
+			sprintf(numeroParametrosString, "%i", numeroParametros);
+			insert(getPointerParTbl(&tblProc,nombreFuncion),numeroParametrosString,$2,tipoOp,direccion);
+			printf("\n\nDIRECCION PARAMETRO %i, %i,%s\n\n", direccion, getType(getPointerParTbl(&tblProc,nombreFuncion),numeroParametrosString), numeroParametrosString);
 			} 
 		CREARFUNCION5;
 CREARFUNCION5: /*vacio*/
 		| coma CREARFUNCION4;
 				
-LLAMARFUNCION: id {
+LLAMARFUNCION: id {	strcpy(nombreFuncion, $1); 
 			if(getProc(&tblProc,$1)==1){
-				 printf("\n @@@@@@@@@@Ya existe PROC");
+				 printf("\n @@@@@@@@@@Ya existe PROC %s ... Local vars: %i\n", $1, getNumberLocalVars(&tblProc,$1));
 				 generarEra(getNumberLocalVars(&tblProc,$1));
 			}
 			else printf("\n @@@@@@@@@@ NO existe PROC");
 			
 		} parentesisa LLAMARFUNCION2 parentesisc ptocoma ;
-LLAMARFUNCION2: EXP LLAMARFUNCION3;
+LLAMARFUNCION2: EXP {generarParametro();} LLAMARFUNCION3;
 LLAMARFUNCION3: coma LLAMARFUNCION2
 			  | /*vacio*/;
 			  
@@ -565,20 +567,16 @@ int generarDireccion(int tipo, int alcance){
 }
 
 
+/*
+ ######  ##     ##    ###    ########  ########  ##     ## ########  ##        #######   ######  
+##    ## ##     ##   ## ##   ##     ## ##     ## ##     ## ##     ## ##       ##     ## ##    ## 
+##       ##     ##  ##   ##  ##     ## ##     ## ##     ## ##     ## ##       ##     ## ##       
+##       ##     ## ##     ## ##     ## ########  ##     ## ########  ##       ##     ##  ######  
+##       ##     ## ######### ##     ## ##   ##   ##     ## ##        ##       ##     ##       ## 
+##    ## ##     ## ##     ## ##     ## ##    ##  ##     ## ##        ##       ##     ## ##    ## 
+ ######   #######  ##     ## ########  ##     ##  #######  ##        ########  #######   ######  
+*/
 
-
-int checarSemantica(int op, int op1, int op2){
-
-	if( matrizSemantica[op1-1][op2-1][op] == 0 ){
-		/*printf("--------------Semantica No Valida!!\n");*/
-		return 0;	//Error: no se puede hacer operacion de esos tipos
-	}
-	else {
-		/*printf("--------------Semantica Valida!! tipo: %i. \n " , matrizSemantica[op1-1][op2-1][op]);*/
-		return matrizSemantica[op1-1][op2-1][op];
-	}
-	
-}
 
 void checarOperando1(){
 	ptr op= malloc (sizeof(p_Nodo)); 
@@ -914,10 +912,61 @@ void generarEra(int tamano){
 
 	int numeroEra = 20;
 	generarCuadruplo(numeroEra,tamano,-1,-1); //era=20 tamaño= bonche de memoria
-	numeroParametros=1; //inicializar el contador de parametros
+	apuntadorParametro=1; //inicializar el contador de parametros
 
 	//Apuntar al primer parametro de nomProcesimiento
 
+}
+
+
+void generarParametro(){
+	
+	ptr arg= malloc (sizeof(p_Nodo)); 
+	
+	arg->valor = pilaOperadores->valor;
+	arg->tipo = pilaOperadores->tipo; 
+	arg->direccion = pilaOperadores->direccion; 
+
+	pop(&pilaOperadores); 
+	
+	char apuntadorParametroString[3];
+	sprintf(apuntadorParametroString, "%i", apuntadorParametro);
+
+	//Checar si los tipos son consistentes
+	if(arg->tipo != getType(getPointerParTbl(&tblProc,nombreFuncion), apuntadorParametroString) ){
+		printf("\nEl tipo del parametro es inconsistente con la definicion del procedimiento\n:%s, %i, %i, %s\n",nombreFuncion, arg->tipo, getType(getPointerParTbl(&tblProc,nombreFuncion), apuntadorParametroString), apuntadorParametroString);
+	}
+	else{
+		int numeroParam = 23;
+
+		generarCuadruplo(numeroParam,arg->direccion,-1,apuntadorParametro);// param=23
+		apuntadorParametro++;
+	}
+
+}
+
+
+/*
+##     ##    ###    ######## ########  #### ######## 
+###   ###   ## ##      ##    ##     ##  ##       ##  
+#### ####  ##   ##     ##    ##     ##  ##      ##   
+## ### ## ##     ##    ##    ########   ##     ##    
+##     ## #########    ##    ##   ##    ##    ##     
+##     ## ##     ##    ##    ##    ##   ##   ##      
+##     ## ##     ##    ##    ##     ## #### ######## 
+*/
+
+int checarSemantica(int op, int op1, int op2){
+
+	if( matrizSemantica[op1-1][op2-1][op] == 0 ){
+		/*printf("--------------Semantica No Valida!!\n");*/
+		return 0;	//Error: no se puede hacer operacion de esos tipos
+	}
+	else {
+		/*printf("--------------Semantica Valida!! tipo: %i. \n " , matrizSemantica[op1-1][op2-1][op]);*/
+		return matrizSemantica[op1-1][op2-1][op];
+	}
+	
 }
 
 void inicializarMatriz(){
@@ -1122,6 +1171,18 @@ void inicializarMatriz(){
 	matrizSemantica[3][2][10]= 0;	//bool = texto -> no se puede
 	matrizSemantica[3][3][10]= 4;	//bool = bool -> bool
 }
+
+
+/*
+##     ##    ###    #### ##    ## 
+###   ###   ## ##    ##  ###   ## 
+#### ####  ##   ##   ##  ####  ## 
+## ### ## ##     ##  ##  ## ## ## 
+##     ## #########  ##  ##  #### 
+##     ## ##     ##  ##  ##   ### 
+##     ## ##     ## #### ##    ## 
+		
+*/
 
 int main()
 {

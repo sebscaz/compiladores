@@ -57,7 +57,7 @@ void *get(struct StrHashTable *table,const char *key)
 int getProc(struct StrHashTableProc *table,const char *key)
 {
     unsigned int bucket = table->hash(key)%NR_BUCKETS;
-    struct StrHashNode *node;
+    struct StrHashNodeProc *node;
     node = table->buckets[bucket];
     while(node) {
         if(table->cmp(key,node->key) == 0)
@@ -113,8 +113,10 @@ void setNumberParameters(struct StrHashTableProc *table,const char *key, int num
     node = table->buckets[bucket];
     while(node) {
         if(table->cmp(key,node->key) == 0)
-            {return ;}
+            {}
         node->numberParameters = numberParameters;
+	printf("\n========###number parameters %i\n", node->numberParameters);
+	return ;
     }
 	return ;
 
@@ -127,8 +129,10 @@ void setNumberLocalVars(struct StrHashTableProc *table,const char *key, int numb
     node = table->buckets[bucket];
     while(node) {
         if(table->cmp(key,node->key) == 0)
-            {return ;}
+            { }
         node->numberLocalVars = numberLocalVars;
+	printf("\n========###number local vars %i\n", node->numberLocalVars);
+	return ;
     }
 	return ;
 }
@@ -140,8 +144,10 @@ void setCuadruploInicial(struct StrHashTableProc *table,const char *key, int cua
     node = table->buckets[bucket];
     while(node) {
         if(table->cmp(key,node->key) == 0)
-            {return ;}
+            {}
         node->cuadruploInicial = cuadruploInicial;
+ 	printf("\n========Cuadruplo inicial %i\n", node->cuadruploInicial);
+	return;
     }
 	return ;
 }
