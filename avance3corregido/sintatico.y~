@@ -20,6 +20,7 @@ void generarImprimir();
 void generarLectura();
 void generarMain();
 void llenarMain(); //llenar el cuadruplo del main
+void generarRetorno();
 void rellenar(int goTo, int contador);
 void generarCuadruplo(int numOp ,int tipo1, int tipo2, int res);
 
@@ -38,7 +39,7 @@ int contT=1;
 int contS=0; /*contador de saltos*/ 
 char strCuadruplos[2000];
 char strDirecciones[2000];
-
+char nombreFuncion[20];
 
 //contadores 
 
@@ -91,12 +92,16 @@ struct StrHashTable tbl = {{0},NULL,NULL,foo_strhash,strcmp};
 struct StrHashTableProc tblProc = {{0},NULL,NULL,foo_strhash,strcmp};
 struct StrHashNodeProc nodeProc;
 
+
 struct StrHashTable tablaGlobal = {{0},NULL,NULL,foo_strhash,strcmp};
 struct StrHashTable tablaLocal = {{0},NULL,NULL,foo_strhash,strcmp};
 struct StrHashTable tablaTemporal = {{0},NULL,NULL,foo_strhash,strcmp};
 struct StrHashTable tablaConstantes = {{0},NULL,NULL,foo_strhash,strcmp};
 
 int tipoOp=-1;
+int numeroParametros=0;
+int numeroFunciones =0;
+int numeroVarLocales = 0;
 
 //PILAS
 ptr pilaOperadores=NULL;
@@ -195,7 +200,8 @@ int contadorConstantes =0;
 %%
 
 PROGRAMA: {file = fopen("cuadruplos.txt","w+"); generarMain();}
-	 programa id {insertProc(&tblProc,&tablaGlobal,$3,$3);}  llavea PROGRAMA1 PROGRAMASIG PROGRAMA2 PRINCIPAL {llenarMain();} llavec;
+	 programa id {struct StrHashTable tablaParametros = {{0},NULL,NULL,foo_strhash,strcmp};
+		     insertProc(&tblProc,&tablaGlobal,&tablaParametros,$3,$3, 0,0,0); numeroFunciones++;}  llavea PROGRAMA1 PROGRAMASIG PROGRAMA2 PRINCIPAL  llavec;
 PROGRAMA1: {alcanceDireccion=1;/*global*/}DECLARACION PROGRAMA12;
 PROGRAMA12: PROGRAMA1
 		  | /*vacio*/;
@@ -213,7 +219,7 @@ TIPO: texto		{tipoOp = generarTipo($1); /*printf("===========tipo: %i\n", tipoOp
 	| decimal	{tipoOp = generarTipo($1); /*printf("===========tipo: %i\n", tipoOp);*/}
 	| booleano	{tipoOp = generarTipo($1); /*printf("===========tipo: %i\n", tipoOp);*/};	
 
-PRINCIPAL: principal parentesisa parentesisc llavea BLOQUE llavec;
+PRINCIPAL: principal {llenarMain();} parentesisa parentesisc llavea BLOQUE llavec;
 	
 BLOQUE: ESTATUTO BLOQUE1;
 BLOQUE1: BLOQUE;
@@ -250,7 +256,7 @@ DECLARACIONFUNCIONCICLO: {alcanceDireccion=2;/*local*/}DECLARACIONFUNCION DECLAR
 DECLARACIONFUNCIONCICLO2: DECLARACIONFUNCIONCICLO
 			| /*vacio*/;
 
-DECLARACIONFUNCION: crear TIPO DECLARACIONFUNCION2 id	ptocoma {insert(&tablaLocal,$4,$4,tipoOp,generarDireccion(tipoOp,2));} ;
+DECLARACIONFUNCION: crear TIPO DECLARACIONFUNCION2 id	ptocoma {insert(getPointerParTbl(&tblProc,nombreFuncion),$4,$4,tipoOp,generarDireccion(tipoOp,2)); numeroVarLocales++;} ;
 
 DECLARACIONFUNCION2: ARREGLOS
 		| /*vacio*/;
@@ -292,16 +298,36 @@ CONDICION2: no {secuenciaElse();} llavea BLOQUE llavec
 
 CICLO: mientras {secuenciaWhile1();} parentesisa SUPEREXPRESION parentesisc hacer {secuenciaWhile2();}  llavea BLOQUE llavec {secuenciaWhile3();} ;
 
-CREARFUNCION: funcion CREARFUNCION2 id parentesisa CREARFUNCION3 parentesisc llavea DECLARACIONFUNCIONCICLO BLOQUE regresar EXP llavec 
-
-{insertProc(&tblProc,&tablaGlobal,$3,$3);}
-	;
+CREARFUNCION: funcion CREARFUNCION2 id {numeroParametros=0;
+					strcpy(nombreFuncion, $3); 
+					printf("\n++++++++++Nombe Funcion:%s\n\n", nombreFuncion);
+					struct StrHashTable tablaLocalFuncion = {{0},NULL,NULL,foo_strhash,strcmp};
+					struct StrHashTable tablaParametros = {{0},NULL,NULL,foo_strhash,strcmp};
+					insertProc(&tblProc,&tablaLocalFuncion,&tablaParametros,nombreFuncion,nombreFuncion,0,0,0);	
+					numeroFunciones++;
+					printf("\n\n\n\num Funciones %i\n", numeroFunciones);
+					} 
+	parentesisa CREARFUNCION3 parentesisc {
+					setNumberParameters(&tblProc,nombreFuncion,numeroParametros);
+					 printf("\n\nNum param%i\n\n", numeroParametros);
+					} llavea DECLARACIONFUNCIONCICLO
+					 {setNumberLocalVars(&tblProc,nombreFuncion,numeroVarLocales);
+					 printf("\n\nNum Local Var%i\n\n", numeroVarLocales);
+					setCuadruploInicial(&tblProc,nombreFuncion,contS);
+					 printf("\n\nCuadruplo Inicial%i\n\n", contS);}
+					BLOQUE regresar EXP llavec {generarRetorno();};
 
 CREARFUNCION2: TIPO
 			| neutral; 	
 CREARFUNCION3: /*vacio*/
 		| CREARFUNCION4;
-CREARFUNCION4: TIPO id CREARFUNCION5 {insert(&tablaLocal,$2,$2,tipoOp,generarDireccion(tipoOp,2));};
+CREARFUNCION4: TIPO id  {int direccion = generarDireccion(tipoOp,2);
+			printf("\n-----Nombe Funcion:%s\n\n", nombreFuncion);
+			insert(getPointerParTbl(&tblProc,nombreFuncion),$2,$2,tipoOp,direccion);
+			numeroParametros++;
+			printf("\n\nDIRECCION PARAMETRO %i, %i\n\n", direccion, getType(getPointerParTbl(&tblProc,nombreFuncion),$2));
+			} 
+		CREARFUNCION5;
 CREARFUNCION5: /*vacio*/
 		| coma CREARFUNCION4;
 				
@@ -862,6 +888,11 @@ void generarMain(){
 
 void llenarMain(){
 	vectorRes[0]=contS;
+}
+
+void generarRetorno(){
+	int numeroRet=22;
+	generarCuadruplo(numeroRet ,-1, -1, -1);
 }
 
 

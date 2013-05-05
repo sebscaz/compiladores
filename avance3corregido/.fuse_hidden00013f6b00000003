@@ -32,6 +32,12 @@ programa prueba {
 		
 	}
 
+	funcion entero dos(){
+		crear entero whaat;
+	
+		regresar 3
+		
+	}
 
 	principal(){
 		imprimir("hola");

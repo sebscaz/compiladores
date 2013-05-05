@@ -32,7 +32,6 @@ programa prueba {
 		
 	}
 
-
 	principal(){
 		imprimir("hola");
 		imprimir("adios");

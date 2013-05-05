@@ -33,8 +33,11 @@ struct StrHashNodeProc {
     char *key;
     void *value;
     struct StrHashTable *vartable;
+    struct StrHashTable *partable;
     struct StrHashNodeProc *next;
-
+    int numberParameters; 
+    int numberLocalVars; 
+    int cuadruploInicial;
 };
 
 
@@ -78,6 +81,46 @@ int getDirection(struct StrHashTable *table,const char *key)
 	return -1;
 }
 
+void setNumberParameters(struct StrHashTableProc *table,const char *key, int numberParameters){
+
+    unsigned int bucket = table->hash(key)%NR_BUCKETS;
+    struct StrHashNodeProc *node;
+    node = table->buckets[bucket];
+    while(node) {
+        if(table->cmp(key,node->key) == 0)
+            {return ;}
+        node->numberParameters = numberParameters;
+    }
+	return ;
+
+}
+
+void setNumberLocalVars(struct StrHashTableProc *table,const char *key, int numberLocalVars){
+
+    unsigned int bucket = table->hash(key)%NR_BUCKETS;
+    struct StrHashNodeProc *node;
+    node = table->buckets[bucket];
+    while(node) {
+        if(table->cmp(key,node->key) == 0)
+            {return ;}
+        node->numberLocalVars = numberLocalVars;
+    }
+	return ;
+}
+
+void setCuadruploInicial(struct StrHashTableProc *table,const char *key, int cuadruploInicial){
+
+    unsigned int bucket = table->hash(key)%NR_BUCKETS;
+    struct StrHashNodeProc *node;
+    node = table->buckets[bucket];
+    while(node) {
+        if(table->cmp(key,node->key) == 0)
+            {return ;}
+        node->cuadruploInicial = cuadruploInicial;
+    }
+	return ;
+}
+
 struct StrHashTable *getPointerTbl(struct StrHashTableProc *table,const char *key)
 {
     unsigned int bucket = table->hash(key)%NR_BUCKETS;
@@ -90,9 +133,21 @@ struct StrHashTable *getPointerTbl(struct StrHashTableProc *table,const char *ke
     } 
 }
 
+struct StrHashTable *getPointerParTbl(struct StrHashTableProc *table,const char *key)
+{
+    unsigned int bucket = table->hash(key)%NR_BUCKETS;
+    struct StrHashNodeProc *node;
+    node = table->buckets[bucket];
+    while(node) {
+        if(table->cmp(key,node->key) == 0)
+            return node->partable;
+        return node->partable;
+    } 
+}
 
 
-int insert(struct StrHashTable *table,char *key,void *value, int type, int direction)
+
+int insert(struct StrHashTable *table, char *key,void *value, int type, int direction)
 {
     unsigned int bucket = table->hash(key)%NR_BUCKETS;
     struct StrHashNode **tmp;
@@ -144,7 +199,7 @@ unsigned int foo_strhash(const char *str)
 }
 
 
-int insertProc(struct StrHashTableProc *table, struct StrHashTable *vartable, char *key,void *value)
+int insertProc(struct StrHashTableProc *table, struct StrHashTable *vartable, struct StrHashTable *partable, char *key,void *value, int numberParameters, int numberLocalVars, int cuadruploInicial)
 {
     unsigned int bucket = table->hash(key)%NR_BUCKETS;
     struct StrHashNodeProc **tmp;
@@ -171,7 +226,7 @@ int insertProc(struct StrHashTableProc *table, struct StrHashTable *vartable, ch
     }
 	
 	if(node->key != NULL) {
-		printf("ID Repetida: \n");
+		printf("ID Proc Repetida: %s\n", key);
 	}
 	else
 	{
@@ -179,6 +234,10 @@ int insertProc(struct StrHashTableProc *table, struct StrHashTable *vartable, ch
    		node->key = key;
     		node->value = value;
 		node->vartable = vartable;
+		node->partable = partable;
+		node->numberParameters = numberParameters;
+		node->numberLocalVars = numberLocalVars;
+		node->cuadruploInicial = cuadruploInicial;
 		//struct StrHashTable tblee = {{0},NULL,NULL,foo_strhash,strcmp};
 		//node->vartable[0] = value; 
 	}
