@@ -25,6 +25,7 @@ void rellenar(int goTo, int contador);
 void generarCuadruplo(int numOp ,int tipo1, int tipo2, int res);
 void generarEra(int tamano);
 void generarParametro();
+void generarGoSub();
 
 int hacerPush = 1;	//bool para saber si meter variables a la pila - 1:hacer push, 0:no hacer push
 
@@ -348,9 +349,9 @@ LLAMARFUNCION: id {	strcpy(nombreFuncion, $1);
 			}
 			else printf("\n @@@@@@@@@@ NO existe PROC");
 			
-		} parentesisa LLAMARFUNCION2 parentesisc ptocoma ;
+		} parentesisa LLAMARFUNCION2 parentesisc ptocoma {generarGoSub();} ;
 LLAMARFUNCION2: EXP {generarParametro();} LLAMARFUNCION3;
-LLAMARFUNCION3: coma LLAMARFUNCION2
+LLAMARFUNCION3: coma {apuntadorParametro++;} LLAMARFUNCION2
 			  | /*vacio*/;
 			  
 			  
@@ -921,30 +922,36 @@ void generarEra(int tamano){
 
 void generarParametro(){
 	
-	ptr arg= malloc (sizeof(p_Nodo)); 
-	
-	arg->valor = pilaOperadores->valor;
-	arg->tipo = pilaOperadores->tipo; 
-	arg->direccion = pilaOperadores->direccion; 
-
-	pop(&pilaOperadores); 
-	
-	char apuntadorParametroString[3];
-	sprintf(apuntadorParametroString, "%i", apuntadorParametro);
-
-	//Checar si los tipos son consistentes
-	if(arg->tipo != getType(getPointerParTbl(&tblProc,nombreFuncion), apuntadorParametroString) ){
-		printf("\nEl tipo del parametro es inconsistente con la definicion del procedimiento\n:%s, %i, %i, %s\n",nombreFuncion, arg->tipo, getType(getPointerParTbl(&tblProc,nombreFuncion), apuntadorParametroString), apuntadorParametroString);
-	}
+	if(apuntadorParametro > getNumberParameters(&tblProc,nombreFuncion))
+		printf("ERROR: Demasiados Parametros en la llamada a la funcion \"%s\"\n", nombreFuncion);
 	else{
-		int numeroParam = 23;
+		ptr arg= malloc (sizeof(p_Nodo)); 
+	
+		arg->valor = pilaOperadores->valor;
+		arg->tipo = pilaOperadores->tipo; 
+		arg->direccion = pilaOperadores->direccion; 
 
-		generarCuadruplo(numeroParam,arg->direccion,-1,apuntadorParametro);// param=23
-		apuntadorParametro++;
+		pop(&pilaOperadores); 
+	
+		char apuntadorParametroString[3];
+		sprintf(apuntadorParametroString, "%i", apuntadorParametro);
+
+		//Checar si los tipos son consistentes
+		if(arg->tipo != getType(getPointerParTbl(&tblProc,nombreFuncion), apuntadorParametroString) ){
+			printf("\nEl tipo del parametro es inconsistente con la definicion del procedimiento\n:%s, %i, %i, %s\n",nombreFuncion, arg->tipo, getType(getPointerParTbl(&tblProc,nombreFuncion), apuntadorParametroString), apuntadorParametroString);
+		}
+		else{
+			int numeroParam = 23;
+			generarCuadruplo(numeroParam,arg->direccion,-1,apuntadorParametro);// param=23
+		}
 	}
-
 }
 
+void generarGoSub(){
+
+	int numeroGoSub = 21;
+	generarCuadruplo(numeroGoSub,getCuadruploInicial(&tblProc,nombreFuncion),-1,-1);// param=23
+}
 
 /*
 ##     ##    ###    ######## ########  #### ######## 
