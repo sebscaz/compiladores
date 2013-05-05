@@ -54,7 +54,18 @@ void *get(struct StrHashTable *table,const char *key)
     return NULL;
 }
 
-
+int getProc(struct StrHashTableProc *table,const char *key)
+{
+    unsigned int bucket = table->hash(key)%NR_BUCKETS;
+    struct StrHashNodeProc *node;
+    node = table->buckets[bucket];
+    while(node) {
+        if(table->cmp(key,node->key) == 0)
+            return 1;
+        node = node->value;
+    }
+    return 0;
+}
 
 int getType(struct StrHashTable *table,const char *key)
 {
@@ -80,6 +91,20 @@ int getDirection(struct StrHashTable *table,const char *key)
     } 
 	return -1;
 }
+
+int getNumberLocalVars(struct StrHashTableProc *table,const char *key)
+{
+    unsigned int bucket = table->hash(key)%NR_BUCKETS;
+    struct StrHashNodeProc *node;
+    node = table->buckets[bucket];
+    while(node) {
+        if(table->cmp(key,node->key) == 0)
+            return node->numberLocalVars;
+        return node->numberLocalVars;
+    } 
+	return -1;
+}
+
 
 void setNumberParameters(struct StrHashTableProc *table,const char *key, int numberParameters){
 

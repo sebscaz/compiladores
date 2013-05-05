@@ -10,6 +10,7 @@ programa prueba {
 
 	funcion entero mak(entero hola, texto mesa){
 		crear entero sebas;
+		crear entero galaxy;
 		crear entero [3][3] areglo;		
 
 		sebas = 2 + 3 / (4 * 3) - 4;
@@ -36,5 +37,6 @@ programa prueba {
 	principal(){
 		imprimir("hola");
 		imprimir("adios");
+		dos(3,"what");
 	}
 }

@@ -23,6 +23,7 @@ void llenarMain(); //llenar el cuadruplo del main
 void generarRetorno();
 void rellenar(int goTo, int contador);
 void generarCuadruplo(int numOp ,int tipo1, int tipo2, int res);
+void generarEra(int tamano);
 
 int hacerPush = 1;	//bool para saber si meter variables a la pila - 1:hacer push, 0:no hacer push
 
@@ -102,6 +103,13 @@ int tipoOp=-1;
 int numeroParametros=0;
 int numeroFunciones =0;
 int numeroVarLocales = 0;
+int numeroIntLocales = 0;
+int numeroFloatLocales = 0;
+int numeroStringLocales = 0;
+int idProc;
+
+int arg;
+int tipoArg;
 
 //PILAS
 ptr pilaOperadores=NULL;
@@ -214,9 +222,9 @@ PROGRAMASIG2: PROGRAMASIG
 	| /*vacio*/
 
 
-TIPO: texto		{tipoOp = generarTipo($1); /*printf("===========tipo: %i\n", tipoOp);*/ }
-	| entero	{tipoOp = generarTipo($1); /*printf("===========tipo: %i\n", tipoOp);*/ }
-	| decimal	{tipoOp = generarTipo($1); /*printf("===========tipo: %i\n", tipoOp);*/}
+TIPO: texto		{tipoOp = generarTipo($1); numeroStringLocales++;/*printf("===========tipo: %i\n", tipoOp);*/ }
+	| entero	{tipoOp = generarTipo($1); numeroIntLocales++; /*printf("===========tipo: %i\n", tipoOp);*/ }
+	| decimal	{tipoOp = generarTipo($1); numeroFloatLocales++;/*printf("===========tipo: %i\n", tipoOp);*/}
 	| booleano	{tipoOp = generarTipo($1); /*printf("===========tipo: %i\n", tipoOp);*/};	
 
 PRINCIPAL: principal {llenarMain();} parentesisa parentesisc llavea BLOQUE llavec;
@@ -331,7 +339,14 @@ CREARFUNCION4: TIPO id  {int direccion = generarDireccion(tipoOp,2);
 CREARFUNCION5: /*vacio*/
 		| coma CREARFUNCION4;
 				
-LLAMARFUNCION: id parentesisa LLAMARFUNCION2 parentesisc ptocoma ;
+LLAMARFUNCION: id {
+			if(getProc(&tblProc,$1)==1){
+				 printf("\n @@@@@@@@@@Ya existe PROC");
+				 generarEra(getNumberLocalVars(getPointerParTbl(&tblProc,$1)));
+			}
+			else printf("\n @@@@@@@@@@ NO existe PROC");
+			
+		} parentesisa LLAMARFUNCION2 parentesisc ptocoma ;
 LLAMARFUNCION2: EXP LLAMARFUNCION3;
 LLAMARFUNCION3: coma LLAMARFUNCION2
 			  | /*vacio*/;
@@ -895,6 +910,15 @@ void generarRetorno(){
 	generarCuadruplo(numeroRet ,-1, -1, -1);
 }
 
+void generarEra(int tamano){
+
+	int numeroEra = 20;
+	generarCuadruplo(numeroEra,tamano,-1,-1); //era=20 tamaño= bonche de memoria
+	numeroParametros=1; //inicializar el contador de parametros
+
+	//Apuntar al primer parametro de nomProcesimiento
+
+}
 
 void inicializarMatriz(){
 	//Tipos: entero: 1, doble:2, texto:3, booleano:4	
