@@ -26,6 +26,7 @@ void generarCuadruplo(int numOp ,int tipo1, int tipo2, int res);
 void generarEra(int tamano);
 void generarParametro();
 void generarGoSub();
+void generarEnd();
 
 int hacerPush = 1;	//bool para saber si meter variables a la pila - 1:hacer push, 0:no hacer push
 
@@ -212,7 +213,7 @@ int contadorConstantes =0;
 
 PROGRAMA: {file = fopen("cuadruplos.txt","w+"); generarMain();}
 	 programa id {struct StrHashTable tablaParametros = {{0},NULL,NULL,foo_strhash,strcmp};
-		     insertProc(&tblProc,&tablaGlobal,&tablaParametros,$3,$3, 0,0,0); numeroFunciones++;}  llavea PROGRAMA1 PROGRAMASIG PROGRAMA2 PRINCIPAL  llavec;
+		     insertProc(&tblProc,&tablaGlobal,&tablaParametros,$3,$3, 0,0,0); numeroFunciones++;}  llavea PROGRAMA1 PROGRAMASIG PROGRAMA2 PRINCIPAL  llavec {generarEnd();};
 PROGRAMA1: {alcanceDireccion=1;/*global*/}DECLARACION PROGRAMA12;
 PROGRAMA12: PROGRAMA1
 		  | /*vacio*/;
@@ -951,6 +952,12 @@ void generarGoSub(){
 
 	int numeroGoSub = 21;
 	generarCuadruplo(numeroGoSub,getCuadruploInicial(&tblProc,nombreFuncion),-1,-1);// param=23
+}
+
+void generarEnd(){
+
+	int numeroEnd = 30;
+	generarCuadruplo(numeroEnd,-1,-1,-1);// param=23
 }
 
 /*
