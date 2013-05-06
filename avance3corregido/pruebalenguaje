@@ -11,8 +11,10 @@ programa prueba {
 	funcion entero mak(entero hola, texto mesa){
 		crear entero sebas;
 		crear entero galaxy;
-		crear entero [3][3] areglo;		
+		crear entero areglo[3][3];		
 
+		sebas = 1;
+		galaxy = 4;
 		sebas = 2 + 3 / (4 * 3) - 4;
 		
 		dibujarFigura(perro, prueba1);
@@ -29,6 +31,8 @@ programa prueba {
 			sebas = 4 / 2;
 		}
 		sebas = 3 + 3;
+		areglo[0][1]=1;
+		sebas = areglo[0][1];
 		regresar 3
 		
 	}
@@ -37,6 +41,6 @@ programa prueba {
 	principal(){
 		imprimir("hola");
 		imprimir("adios");
-		mak(3+1,"what",3);
+		mak(3+1,"what");
 	}
 }

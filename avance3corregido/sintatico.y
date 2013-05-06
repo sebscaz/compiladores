@@ -115,6 +115,13 @@ int apuntadorParametro;
 int arg;
 int tipoArg;
 
+struct DimensionArreglo {
+    int numeroDimension;
+    int cantidad;
+    int m;
+    struct DimensionArreglo *next;
+};
+
 //PILAS
 ptr pilaOperadores=NULL;
 ptr pilaOperando=NULL;
@@ -223,7 +230,7 @@ PROGRAMA22: PROGRAMA2
 
 PROGRAMASIG: ASIGNACION PROGRAMASIG2;
 PROGRAMASIG2: PROGRAMASIG
-	| /*vacio*/
+	| /*vacio*/;
 
 
 TIPO: texto		{tipoOp = generarTipo($1); numeroStringLocales++;/*printf("===========tipo: %i\n", tipoOp);*/ }
@@ -259,7 +266,7 @@ FUNCIONESPECIAL: DIBUJARFIGURA
 				| OBTENERPOSICION;
 
 				
-DECLARACION: crear TIPO DECLARACION2 id	ptocoma  {insert(&tablaGlobal,$4,$4,tipoOp,generarDireccion(tipoOp,1));} ;
+DECLARACION: crear TIPO id  DECLARACION2 ptocoma  {insert(&tablaGlobal,$3,$3,tipoOp,generarDireccion(tipoOp,1));} ;
 DECLARACION2: ARREGLOS
 		| /*vacio*/;
 
@@ -268,7 +275,7 @@ DECLARACIONFUNCIONCICLO: {alcanceDireccion=2;/*local*/}DECLARACIONFUNCION DECLAR
 DECLARACIONFUNCIONCICLO2: DECLARACIONFUNCIONCICLO
 			| /*vacio*/;
 
-DECLARACIONFUNCION: crear TIPO DECLARACIONFUNCION2 id	ptocoma {insert(getPointerParTbl(&tblProc,nombreFuncion),$4,$4,tipoOp,generarDireccion(tipoOp,2)); numeroVarLocales++;} ;
+DECLARACIONFUNCION: crear TIPO id DECLARACIONFUNCION2 ptocoma {insert(getPointerTbl(&tblProc,nombreFuncion),$3,$3,tipoOp,generarDireccion(tipoOp,2)); numeroVarLocales++;} ;
 
 DECLARACIONFUNCION2: ARREGLOS
 		| /*vacio*/;
@@ -281,17 +288,17 @@ ARREGLOS2: corchetea cteentero corchetec
 
 ASIGNACION: id ASIGNACION2 {int tipoId = getType(&tablaGlobal,$1);
 			    if(tipoId==0)
-				tipoId = getType(&tablaLocal,$1);
+				tipoId = getType(getPointerTbl(&tblProc,nombreFuncion),$1);
 			    int direccionVirtual = getDirection(&tablaGlobal,$1);
-			    if(direccionVirtual==0)
-				direccionVirtual = getDirection(&tablaLocal,$1);
+			    if(direccionVirtual==-1)
+				direccionVirtual = getDirection(getPointerTbl(&tblProc,nombreFuncion),$1);
 			    push(&pilaOperadores, $1, tipoId, direccionVirtual); 
 				printf("\n\nHIzo pussh: tipo %i, direcicn %i\n\n",tipoId,direccionVirtual);}	
 	    igual { push(&pilaOperando, $4, -1, -1);} 
 	    ASIGNACION3 ptocoma {checarOperando3();} ;
 ASIGNACION3: LECTURA
 		| EXP;
-ASIGNACION2: {hacerPush=0; /*no meter a la pila las EXP de los arreglos*/}  ARREGLOSASIG  {hacerPush=1;} 
+ASIGNACION2: {hacerPush=1; /*no meter a la pila las EXP de los arreglos*/}  ARREGLOSASIG  {hacerPush=1;} 
 	|/*vacio*/;
 ARREGLOSASIG: corchetea EXP corchetec ARREGLOSASIG2;
 ARREGLOSASIG2: corchetea EXP corchetec 
