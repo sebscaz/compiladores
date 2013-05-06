@@ -24,7 +24,7 @@ GOTOF 12
 GOTOV  13
 GOTOSUB  14
 ERA    20
-		21
+GOSUB  21
 RET    22
 param  23
 Return 24

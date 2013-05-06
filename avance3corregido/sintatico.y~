@@ -27,6 +27,9 @@ void generarEra(int tamano);
 void generarParametro();
 void generarGoSub();
 void generarEnd();
+void generarDimension1();
+void generarDimension2();
+void generarVerifica();
 
 int hacerPush = 1;	//bool para saber si meter variables a la pila - 1:hacer push, 0:no hacer push
 
@@ -297,7 +300,7 @@ DECLARACIONFUNCIONCICLO: {alcanceDireccion=2;/*local*/}DECLARACIONFUNCION DECLAR
 DECLARACIONFUNCIONCICLO2: DECLARACIONFUNCIONCICLO
 			| /*vacio*/;
 
-DECLARACIONFUNCION: crear TIPO id DECLARACIONFUNCION2 ptocoma 
+DECLARACIONFUNCION: crear TIPO id {numeroDimension=0;} DECLARACIONFUNCION2 ptocoma 
 			{insert(getPointerTbl(&tblProc,nombreFuncion),$3,$3,tipoOp,generarDireccion(tipoOp,2));
 			direccionAux=m0;			
 			if(esArreglo==1) {
@@ -330,7 +333,7 @@ ASIGNACION3: LECTURA
 		| EXP;
 ASIGNACION2: {numeroDimension=1;}  ARREGLOSASIG  {hacerPush=1;} 
 	|/*vacio*/;
-ARREGLOSASIG: corchetea EXP corchetec ARREGLOSASIG2;
+ARREGLOSASIG: corchetea EXP {generarVerifica();} corchetec ARREGLOSASIG2;
 ARREGLOSASIG2: corchetea EXP corchetec 
 	| /*vacio*/;
 			
@@ -432,7 +435,7 @@ FACTOR:  parentesisa  { push(&pilaOperando,$1,-1,-1); } EXPRESION parentesisc {p
 				int tipoId = getType(getPointerTbl(&tblProc,nombreFuncion),$1);
 				int direccion= getDirection(getPointerTbl(&tblProc,nombreFuncion),$1);
 				if (direccion == -1) 
-					printf("\nVariable %s\n no declarada", $1)
+					printf("\nVariable %s\n no declarada", $1);
 				else{
 					//direccion=generarDireccion(tipoId, alcanceDireccion);
  					push(&pilaOperadores, $1, tipoId, direccion);
@@ -1032,6 +1035,32 @@ void generarEnd(){
 	generarCuadruplo(numeroEnd,-1,-1,-1);// param=23
 }
 
+void generarDimension1(){
+	int numeroVerifica = 27;
+	//generarCuadruplo(numeroVerifica,-1,-1,-1);// param=23
+}
+
+void generarDimension2(){
+
+}
+
+void generarVerifica(){
+
+	
+}
+
+
+
+/*
+   ###    ########  ########  ########  ######   ##        #######   ######  
+  ## ##   ##     ## ##     ## ##       ##    ##  ##       ##     ## ##    ## 
+ ##   ##  ##     ## ##     ## ##       ##        ##       ##     ## ##       
+##     ## ########  ########  ######   ##   #### ##       ##     ##  ######  
+######### ##   ##   ##   ##   ##       ##    ##  ##       ##     ##       ## 
+##     ## ##    ##  ##    ##  ##       ##    ##  ##       ##     ## ##    ## 
+##     ## ##     ## ##     ## ########  ######   ########  #######   ######  
+
+*/
 void dimensionesArreglos1(int cantidadElementos){
 
 	esArreglo=1;	//la variable si es un arreglo'
@@ -1071,13 +1100,13 @@ void operacionesArreglos(){
 }
 
 /*
-##     ##    ###    ######## ########  #### ######## 
-###   ###   ## ##      ##    ##     ##  ##       ##  
-#### ####  ##   ##     ##    ##     ##  ##      ##   
-## ### ## ##     ##    ##    ########   ##     ##    
-##     ## #########    ##    ##   ##    ##    ##     
-##     ## ##     ##    ##    ##    ##   ##   ##      
-##     ## ##     ##    ##    ##     ## #### ######## 
+ ######  ######## ##     ##    ###    ##    ## ######## ####  ######     ###    
+##    ## ##       ###   ###   ## ##   ###   ##    ##     ##  ##    ##   ## ##   
+##       ##       #### ####  ##   ##  ####  ##    ##     ##  ##        ##   ##  
+ ######  ######   ## ### ## ##     ## ## ## ##    ##     ##  ##       ##     ## 
+      ## ##       ##     ## ######### ##  ####    ##     ##  ##       ######### 
+##    ## ##       ##     ## ##     ## ##   ###    ##     ##  ##    ## ##     ## 
+ ######  ######## ##     ## ##     ## ##    ##    ##    ####  ######  ##     ## 
 */
 
 int checarSemantica(int op, int op1, int op2){

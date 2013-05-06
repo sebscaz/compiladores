@@ -9,6 +9,7 @@ struct StrHashNode {
     void *value;
     int type;
     int direction;
+    int dimensiones;
     struct StrHashNode *next;
 };
 
@@ -118,6 +119,19 @@ int getNumberParameters(struct StrHashTableProc *table,const char *key)
 	return -1;
 }
 
+int getCuadruploInicial(struct StrHashTableProc *table,const char *key)
+{
+    unsigned int bucket = table->hash(key)%NR_BUCKETS;
+    struct StrHashNodeProc *node;
+    node = table->buckets[bucket];
+    while(node) {
+        if(table->cmp(key,node->key) == 0)
+            return node->cuadruploInicial;
+        return node->cuadruploInicial;
+    } 
+	return -1;
+}
+
 void setNumberParameters(struct StrHashTableProc *table,const char *key, int numberParameters){
 
     unsigned int bucket = table->hash(key)%NR_BUCKETS;
@@ -187,7 +201,7 @@ struct StrHashTable *getPointerParTbl(struct StrHashTableProc *table,const char 
 
 
 
-int insert(struct StrHashTable *table, char *key,void *value, int type, int direction)
+int insert(struct StrHashTable *table, char *key,void *value, int type, int direction, int dimensiones)
 {
     unsigned int bucket = table->hash(key)%NR_BUCKETS;
     struct StrHashNode **tmp;
@@ -224,6 +238,7 @@ int insert(struct StrHashTable *table, char *key,void *value, int type, int dire
     		node->value = value;
 		node->type=type;
 		node->direction=direction;
+		node->dimensiones=dimensiones;
 
 		printf("%s\t%i\t%i\n", node->key , node->type ,node->direction  );
 	}

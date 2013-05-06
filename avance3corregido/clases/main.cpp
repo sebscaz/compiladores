@@ -30,6 +30,8 @@ param  23
 Return 24
 write  25
 PRINT  26
+
+VERIFICA 27
 END   30
 */
 
