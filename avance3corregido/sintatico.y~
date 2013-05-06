@@ -109,11 +109,19 @@ int numeroVarLocales = 0;
 int numeroIntLocales = 0;
 int numeroFloatLocales = 0;
 int numeroStringLocales = 0;
-int idProc;
 int apuntadorParametro;
 
 int arg;
 int tipoArg;
+
+//ARREGLOS
+
+void dimensionesArreglos1(int cantidadElementos);
+void dimensionesArreglos2(int cantidadElementos);
+void operacionesArreglos();
+int r; 			//usada en la formula de arreglos
+int numeroDimension;	//indica la dimension actual del arreglo (1 o 2)
+
 
 struct DimensionArreglo {
     int numeroDimension;
@@ -121,6 +129,9 @@ struct DimensionArreglo {
     int m;
     struct DimensionArreglo *next;
 };
+
+typedef struct DimensionArreglo dimensionArreglo;
+dimensionArreglo dimensiones[2];	//almacenar las dimensiones de un arreglo (1 o 2)
 
 //PILAS
 ptr pilaOperadores=NULL;
@@ -277,12 +288,12 @@ DECLARACIONFUNCIONCICLO2: DECLARACIONFUNCIONCICLO
 
 DECLARACIONFUNCION: crear TIPO id DECLARACIONFUNCION2 ptocoma {insert(getPointerTbl(&tblProc,nombreFuncion),$3,$3,tipoOp,generarDireccion(tipoOp,2)); numeroVarLocales++;} ;
 
-DECLARACIONFUNCION2: ARREGLOS
+DECLARACIONFUNCION2: ARREGLOS {operacionesArreglos();}
 		| /*vacio*/;
 
 
-ARREGLOS: corchetea cteentero corchetec ARREGLOS2;
-ARREGLOS2: corchetea cteentero corchetec 
+ARREGLOS: corchetea cteentero {dimensionesArreglos1(atoi($2));} corchetec ARREGLOS2;
+ARREGLOS2: corchetea cteentero {{dimensionesArreglos2(atoi($2));}} corchetec 
 	| /*vacio*/;
 	
 
@@ -290,7 +301,7 @@ ASIGNACION: id ASIGNACION2 {int tipoId = getType(&tablaGlobal,$1);
 			    if(tipoId==0)
 				tipoId = getType(getPointerTbl(&tblProc,nombreFuncion),$1);
 			    int direccionVirtual = getDirection(&tablaGlobal,$1);
-			    if(direccionVirtual==0)
+			    if(direccionVirtual==-1)
 				direccionVirtual = getDirection(getPointerTbl(&tblProc,nombreFuncion),$1);
 			    push(&pilaOperadores, $1, tipoId, direccionVirtual); 
 				printf("\n\nHIzo pussh: tipo %i, direcicn %i\n\n",tipoId,direccionVirtual);}	
@@ -298,7 +309,7 @@ ASIGNACION: id ASIGNACION2 {int tipoId = getType(&tablaGlobal,$1);
 	    ASIGNACION3 ptocoma {checarOperando3();} ;
 ASIGNACION3: LECTURA
 		| EXP;
-ASIGNACION2: {hacerPush=1; /*no meter a la pila las EXP de los arreglos*/}  ARREGLOSASIG  {hacerPush=1;} 
+ASIGNACION2: {numeroDimension=1;}  ARREGLOSASIG  {hacerPush=1;} 
 	|/*vacio*/;
 ARREGLOSASIG: corchetea EXP corchetec ARREGLOSASIG2;
 ARREGLOSASIG2: corchetea EXP corchetec 
@@ -965,6 +976,39 @@ void generarEnd(){
 
 	int numeroEnd = 30;
 	generarCuadruplo(numeroEnd,-1,-1,-1);// param=23
+}
+
+void dimensionesArreglos1(int cantidadElementos){
+
+	numeroDimension = 1;
+	r = 1;
+	r = r * cantidadElementos;
+
+	dimensionArreglo dimensionNueva = {numeroDimension,cantidadElementos,0};
+	dimensiones[0] = dimensionNueva;
+	printf("\nDIMENSION 1 !!! %i\n", cantidadElementos);
+}
+
+void dimensionesArreglos2(int cantidadElementos){
+
+	numeroDimension = 2;
+	r = r * cantidadElementos;
+
+	printf("\nDIMENSION 2 !!! %i\n", cantidadElementos);
+
+	dimensionArreglo dimensionNueva = {numeroDimension,cantidadElementos,0};
+	dimensiones[1] = dimensionNueva;
+
+}
+
+void operacionesArreglos(){
+
+	int i; //para recorrer el arreglo de dimensiones
+
+	for (i=0; i<numeroDimension; i++){
+		dimensiones[i].m = r / dimensiones[i].cantidad;
+		printf("\n________________M !!! %i\n", dimensiones[i].m );
+	}
 }
 
 /*

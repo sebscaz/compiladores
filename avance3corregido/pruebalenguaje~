@@ -11,11 +11,14 @@ programa prueba {
 	funcion entero mak(entero hola, texto mesa){
 		crear entero sebas;
 		crear entero galaxy;
-		crear entero areglo[3][3];		
+		crear entero areglo[3][10];
+		crear entero areglo2[4];
+		crear entero celular;		
 
 		sebas = 1;
 		galaxy = 4;
 		sebas = 2 + 3 / (4 * 3) - 4;
+		celular = 2;
 		
 		dibujarFigura(perro, prueba1);
 
