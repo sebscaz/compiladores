@@ -13,7 +13,8 @@ programa prueba {
 		crear entero galaxy;
 		crear entero areglo[3][3];
 		crear entero areglo2[10];
-		crear entero celular;		
+		crear entero celular;
+		crear entero iphone;		
 
 		sebas = 1;
 		galaxy = 4;

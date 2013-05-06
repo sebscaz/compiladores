@@ -188,7 +188,10 @@ int tipoArg;
 void dimensionesArreglos1(int cantidadElementos);
 void dimensionesArreglos2(int cantidadElementos);
 void operacionesArreglos();
+int esArreglo;		//determina si la variables es normal o un arreglo
 int r; 			//usada en la formula de arreglos
+int m0=1;			//indica la cantidad de elementos en el arreglo, en todas sus dimensiones
+int direccionAux=1;	//direccion que se sumara a la direccion base en caso de ser necesario	
 int numeroDimension;	//indica la dimension actual del arreglo (1 o 2)
 
 
@@ -222,7 +225,7 @@ int contadorConstantes =0;
 
 
 /* Line 268 of yacc.c  */
-#line 226 "sintatico.tab.c"
+#line 229 "sintatico.tab.c"
 
 /* Enabling traces.  */
 #ifndef YYDEBUG
@@ -321,12 +324,12 @@ typedef union YYSTYPE
 {
 
 /* Line 293 of yacc.c  */
-#line 156 "sintatico.y"
+#line 159 "sintatico.y"
 int cteint; float ctefloat; int cteboolean; char *string;
 
 
 /* Line 293 of yacc.c  */
-#line 330 "sintatico.tab.c"
+#line 333 "sintatico.tab.c"
 } YYSTYPE;
 # define YYSTYPE_IS_TRIVIAL 1
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */
@@ -338,7 +341,7 @@ int cteint; float ctefloat; int cteboolean; char *string;
 
 
 /* Line 343 of yacc.c  */
-#line 342 "sintatico.tab.c"
+#line 345 "sintatico.tab.c"
 
 #ifdef short
 # undef short
@@ -686,21 +689,21 @@ static const yytype_int16 yyrhs[] =
 /* YYRLINE[YYN] -- source line where rule number YYN was defined.  */
 static const yytype_uint16 yyrline[] =
 {
-       0,   232,   232,   233,   232,   235,   235,   236,   237,   238,
-     239,   240,   242,   243,   244,   247,   248,   249,   250,   252,
-     252,   254,   255,   256,   258,   259,   260,   261,   262,   263,
-     264,   266,   267,   268,   269,   270,   271,   272,   273,   274,
-     275,   276,   277,   280,   281,   282,   285,   285,   286,   287,
-     289,   291,   292,   295,   295,   296,   296,   297,   300,   308,
-     300,   310,   311,   312,   312,   313,   314,   315,   316,   318,
-     320,   322,   322,   324,   324,   325,   329,   329,   329,   331,
-     339,   342,   331,   348,   349,   350,   351,   352,   352,   361,
-     362,   364,   364,   372,   372,   373,   373,   374,   377,   378,
-     379,   380,   381,   384,   385,   386,   387,   388,   389,   390,
-     397,   397,   398,   399,   400,   401,   403,   403,   404,   405,
-     406,   407,   409,   409,   410,   411,   417,   430,   443,   456,
-     470,   472,   473,   474,   475,   477,   479,   482,   484,   486,
-     488,   490,   492,   494,   496,   498,   500,   501,   502
+       0,   235,   235,   236,   235,   238,   238,   239,   240,   241,
+     242,   243,   245,   246,   247,   250,   251,   252,   253,   255,
+     255,   257,   258,   259,   261,   262,   263,   264,   265,   266,
+     267,   269,   270,   271,   272,   273,   274,   275,   276,   277,
+     278,   279,   280,   283,   290,   291,   294,   294,   295,   296,
+     298,   309,   310,   313,   313,   314,   314,   315,   318,   326,
+     318,   328,   329,   330,   330,   331,   332,   333,   334,   336,
+     338,   340,   340,   342,   342,   343,   347,   347,   347,   349,
+     357,   360,   349,   366,   367,   368,   369,   370,   370,   379,
+     380,   382,   382,   390,   390,   391,   391,   392,   395,   396,
+     397,   398,   399,   402,   403,   404,   405,   406,   407,   408,
+     415,   415,   416,   417,   418,   419,   421,   421,   422,   423,
+     424,   425,   427,   427,   428,   429,   435,   448,   461,   474,
+     488,   490,   491,   492,   493,   495,   497,   500,   502,   504,
+     506,   508,   510,   512,   514,   516,   518,   519,   520
 };
 #endif
 
@@ -1833,14 +1836,14 @@ yyreduce:
         case 2:
 
 /* Line 1806 of yacc.c  */
-#line 232 "sintatico.y"
+#line 235 "sintatico.y"
     {file = fopen("cuadruplos.txt","w+"); generarMain();}
     break;
 
   case 3:
 
 /* Line 1806 of yacc.c  */
-#line 233 "sintatico.y"
+#line 236 "sintatico.y"
     {struct StrHashTable tablaParametros = {{0},NULL,NULL,foo_strhash,strcmp};
 		     insertProc(&tblProc,&tablaGlobal,&tablaParametros,(yyvsp[(3) - (3)].string),(yyvsp[(3) - (3)].string), 0,0,0); numeroFunciones++;}
     break;
@@ -1848,98 +1851,112 @@ yyreduce:
   case 4:
 
 /* Line 1806 of yacc.c  */
-#line 234 "sintatico.y"
+#line 237 "sintatico.y"
     {generarEnd();}
     break;
 
   case 5:
 
 /* Line 1806 of yacc.c  */
-#line 235 "sintatico.y"
+#line 238 "sintatico.y"
     {alcanceDireccion=1;/*global*/}
     break;
 
   case 15:
 
 /* Line 1806 of yacc.c  */
-#line 247 "sintatico.y"
+#line 250 "sintatico.y"
     {tipoOp = generarTipo((yyvsp[(1) - (1)].string)); numeroStringLocales++;/*printf("===========tipo: %i\n", tipoOp);*/ }
     break;
 
   case 16:
 
 /* Line 1806 of yacc.c  */
-#line 248 "sintatico.y"
+#line 251 "sintatico.y"
     {tipoOp = generarTipo((yyvsp[(1) - (1)].string)); numeroIntLocales++; /*printf("===========tipo: %i\n", tipoOp);*/ }
     break;
 
   case 17:
 
 /* Line 1806 of yacc.c  */
-#line 249 "sintatico.y"
+#line 252 "sintatico.y"
     {tipoOp = generarTipo((yyvsp[(1) - (1)].string)); numeroFloatLocales++;/*printf("===========tipo: %i\n", tipoOp);*/}
     break;
 
   case 18:
 
 /* Line 1806 of yacc.c  */
-#line 250 "sintatico.y"
+#line 253 "sintatico.y"
     {tipoOp = generarTipo((yyvsp[(1) - (1)].string)); /*printf("===========tipo: %i\n", tipoOp);*/}
     break;
 
   case 19:
 
 /* Line 1806 of yacc.c  */
-#line 252 "sintatico.y"
+#line 255 "sintatico.y"
     {llenarMain();}
     break;
 
   case 43:
 
 /* Line 1806 of yacc.c  */
-#line 280 "sintatico.y"
-    {insert(&tablaGlobal,(yyvsp[(3) - (5)].string),(yyvsp[(3) - (5)].string),tipoOp,generarDireccion(tipoOp,1));}
+#line 283 "sintatico.y"
+    {insert(&tablaGlobal,(yyvsp[(3) - (5)].string),(yyvsp[(3) - (5)].string),tipoOp,generarDireccion(tipoOp,1));
+					printf("CREARR FUNCCC esAREGLOO---------------%i\n",esArreglo);
+				direccionAux=m0;			   
+				if(esArreglo==1) {
+				    	esArreglo=0; /*la siguiente direccion base sera normal*/
+				    } else {m0=1; direccionAux=m0;}
+				     }
     break;
 
   case 46:
 
 /* Line 1806 of yacc.c  */
-#line 285 "sintatico.y"
+#line 294 "sintatico.y"
     {alcanceDireccion=2;/*local*/}
     break;
 
   case 50:
 
 /* Line 1806 of yacc.c  */
-#line 289 "sintatico.y"
-    {insert(getPointerTbl(&tblProc,nombreFuncion),(yyvsp[(3) - (5)].string),(yyvsp[(3) - (5)].string),tipoOp,generarDireccion(tipoOp,2)); numeroVarLocales++;}
+#line 299 "sintatico.y"
+    {insert(getPointerTbl(&tblProc,nombreFuncion),(yyvsp[(3) - (5)].string),(yyvsp[(3) - (5)].string),tipoOp,generarDireccion(tipoOp,2));
+			printf("CREARR FUNCCC esAREGLOO---------------%i\n",esArreglo);
+			direccionAux=m0;			
+			if(esArreglo==1) {
+				esArreglo=0; /*la siguiente direccion base sera normal*/
+			} else {m0=1;
+				direccionAux=m0;
+				}
+			numeroVarLocales++;}
     break;
 
   case 51:
 
 /* Line 1806 of yacc.c  */
-#line 291 "sintatico.y"
+#line 309 "sintatico.y"
     {operacionesArreglos();}
     break;
 
   case 53:
 
 /* Line 1806 of yacc.c  */
-#line 295 "sintatico.y"
+#line 313 "sintatico.y"
     {dimensionesArreglos1(atoi((yyvsp[(2) - (2)].string)));}
     break;
 
   case 55:
 
 /* Line 1806 of yacc.c  */
-#line 296 "sintatico.y"
+#line 314 "sintatico.y"
     {{dimensionesArreglos2(atoi((yyvsp[(2) - (2)].string)));}}
     break;
 
   case 58:
 
 /* Line 1806 of yacc.c  */
-#line 300 "sintatico.y"
+#line 318 "sintatico.y"
     {int tipoId = getType(&tablaGlobal,(yyvsp[(1) - (2)].string));
 			    if(tipoId==0)
 				tipoId = getType(getPointerTbl(&tblProc,nombreFuncion),(yyvsp[(1) - (2)].string));
@@ -1953,91 +1970,91 @@ yyreduce:
   case 59:
 
 /* Line 1806 of yacc.c  */
-#line 308 "sintatico.y"
+#line 326 "sintatico.y"
     { push(&pilaOperando, (yyvsp[(4) - (4)].string), -1, -1);}
     break;
 
   case 60:
 
 /* Line 1806 of yacc.c  */
-#line 309 "sintatico.y"
+#line 327 "sintatico.y"
     {checarOperando3();}
     break;
 
   case 63:
 
 /* Line 1806 of yacc.c  */
-#line 312 "sintatico.y"
+#line 330 "sintatico.y"
     {numeroDimension=1;}
     break;
 
   case 64:
 
 /* Line 1806 of yacc.c  */
-#line 312 "sintatico.y"
+#line 330 "sintatico.y"
     {hacerPush=1;}
     break;
 
   case 69:
 
 /* Line 1806 of yacc.c  */
-#line 318 "sintatico.y"
+#line 336 "sintatico.y"
     {generarImprimir();}
     break;
 
   case 70:
 
 /* Line 1806 of yacc.c  */
-#line 320 "sintatico.y"
+#line 338 "sintatico.y"
     {generarLectura();}
     break;
 
   case 71:
 
 /* Line 1806 of yacc.c  */
-#line 322 "sintatico.y"
+#line 340 "sintatico.y"
     {secuenciaIf1();}
     break;
 
   case 72:
 
 /* Line 1806 of yacc.c  */
-#line 322 "sintatico.y"
+#line 340 "sintatico.y"
     {secuenciaIf2();}
     break;
 
   case 73:
 
 /* Line 1806 of yacc.c  */
-#line 324 "sintatico.y"
+#line 342 "sintatico.y"
     {secuenciaElse();}
     break;
 
   case 76:
 
 /* Line 1806 of yacc.c  */
-#line 329 "sintatico.y"
+#line 347 "sintatico.y"
     {secuenciaWhile1();}
     break;
 
   case 77:
 
 /* Line 1806 of yacc.c  */
-#line 329 "sintatico.y"
+#line 347 "sintatico.y"
     {secuenciaWhile2();}
     break;
 
   case 78:
 
 /* Line 1806 of yacc.c  */
-#line 329 "sintatico.y"
+#line 347 "sintatico.y"
     {secuenciaWhile3();}
     break;
 
   case 79:
 
 /* Line 1806 of yacc.c  */
-#line 331 "sintatico.y"
+#line 349 "sintatico.y"
     {numeroParametros=0;
 					strcpy(nombreFuncion, (yyvsp[(3) - (3)].string)); 
 					printf("\n++++++++++Nombe Funcion:%s\n\n", nombreFuncion);
@@ -2051,7 +2068,7 @@ yyreduce:
   case 80:
 
 /* Line 1806 of yacc.c  */
-#line 339 "sintatico.y"
+#line 357 "sintatico.y"
     {
 					setNumberParameters(&tblProc,nombreFuncion,numeroParametros);
 					 }
@@ -2060,7 +2077,7 @@ yyreduce:
   case 81:
 
 /* Line 1806 of yacc.c  */
-#line 342 "sintatico.y"
+#line 360 "sintatico.y"
     {setNumberLocalVars(&tblProc,nombreFuncion,numeroVarLocales);
 					 
 					setCuadruploInicial(&tblProc,nombreFuncion,contS);
@@ -2070,14 +2087,14 @@ yyreduce:
   case 82:
 
 /* Line 1806 of yacc.c  */
-#line 346 "sintatico.y"
+#line 364 "sintatico.y"
     {generarRetorno();}
     break;
 
   case 87:
 
 /* Line 1806 of yacc.c  */
-#line 352 "sintatico.y"
+#line 370 "sintatico.y"
     {int direccion = generarDireccion(tipoOp,2);
 			char numeroParametrosString[3];
 			printf("\n-----Nombe Funcion:%s\n\n", nombreFuncion);
@@ -2091,7 +2108,7 @@ yyreduce:
   case 91:
 
 /* Line 1806 of yacc.c  */
-#line 364 "sintatico.y"
+#line 382 "sintatico.y"
     {	strcpy(nombreFuncion, (yyvsp[(1) - (1)].string)); 
 			if(getProc(&tblProc,(yyvsp[(1) - (1)].string))==1){
 				 printf("\n @@@@@@@@@@Ya existe PROC %s ... Local vars: %i\n", (yyvsp[(1) - (1)].string), getNumberLocalVars(&tblProc,(yyvsp[(1) - (1)].string)));
@@ -2105,56 +2122,56 @@ yyreduce:
   case 92:
 
 /* Line 1806 of yacc.c  */
-#line 371 "sintatico.y"
+#line 389 "sintatico.y"
     {generarGoSub();}
     break;
 
   case 93:
 
 /* Line 1806 of yacc.c  */
-#line 372 "sintatico.y"
+#line 390 "sintatico.y"
     {generarParametro();}
     break;
 
   case 95:
 
 /* Line 1806 of yacc.c  */
-#line 373 "sintatico.y"
+#line 391 "sintatico.y"
     {apuntadorParametro++;}
     break;
 
   case 105:
 
 /* Line 1806 of yacc.c  */
-#line 386 "sintatico.y"
+#line 404 "sintatico.y"
     {  checarOperando3();   }
     break;
 
   case 106:
 
 /* Line 1806 of yacc.c  */
-#line 387 "sintatico.y"
+#line 405 "sintatico.y"
     {push(&pilaOperando,(yyvsp[(1) - (1)].string),-1, -1);}
     break;
 
   case 107:
 
 /* Line 1806 of yacc.c  */
-#line 388 "sintatico.y"
+#line 406 "sintatico.y"
     {push(&pilaOperando,(yyvsp[(1) - (1)].string), -1, -1);}
     break;
 
   case 108:
 
 /* Line 1806 of yacc.c  */
-#line 389 "sintatico.y"
+#line 407 "sintatico.y"
     {push(&pilaOperando, (yyvsp[(1) - (1)].string), -1, -1);}
     break;
 
   case 109:
 
 /* Line 1806 of yacc.c  */
-#line 390 "sintatico.y"
+#line 408 "sintatico.y"
     {char* str = (yyvsp[(1) - (2)].string);
 				      char dest[2];
 				      strcpy( dest, str );
@@ -2165,63 +2182,63 @@ yyreduce:
   case 110:
 
 /* Line 1806 of yacc.c  */
-#line 397 "sintatico.y"
+#line 415 "sintatico.y"
     {  checarOperando2();   }
     break;
 
   case 114:
 
 /* Line 1806 of yacc.c  */
-#line 400 "sintatico.y"
+#line 418 "sintatico.y"
     {push(&pilaOperando,(yyvsp[(1) - (1)].string),-1, -1);}
     break;
 
   case 115:
 
 /* Line 1806 of yacc.c  */
-#line 401 "sintatico.y"
+#line 419 "sintatico.y"
     {push(&pilaOperando,(yyvsp[(1) - (1)].string),-1, -1);}
     break;
 
   case 116:
 
 /* Line 1806 of yacc.c  */
-#line 403 "sintatico.y"
+#line 421 "sintatico.y"
     { checarOperando1();   }
     break;
 
   case 120:
 
 /* Line 1806 of yacc.c  */
-#line 406 "sintatico.y"
+#line 424 "sintatico.y"
     {push(&pilaOperando,(yyvsp[(1) - (1)].string),-1, -1);}
     break;
 
   case 121:
 
 /* Line 1806 of yacc.c  */
-#line 407 "sintatico.y"
+#line 425 "sintatico.y"
     {push(&pilaOperando,(yyvsp[(1) - (1)].string),-1, -1);}
     break;
 
   case 122:
 
 /* Line 1806 of yacc.c  */
-#line 409 "sintatico.y"
+#line 427 "sintatico.y"
     { push(&pilaOperando,(yyvsp[(1) - (1)].string),-1,-1); }
     break;
 
   case 123:
 
 /* Line 1806 of yacc.c  */
-#line 409 "sintatico.y"
+#line 427 "sintatico.y"
     {pop(&pilaOperando);}
     break;
 
   case 125:
 
 /* Line 1806 of yacc.c  */
-#line 411 "sintatico.y"
+#line 429 "sintatico.y"
     {int tipoId = getType(&tbl,(yyvsp[(1) - (2)].string));
 				int direccionVirtual = generarDireccion(tipoId, alcanceDireccion);
 				if(hacerPush==1) push(&pilaOperadores, (yyvsp[(1) - (2)].string), tipoId, direccionVirtual); }
@@ -2230,7 +2247,7 @@ yyreduce:
   case 126:
 
 /* Line 1806 of yacc.c  */
-#line 417 "sintatico.y"
+#line 435 "sintatico.y"
     {if(hacerPush==1) {
 							//Generar direccion en tabla de constantes si no existe	
 							int direccion= getDirection(&tablaConstantes,(yyvsp[(1) - (1)].string));
@@ -2249,7 +2266,7 @@ yyreduce:
   case 127:
 
 /* Line 1806 of yacc.c  */
-#line 430 "sintatico.y"
+#line 448 "sintatico.y"
     {if(hacerPush==1) {
 							//Generar direccion en tabla de constantes si no existe	
 						   	int direccion= getDirection(&tablaConstantes,(yyvsp[(1) - (1)].string));
@@ -2268,7 +2285,7 @@ yyreduce:
   case 128:
 
 /* Line 1806 of yacc.c  */
-#line 443 "sintatico.y"
+#line 461 "sintatico.y"
     {if(hacerPush==1) {
 							//Generar direccion en tabla de constantes si no existe	
 						  	int direccion= getDirection(&tablaConstantes,(yyvsp[(1) - (1)].string));
@@ -2287,7 +2304,7 @@ yyreduce:
   case 129:
 
 /* Line 1806 of yacc.c  */
-#line 456 "sintatico.y"
+#line 474 "sintatico.y"
     {if(hacerPush==1) {
 							//Generar direccion en tabla de constantes si no existe	
 						  	int direccion= getDirection(&tablaConstantes,(yyvsp[(1) - (1)].string));
@@ -2306,7 +2323,7 @@ yyreduce:
 
 
 /* Line 1806 of yacc.c  */
-#line 2310 "sintatico.tab.c"
+#line 2327 "sintatico.tab.c"
       default: break;
     }
   /* User semantic actions sometimes alter yychar, and that requires
@@ -2537,7 +2554,7 @@ yyreturn:
 
 
 /* Line 2067 of yacc.c  */
-#line 504 "sintatico.y"
+#line 522 "sintatico.y"
 
 
 int generarTipo(char *operando){
@@ -2553,72 +2570,95 @@ int generarTipo(char *operando){
 
 int generarDireccion(int tipo, int alcance){
 
-               
+	int cantidadDirecciones;	//saber si sumar una direccion o la cantidad necesaria para arreglos
+
+	//Checar si hay direccion auxiliar para arreglos
+	if(direccionAux != 1)
+		cantidadDirecciones = direccionAux;
+	else
+		cantidadDirecciones = 1;
+
+	printf("\n***************CANTIDAD DIRECCIONSSS!!! %i**************\n", cantidadDirecciones );
 
 	//global	
 	if(alcance==1){ 
 		//printf(">>>>>>>>>>>>>>>>>>ALCANCE GLOBAL\n");
 		if(tipo==1) //entero
 			{ contEnteroGlobal++;
-			  return direccionEnteroGlobal++;}
+			direccionEnteroGlobal += cantidadDirecciones;
+			return direccionEnteroGlobal;}
 		else if(tipo==2){ //doble
 			contDobleGlobal++;
-			return direccionDobleGlobal++;}
+			direccionDobleGlobal += cantidadDirecciones;
+			return direccionDobleGlobal;}
 		else if(tipo==3) {//texto
-			contTextoGlobal++;			
-			return direccionTextoGlobal++;}
+			contTextoGlobal++;
+			direccionTextoGlobal += cantidadDirecciones;
+			return direccionTextoGlobal;}
 		else if(tipo==4){ //booleano
 			contBooleanoGlobal++;
-			return direccionBooleanoGlobal++;}
+			direccionBooleanoGlobal += cantidadDirecciones;
+			return direccionBooleanoGlobal;}
 	}
 	 //local
 	else if(alcance==2){
 		//printf(">>>>>>>>>>>>>>>>>>ALCANCE LOCAL\n");
 		if(tipo==1) {//entero
 			contEnteroLocal++;
-			return direccionEnteroLocal++;}
-			
+			direccionEnteroLocal += cantidadDirecciones;
+			return direccionEnteroLocal;}
 		else if(tipo==2){ //doble
 			contDobleLocal++;
-			return direccionDobleLocal++;}
+			direccionDobleLocal += cantidadDirecciones;
+			return direccionDobleLocal;}
 		else if(tipo==3) {//texto
 			contTextoLocal++;
-			return direccionTextoLocal++;}
+			direccionTextoLocal += cantidadDirecciones;
+			return direccionTextoLocal;}
 		else if(tipo==4) {//booleano
 			contBooleanoLocal++;
-			return direccionBooleanoLocal++;}
+			direccionBooleanoLocal += cantidadDirecciones;
+			return direccionBooleanoLocal;}
 	}
 	//temp
 	else if (alcance==3){ 
 		//printf(">>>>>>>>>>>>>>>>>>ALCANCE TEMPORAL\n");
 		if(tipo==1){// entero
 			contEnteroTemp++;
-			return direccionEnteroTemp++;}
+			direccionEnteroTemp += cantidadDirecciones;
+			return direccionEnteroTemp;}
 		else if(tipo==2) {//doble
 			contDobleTemp++;
-			return direccionDobleTemp++;}
+			direccionDobleTemp += cantidadDirecciones;
+			return direccionDobleTemp;}
 		else if(tipo==3){ //texto
 			contTextoTemp++;
-			return direccionTextoTemp++;}
+			direccionTextoTemp += cantidadDirecciones;
+			return direccionTextoTemp;}
 		else if(tipo==4){ //booleano
 			contBooleanoTemp++;
-			return direccionBooleanoTemp++;}
+			direccionBooleanoTemp += cantidadDirecciones;
+			return direccionBooleanoTemp;}
 	}
 	//Constante
 	else if (alcance==5){ 
 		printf(">>>>>>>>>>>>>>>>>>ALCANCE: COnstante\n");
 		if(tipo==1){// entero
 			contEnteroConstante++;
-			return direccionEnteroConstante++;}
+			direccionEnteroConstante += cantidadDirecciones;
+			return direccionEnteroConstante;}
 		else if(tipo==2) {//doble
 			contDobleConstante++;
-			return direccionDobleConstante++;}
+			direccionDobleConstante += cantidadDirecciones;
+			return direccionDobleConstante;}
 		else if(tipo==3){ //texto
 			contTextoConstante++;
-			return direccionTextoConstante++;}
+			direccionTextoConstante += cantidadDirecciones;
+			return direccionTextoConstante;}
 		else if(tipo==4) {//booleano
 			contBooleanoConstante++;
-			return direccionBooleanoConstante++;}
+			direccionBooleanoConstante += cantidadDirecciones;
+			return direccionBooleanoConstante;}
 	}
 
 }
@@ -3017,9 +3057,12 @@ void generarEnd(){
 
 void dimensionesArreglos1(int cantidadElementos){
 
+	esArreglo=1;	//la variable si es un arreglo'
+	printf("\nES ARREGLOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO\n");
 	numeroDimension = 1;
 	r = 1;
 	r = r * cantidadElementos;
+	m0=r;
 
 	dimensionArreglo dimensionNueva = {numeroDimension,cantidadElementos,0};
 	dimensiones[0] = dimensionNueva;
@@ -3028,8 +3071,11 @@ void dimensionesArreglos1(int cantidadElementos){
 
 void dimensionesArreglos2(int cantidadElementos){
 
+	esArreglo=1;	//la variable si es un arreglo
+	printf("\nES ARREGLOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO\n");
 	numeroDimension = 2;
 	r = r * cantidadElementos;
+	m0=r;
 
 	printf("\nDIMENSION 2 !!! %i\n", cantidadElementos);
 

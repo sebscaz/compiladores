@@ -11,8 +11,8 @@ programa prueba {
 	funcion entero mak(entero hola, texto mesa){
 		crear entero sebas;
 		crear entero galaxy;
-		crear entero areglo[3][10];
-		crear entero areglo2[4];
+		crear entero areglo[3][3];
+		crear entero areglo2[10];
 		crear entero celular;		
 
 		sebas = 1;

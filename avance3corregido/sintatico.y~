@@ -119,7 +119,10 @@ int tipoArg;
 void dimensionesArreglos1(int cantidadElementos);
 void dimensionesArreglos2(int cantidadElementos);
 void operacionesArreglos();
+int esArreglo;		//determina si la variables es normal o un arreglo
 int r; 			//usada en la formula de arreglos
+int m0=1;			//indica la cantidad de elementos en el arreglo, en todas sus dimensiones
+int direccionAux=1;	//direccion que se sumara a la direccion base en caso de ser necesario	
 int numeroDimension;	//indica la dimension actual del arreglo (1 o 2)
 
 
@@ -277,7 +280,13 @@ FUNCIONESPECIAL: DIBUJARFIGURA
 				| OBTENERPOSICION;
 
 				
-DECLARACION: crear TIPO id  DECLARACION2 ptocoma  {insert(&tablaGlobal,$3,$3,tipoOp,generarDireccion(tipoOp,1));} ;
+DECLARACION: crear TIPO id DECLARACION2 ptocoma  {insert(&tablaGlobal,$3,$3,tipoOp,generarDireccion(tipoOp,1));
+					printf("CREARR FUNCCC esAREGLOO---------------%i\n",esArreglo);
+				direccionAux=m0;			   
+				if(esArreglo==1) {
+				    	esArreglo=0; /*la siguiente direccion base sera normal*/
+				    } else {m0=1; direccionAux=m0;}
+				     } ;
 DECLARACION2: ARREGLOS
 		| /*vacio*/;
 
@@ -286,7 +295,16 @@ DECLARACIONFUNCIONCICLO: {alcanceDireccion=2;/*local*/}DECLARACIONFUNCION DECLAR
 DECLARACIONFUNCIONCICLO2: DECLARACIONFUNCIONCICLO
 			| /*vacio*/;
 
-DECLARACIONFUNCION: crear TIPO id DECLARACIONFUNCION2 ptocoma {insert(getPointerTbl(&tblProc,nombreFuncion),$3,$3,tipoOp,generarDireccion(tipoOp,2)); numeroVarLocales++;} ;
+DECLARACIONFUNCION: crear TIPO id DECLARACIONFUNCION2 ptocoma 
+			{insert(getPointerTbl(&tblProc,nombreFuncion),$3,$3,tipoOp,generarDireccion(tipoOp,2));
+			printf("CREARR FUNCCC esAREGLOO---------------%i\n",esArreglo);
+			direccionAux=m0;			
+			if(esArreglo==1) {
+				esArreglo=0; /*la siguiente direccion base sera normal*/
+			} else {m0=1;
+				direccionAux=m0;
+				}
+			numeroVarLocales++;} ;
 
 DECLARACIONFUNCION2: ARREGLOS {operacionesArreglos();}
 		| /*vacio*/;
@@ -516,72 +534,95 @@ int generarTipo(char *operando){
 
 int generarDireccion(int tipo, int alcance){
 
-               
+	int cantidadDirecciones;	//saber si sumar una direccion o la cantidad necesaria para arreglos
+
+	//Checar si hay direccion auxiliar para arreglos
+	if(direccionAux != 1)
+		cantidadDirecciones = direccionAux;
+	else
+		cantidadDirecciones = 1;
+
+	printf("\n***************CANTIDAD DIRECCIONSSS!!! %i**************\n", cantidadDirecciones );
 
 	//global	
 	if(alcance==1){ 
 		//printf(">>>>>>>>>>>>>>>>>>ALCANCE GLOBAL\n");
 		if(tipo==1) //entero
 			{ contEnteroGlobal++;
-			  return direccionEnteroGlobal++;}
+			direccionEnteroGlobal += cantidadDirecciones;
+			return direccionEnteroGlobal;}
 		else if(tipo==2){ //doble
 			contDobleGlobal++;
-			return direccionDobleGlobal++;}
+			direccionDobleGlobal += cantidadDirecciones;
+			return direccionDobleGlobal;}
 		else if(tipo==3) {//texto
-			contTextoGlobal++;			
-			return direccionTextoGlobal++;}
+			contTextoGlobal++;
+			direccionTextoGlobal += cantidadDirecciones;
+			return direccionTextoGlobal;}
 		else if(tipo==4){ //booleano
 			contBooleanoGlobal++;
-			return direccionBooleanoGlobal++;}
+			direccionBooleanoGlobal += cantidadDirecciones;
+			return direccionBooleanoGlobal;}
 	}
 	 //local
 	else if(alcance==2){
 		//printf(">>>>>>>>>>>>>>>>>>ALCANCE LOCAL\n");
 		if(tipo==1) {//entero
 			contEnteroLocal++;
-			return direccionEnteroLocal++;}
-			
+			direccionEnteroLocal += cantidadDirecciones;
+			return direccionEnteroLocal;}
 		else if(tipo==2){ //doble
 			contDobleLocal++;
-			return direccionDobleLocal++;}
+			direccionDobleLocal += cantidadDirecciones;
+			return direccionDobleLocal;}
 		else if(tipo==3) {//texto
 			contTextoLocal++;
-			return direccionTextoLocal++;}
+			direccionTextoLocal += cantidadDirecciones;
+			return direccionTextoLocal;}
 		else if(tipo==4) {//booleano
 			contBooleanoLocal++;
-			return direccionBooleanoLocal++;}
+			direccionBooleanoLocal += cantidadDirecciones;
+			return direccionBooleanoLocal;}
 	}
 	//temp
 	else if (alcance==3){ 
 		//printf(">>>>>>>>>>>>>>>>>>ALCANCE TEMPORAL\n");
 		if(tipo==1){// entero
 			contEnteroTemp++;
-			return direccionEnteroTemp++;}
+			direccionEnteroTemp += cantidadDirecciones;
+			return direccionEnteroTemp;}
 		else if(tipo==2) {//doble
 			contDobleTemp++;
-			return direccionDobleTemp++;}
+			direccionDobleTemp += cantidadDirecciones;
+			return direccionDobleTemp;}
 		else if(tipo==3){ //texto
 			contTextoTemp++;
-			return direccionTextoTemp++;}
+			direccionTextoTemp += cantidadDirecciones;
+			return direccionTextoTemp;}
 		else if(tipo==4){ //booleano
 			contBooleanoTemp++;
-			return direccionBooleanoTemp++;}
+			direccionBooleanoTemp += cantidadDirecciones;
+			return direccionBooleanoTemp;}
 	}
 	//Constante
 	else if (alcance==5){ 
 		printf(">>>>>>>>>>>>>>>>>>ALCANCE: COnstante\n");
 		if(tipo==1){// entero
 			contEnteroConstante++;
-			return direccionEnteroConstante++;}
+			direccionEnteroConstante += cantidadDirecciones;
+			return direccionEnteroConstante;}
 		else if(tipo==2) {//doble
 			contDobleConstante++;
-			return direccionDobleConstante++;}
+			direccionDobleConstante += cantidadDirecciones;
+			return direccionDobleConstante;}
 		else if(tipo==3){ //texto
 			contTextoConstante++;
-			return direccionTextoConstante++;}
+			direccionTextoConstante += cantidadDirecciones;
+			return direccionTextoConstante;}
 		else if(tipo==4) {//booleano
 			contBooleanoConstante++;
-			return direccionBooleanoConstante++;}
+			direccionBooleanoConstante += cantidadDirecciones;
+			return direccionBooleanoConstante;}
 	}
 
 }
@@ -980,9 +1021,12 @@ void generarEnd(){
 
 void dimensionesArreglos1(int cantidadElementos){
 
+	esArreglo=1;	//la variable si es un arreglo'
+	printf("\nES ARREGLOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO\n");
 	numeroDimension = 1;
 	r = 1;
 	r = r * cantidadElementos;
+	m0=r;
 
 	dimensionArreglo dimensionNueva = {numeroDimension,cantidadElementos,0};
 	dimensiones[0] = dimensionNueva;
@@ -991,8 +1035,11 @@ void dimensionesArreglos1(int cantidadElementos){
 
 void dimensionesArreglos2(int cantidadElementos){
 
+	esArreglo=1;	//la variable si es un arreglo
+	printf("\nES ARREGLOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO\n");
 	numeroDimension = 2;
 	r = r * cantidadElementos;
+	m0=r;
 
 	printf("\nDIMENSION 2 !!! %i\n", cantidadElementos);
 
@@ -1004,9 +1051,11 @@ void dimensionesArreglos2(int cantidadElementos){
 void operacionesArreglos(){
 
 	int i; //para recorrer el arreglo de dimensiones
+	int m=r;
 
 	for (i=0; i<numeroDimension; i++){
-		dimensiones[i].m = r / dimensiones[i].cantidad;
+		dimensiones[i].m = m / dimensiones[i].cantidad;
+		m = dimensiones[i].m;
 		printf("\n________________M !!! %i\n", dimensiones[i].m );
 	}
 }
