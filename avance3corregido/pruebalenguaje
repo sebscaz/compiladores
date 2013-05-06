@@ -17,6 +17,8 @@ programa prueba {
 		crear entero iphone;
 		crear entero areglo3[10];	
 		crear entero mochila;	
+		crear entero cartera;
+		crear decimal trouble;
 
 		sebas = 1;
 		galaxy = 4 + sebas;

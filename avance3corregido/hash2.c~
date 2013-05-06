@@ -4,12 +4,23 @@
 
 #define NR_BUCKETS 1024
 
+struct DimensionArreglo {
+    int numeroDimension;
+    int cantidad;
+    int m;
+    struct DimensionArreglo *next;
+};
+
+typedef struct DimensionArreglo dimensionArreglo;
+
+
 struct StrHashNode {
     char *key;
     void *value;
     int type;
     int direction;
-    int dimensiones;
+    struct DimensionArreglo dimension1;
+    struct DimensionArreglo dimension2;
     struct StrHashNode *next;
 };
 
@@ -40,6 +51,8 @@ struct StrHashNodeProc {
     int numberLocalVars; 
     int cuadruploInicial;
 };
+
+
 
 
 void *get(struct StrHashTable *table,const char *key)
@@ -201,7 +214,7 @@ struct StrHashTable *getPointerParTbl(struct StrHashTableProc *table,const char 
 
 
 
-int insert(struct StrHashTable *table, char *key,void *value, int type, int direction, int dimensiones)
+int insert(struct StrHashTable *table, char *key,void *value, int type, int direction, struct DimensionArreglo dimension1, struct DimensionArreglo dimension2  )
 {
     unsigned int bucket = table->hash(key)%NR_BUCKETS;
     struct StrHashNode **tmp;
@@ -238,9 +251,20 @@ int insert(struct StrHashTable *table, char *key,void *value, int type, int dire
     		node->value = value;
 		node->type=type;
 		node->direction=direction;
-		node->dimensiones=dimensiones;
 
-		printf("%s\t%i\t%i\n", node->key , node->type ,node->direction  );
+		//dimensiones[0].m =1;
+
+		node->dimension1 = dimension1;
+		node->dimension2 = dimension2;
+	/*		
+		node->dimensiones[0].cantidad = dimensiones[0]->cantidad;
+		node->dimensiones[0].m = dimensiones[0]->m;
+
+		node->dimensiones[1]->numeroDimension = dimensiones[1]->numeroDimension;
+		node->dimensiones[1]->cantidad = dimensiones[1]->cantidad;
+		node->dimensiones[1]->m = dimensiones[1]->m;
+*/
+		printf("%s\t%i\t%i\t%i\t%i\n", node->key , node->type ,node->direction, node->dimension1.m, node->dimension2.m );
 	}
     return 0;
 }

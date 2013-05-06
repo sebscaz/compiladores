@@ -127,17 +127,9 @@ int r; 			//usada en la formula de arreglos
 int m0=1;		//indica la cantidad de elementos en el arreglo, en todas sus dimensiones
 int direccionAux=1;	//direccion que se sumara a la direccion base en caso de ser necesario	
 int numeroDimension;	//indica la dimension actual del arreglo (1 o 2)
-
-
-struct DimensionArreglo {
-    int numeroDimension;
-    int cantidad;
-    int m;
-    struct DimensionArreglo *next;
-};
-
-typedef struct DimensionArreglo dimensionArreglo;
 dimensionArreglo dimensiones[2];	//almacenar las dimensiones de un arreglo (1 o 2)
+
+
 
 //PILAS
 ptr pilaOperadores=NULL;
@@ -283,7 +275,7 @@ FUNCIONESPECIAL: DIBUJARFIGURA
 				| OBTENERPOSICION;
 
 				
-DECLARACION: crear TIPO id DECLARACION2 ptocoma  {insert(&tablaGlobal,$3,$3,tipoOp,generarDireccion(tipoOp,1));
+DECLARACION: crear TIPO id DECLARACION2 ptocoma  {insert(&tablaGlobal,$3,$3,tipoOp,generarDireccion(tipoOp,1),dimensiones[0], dimensiones[1]);
 					printf("CREARR FUNCCC esAREGLOO---------------%i\n",esArreglo);
 				direccionAux=m0;			   
 				if(esArreglo==1) {
@@ -300,8 +292,12 @@ DECLARACIONFUNCIONCICLO: {alcanceDireccion=2;/*local*/}DECLARACIONFUNCION DECLAR
 DECLARACIONFUNCIONCICLO2: DECLARACIONFUNCIONCICLO
 			| /*vacio*/;
 
-DECLARACIONFUNCION: crear TIPO id {numeroDimension=0;} DECLARACIONFUNCION2 ptocoma 
-			{insert(getPointerTbl(&tblProc,nombreFuncion),$3,$3,tipoOp,generarDireccion(tipoOp,2));
+DECLARACIONFUNCION: crear TIPO id {numeroDimension=0;
+				dimensionNueva = {0,0,0};
+				dimensiones[0]= dimensionNueva;
+				dimensiones[1]= dimensionNueva;} 
+			DECLARACIONFUNCION2 ptocoma 
+			{insert(getPointerTbl(&tblProc,nombreFuncion),$3,$3,tipoOp,generarDireccion(tipoOp,2),dimensiones[0], dimensiones[1]);
 			direccionAux=m0;			
 			if(esArreglo==1) {
 				esArreglo=0; /*la siguiente direccion base sera normal*/
@@ -375,7 +371,7 @@ CREARFUNCION4: TIPO id  {int direccion = generarDireccion(tipoOp,2);
 			char numeroParametrosString[3];
 			numeroParametros++;
 			sprintf(numeroParametrosString, "%i", numeroParametros);
-			insert(getPointerParTbl(&tblProc,nombreFuncion),numeroParametrosString,$2,tipoOp,direccion);
+			insert(getPointerParTbl(&tblProc,nombreFuncion),numeroParametrosString,$2,tipoOp,direccion,dimensiones[0], dimensiones[1]);
 			printf("\n\nDIRECCION PARAMETRO %i, %i,%s\n\n", direccion, getType(getPointerParTbl(&tblProc,nombreFuncion),numeroParametrosString), numeroParametrosString);
 			} 
 		CREARFUNCION5;
@@ -454,7 +450,7 @@ VARCTE: ctetexto			{if(hacerPush==1) {
 							int direccion= getDirection(&tablaConstantes,$1);
 							if (direccion == -1)direccion=generarDireccion(3, 5);
 						  push(&pilaOperadores, $1, 3, direccion);
-						  if(insert(&tablaConstantes,$1,$1,3,direccion)!= -1){
+						  if(insert(&tablaConstantes,$1,$1,3,direccion,dimensiones[0], dimensiones[1])!= -1){
 							  contadorConstantes++;
 							  char integer_string[32];
 							  sprintf(integer_string, "%d/", direccion);
@@ -467,7 +463,7 @@ VARCTE: ctetexto			{if(hacerPush==1) {
 						   	int direccion= getDirection(&tablaConstantes,$1);
 							if (direccion == -1)direccion=generarDireccion(1, 5);
 						   push(&pilaOperadores, $1, 1, direccion);
-						   if(insert(&tablaConstantes,$1,$1,1,direccion)!= -1){
+						   if(insert(&tablaConstantes,$1,$1,1,direccion,dimensiones[0], dimensiones[1])!= -1){
 							  contadorConstantes++;
 							  char integer_string[32];
 							  sprintf(integer_string, "%d/", direccion);
@@ -480,7 +476,7 @@ VARCTE: ctetexto			{if(hacerPush==1) {
 						  	int direccion= getDirection(&tablaConstantes,$1);
 							if (direccion == -1)direccion=generarDireccion(2, 5);
 						   push(&pilaOperadores, $1, 2, direccion);
-						   if(insert(&tablaConstantes,$1,$1,2,direccion)!=-1){
+						   if(insert(&tablaConstantes,$1,$1,2,direccion,dimensiones[0], dimensiones[1])!=-1){
 							  contadorConstantes++;
 							  char integer_string[32];
 							  sprintf(integer_string, "%d/", direccion);
@@ -493,7 +489,7 @@ VARCTE: ctetexto			{if(hacerPush==1) {
 						  	int direccion= getDirection(&tablaConstantes,$1);
 							if (direccion == -1)direccion=generarDireccion(4, 5);
 						  push(&pilaOperadores, $1, 4, direccion);
-						  if(insert(&tablaConstantes,$1,$1,4,direccion)!=-1){
+						  if(insert(&tablaConstantes,$1,$1,4,direccion, dimensiones[0], dimensiones[1])!=-1){
 							  contadorConstantes++;
 							  char integer_string[32];
 							  sprintf(integer_string, "%d/", direccion);
@@ -693,7 +689,7 @@ void checarOperando1(){
 				semanticaValida = checarSemantica(numOp ,operador1->tipo, operador2->tipo);
 				res = generarDireccion(semanticaValida,3); //3:direccion temporal
 				
-				insert(&tablaTemporal,nombreT,nombreT,semanticaValida,res);
+				insert(&tablaTemporal,nombreT,nombreT,semanticaValida,res,dimensiones[0], dimensiones[1]);
 
 				generarCuadruplo(numOp ,operador1->direccion, operador2->direccion, res);
 				push(&pilaOperadores,nombreT,semanticaValida,res);//3: direccion temporal
@@ -744,7 +740,7 @@ void checarOperando2(){
 				semanticaValida = checarSemantica(numOp ,operador1->tipo, operador2->tipo);
 				res = generarDireccion(semanticaValida,3); //3:direccion temporal
 
-				insert(&tablaTemporal,nombreT,nombreT,semanticaValida,res);
+				insert(&tablaTemporal,nombreT,nombreT,semanticaValida,res,dimensiones[0], dimensiones[1]);
 
 				generarCuadruplo(numOp ,operador1->direccion, operador2->direccion, res);
 				push(&pilaOperadores,nombreT,semanticaValida,res);//3: direccion temporal
@@ -795,7 +791,7 @@ void checarOperando3(char *operando){
 					semanticaValida = checarSemantica(numOp ,operador1->tipo, operador2->tipo);
 					res = operador1->direccion; //3:direccion temporal
 
-					insert(&tablaTemporal,nombreT,nombreT,semanticaValida,res);
+					insert(&tablaTemporal,nombreT,nombreT,semanticaValida,res,dimensiones[0], dimensiones[1]);
 
 					generarCuadruplo(numOp ,operador2->direccion, -1, res);
 					//printf("operando3 semantica %i\n", semanticaValida);
@@ -823,7 +819,7 @@ void checarOperando3(char *operando){
 					semanticaValida = checarSemantica(numOp ,operador1->tipo, operador2->tipo);
 					res = generarDireccion(semanticaValida,3); //3:direccion temporal
 
-					insert(&tablaTemporal,nombreT,nombreT,semanticaValida,res);
+					insert(&tablaTemporal,nombreT,nombreT,semanticaValida,res,dimensiones[0], dimensiones[1]);
 
 					generarCuadruplo(numOp ,operador1->direccion, operador2->direccion, res);
 					//printf("operando3 semantica %i\n", semanticaValida);
@@ -1035,13 +1031,32 @@ void generarEnd(){
 	generarCuadruplo(numeroEnd,-1,-1,-1);// param=23
 }
 
-void generarDimension1(){
+void generarDimension1(int indice){
+	
+/*
 	int numeroVerifica = 27;
-	//generarCuadruplo(numeroVerifica,-1,-1,-1);// param=23
+	int limInf;
+	int limSup;
+	
+	esArreglo=1;	//la variable si es un arreglo'
+	numeroDimension = 1;
+	r = 1;
+	r = r * cantidadElementos;
+	m0=r;
+
+	dimensionArreglo dimensionNueva = {numeroDimension,cantidadElementos,0};
+	dimensiones[0] = dimensionNueva;
+
+
+	dimensiones[2];
+	//generarCuadruplo(numeroVerifica,indice,limInf,limSup);// param=23
+*/
+
 }
 
-void generarDimension2(){
+void generarDimension2(int cantidadElementos){
 
+	
 }
 
 void generarVerifica(){
