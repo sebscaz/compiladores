@@ -18,7 +18,7 @@ programa prueba {
 		crear entero areglo3[10];	
 		crear entero mochila;	
 		crear entero cartera;
-		crear texto trouble;
+		crear decimal trouble;
 
 		sebas = 1;
 		galaxy = 4 + sebas;
@@ -39,7 +39,7 @@ programa prueba {
 			sebas = 4 / 2;
 		}
 		sebas = 3 + 3;
-		sebas = areglo[0][1];
+		sebas = areglo;
 		sebas = 3;
 		regresar 3
 		

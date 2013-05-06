@@ -106,6 +106,33 @@ int getDirection(struct StrHashTable *table,const char *key)
 	return -1;
 }
 
+struct DimensionArreglo getDimension1(struct StrHashTable *table,const char *key)
+{
+    unsigned int bucket = table->hash(key)%NR_BUCKETS;
+    struct StrHashNode *node;
+    node = table->buckets[bucket];
+    while(node) {
+        if(table->cmp(key,node->key) == 0)
+            return node->dimension1;
+        return node->dimension1;
+    } 
+	//return -1;
+}
+
+struct DimensionArreglo getDimension2(struct StrHashTable *table,const char *key)
+{
+    unsigned int bucket = table->hash(key)%NR_BUCKETS;
+    struct StrHashNode *node;
+    node = table->buckets[bucket];
+    while(node) {
+        if(table->cmp(key,node->key) == 0)
+            return node->dimension2;
+        return node->dimension2;
+    } 
+	//return -1;
+}
+
+
 int getNumberLocalVars(struct StrHashTableProc *table,const char *key)
 {
     unsigned int bucket = table->hash(key)%NR_BUCKETS;

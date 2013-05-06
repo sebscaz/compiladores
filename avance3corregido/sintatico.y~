@@ -293,7 +293,7 @@ DECLARACIONFUNCIONCICLO2: DECLARACIONFUNCIONCICLO
 			| /*vacio*/;
 
 DECLARACIONFUNCION: crear TIPO id {numeroDimension=0;
-				dimensionNueva = {0,0,0};
+				dimensionArreglo dimensionNueva = {0,0,0};
 				dimensiones[0]= dimensionNueva;
 				dimensiones[1]= dimensionNueva;} 
 			DECLARACIONFUNCION2 ptocoma 

@@ -106,6 +106,33 @@ int getDirection(struct StrHashTable *table,const char *key)
 	return -1;
 }
 
+struct DimensionArreglo getDimension1(struct StrHashTable *table,const char *key)
+{
+    unsigned int bucket = table->hash(key)%NR_BUCKETS;
+    struct StrHashNode *node;
+    node = table->buckets[bucket];
+    while(node) {
+        if(table->cmp(key,node->key) == 0)
+            return node->dimension1;
+        return node->dimension1;
+    } 
+	return -1;
+}
+
+struct DimensionArreglo getDimension2(struct StrHashTable *table,const char *key)
+{
+    unsigned int bucket = table->hash(key)%NR_BUCKETS;
+    struct StrHashNode *node;
+    node = table->buckets[bucket];
+    while(node) {
+        if(table->cmp(key,node->key) == 0)
+            return node->dimension2;
+        return node->dimension2;
+    } 
+	return -1;
+}
+
+
 int getNumberLocalVars(struct StrHashTableProc *table,const char *key)
 {
     unsigned int bucket = table->hash(key)%NR_BUCKETS;
@@ -264,7 +291,7 @@ int insert(struct StrHashTable *table, char *key,void *value, int type, int dire
 		node->dimensiones[1]->cantidad = dimensiones[1]->cantidad;
 		node->dimensiones[1]->m = dimensiones[1]->m;
 */
-		printf("%s\t%i\t%i\t%i\t%i\n", node->key , node->type ,node->direction, node->dimension1.m, node->dimension2.m );
+		printf("%s\t%i\t%i\t%i\t%i\n", node->key , node->type ,node->direction, node->dimension1.cantidad, node->dimension2.cantidad);
 	}
     return 0;
 }
