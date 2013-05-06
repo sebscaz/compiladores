@@ -13,10 +13,13 @@ programa prueba {
 		crear entero galaxy;
 		crear entero areglo[3][3];
 		crear entero areglo2[10];
-		crear entero celular;		
+		crear entero celular;
+		crear entero iphone;
+		crear entero areglo3[10];	
+		crear entero mochila;	
 
 		sebas = 1;
-		galaxy = 4;
+		galaxy = 4 + sebas;
 		sebas = 2 + 3 / (4 * 3) - 4;
 		celular = 2;
 		
@@ -34,8 +37,8 @@ programa prueba {
 			sebas = 4 / 2;
 		}
 		sebas = 3 + 3;
-		areglo[0][1]=1;
-		sebas = areglo[0][1];
+		sebas = areglo[1][2];
+		sebas = 3;
 		regresar 3
 		
 	}

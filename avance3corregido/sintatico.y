@@ -109,7 +109,7 @@ int numeroVarLocales = 0;
 int numeroIntLocales = 0;
 int numeroFloatLocales = 0;
 int numeroStringLocales = 0;
-int apuntadorParametro;
+int apuntadorParametro;		//indica el numero de parametro que se enviara a la funcion 
 
 int arg;
 int tipoArg;
@@ -121,7 +121,7 @@ void dimensionesArreglos2(int cantidadElementos);
 void operacionesArreglos();
 int esArreglo;		//determina si la variables es normal o un arreglo
 int r; 			//usada en la formula de arreglos
-int m0=1;			//indica la cantidad de elementos en el arreglo, en todas sus dimensiones
+int m0=1;		//indica la cantidad de elementos en el arreglo, en todas sus dimensiones
 int direccionAux=1;	//direccion que se sumara a la direccion base en caso de ser necesario	
 int numeroDimension;	//indica la dimension actual del arreglo (1 o 2)
 
@@ -299,7 +299,6 @@ DECLARACIONFUNCIONCICLO2: DECLARACIONFUNCIONCICLO
 
 DECLARACIONFUNCION: crear TIPO id DECLARACIONFUNCION2 ptocoma 
 			{insert(getPointerTbl(&tblProc,nombreFuncion),$3,$3,tipoOp,generarDireccion(tipoOp,2));
-			printf("CREARR FUNCCC esAREGLOO---------------%i\n",esArreglo);
 			direccionAux=m0;			
 			if(esArreglo==1) {
 				esArreglo=0; /*la siguiente direccion base sera normal*/
@@ -371,7 +370,6 @@ CREARFUNCION3: /*vacio*/
 		| CREARFUNCION4;
 CREARFUNCION4: TIPO id  {int direccion = generarDireccion(tipoOp,2);
 			char numeroParametrosString[3];
-			printf("\n-----Nombe Funcion:%s\n\n", nombreFuncion);
 			numeroParametros++;
 			sprintf(numeroParametrosString, "%i", numeroParametros);
 			insert(getPointerParTbl(&tblProc,nombreFuncion),numeroParametrosString,$2,tipoOp,direccion);
@@ -383,10 +381,9 @@ CREARFUNCION5: /*vacio*/
 				
 LLAMARFUNCION: id {	strcpy(nombreFuncion, $1); 
 			if(getProc(&tblProc,$1)==1){
-				 printf("\n @@@@@@@@@@Ya existe PROC %s ... Local vars: %i\n", $1, getNumberLocalVars(&tblProc,$1));
 				 generarEra(getNumberLocalVars(&tblProc,$1));
 			}
-			else printf("\n @@@@@@@@@@ NO existe PROC");
+			else printf("\nLlamada a un procedimiento que no existe: \"%s\"\n", nombreFuncion );
 			
 		} parentesisa LLAMARFUNCION2 parentesisc ptocoma {generarGoSub();} ;
 LLAMARFUNCION2: EXP {generarParametro();} LLAMARFUNCION3;
@@ -428,9 +425,24 @@ TERMINO3: multiplicacion 	{push(&pilaOperando,$1,-1, -1);}
 
 FACTOR:  parentesisa  { push(&pilaOperando,$1,-1,-1); } EXPRESION parentesisc {pop(&pilaOperando);} /*se queita el fondo falso*/
 	| VARCTE
-	| id  ASIGNACION2	{int tipoId = getType(&tbl,$1);
+	| id  ASIGNACION2	{/*int tipoId = getType(&tbl,$1);
 				int direccionVirtual = generarDireccion(tipoId, alcanceDireccion);
-				if(hacerPush==1) push(&pilaOperadores, $1, tipoId, direccionVirtual); }	;/*Meter en pilaTipos el tipo de id que es*/					
+				push(&pilaOperadores, $1, tipoId, direccionVirtual); */
+	//////////////////
+				int tipoId = getType(getPointerTbl(&tblProc,nombreFuncion),$1);
+				int direccion= getDirection(getPointerTbl(&tblProc,nombreFuncion),$1);
+				if (direccion == -1) 
+					printf("\nVariable %s\n no declarada", $1);
+				else{
+					//direccion=generarDireccion(tipoId, alcanceDireccion);
+ 					push(&pilaOperadores, $1, tipoId, direccion);
+				}
+			
+				 
+
+//////////////////
+
+}	;/*Meter en pilaTipos el tipo de id que es*/					
 
  	
 
@@ -608,7 +620,6 @@ int generarDireccion(int tipo, int alcance){
 	}
 	//Constante
 	else if (alcance==5){ 
-		printf(">>>>>>>>>>>>>>>>>>ALCANCE: COnstante\n");
 		if(tipo==1){// entero
 			contEnteroConstante++;
 			direccionEnteroConstante += cantidadDirecciones;
@@ -1024,7 +1035,6 @@ void generarEnd(){
 void dimensionesArreglos1(int cantidadElementos){
 
 	esArreglo=1;	//la variable si es un arreglo'
-	printf("\nES ARREGLOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO\n");
 	numeroDimension = 1;
 	r = 1;
 	r = r * cantidadElementos;
@@ -1038,7 +1048,6 @@ void dimensionesArreglos1(int cantidadElementos){
 void dimensionesArreglos2(int cantidadElementos){
 
 	esArreglo=1;	//la variable si es un arreglo
-	printf("\nES ARREGLOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO\n");
 	numeroDimension = 2;
 	r = r * cantidadElementos;
 	m0=r;
@@ -1058,7 +1067,6 @@ void operacionesArreglos(){
 	for (i=0; i<numeroDimension; i++){
 		dimensiones[i].m = m / dimensiones[i].cantidad;
 		m = dimensiones[i].m;
-		printf("\n________________M !!! %i\n", dimensiones[i].m );
 	}
 }
 
