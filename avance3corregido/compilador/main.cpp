@@ -4,6 +4,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include <sstream>
+#include <stack>
 
 /*
 + 0
@@ -106,7 +107,10 @@ int contFloatG=0, contFloatL=0, contFloatT=0, contFloatC=0;
 int contStringG=0, contStringL=0, contStringT=0, contStringC=0;
 int contBoolG=0, contBoolL=0, contBoolC=0, contBoolT=0;
 
-//Inicializar vectores
+//Inicializar vectores\\
+
+//pila de Ejecucion
+stack<int> pilaEjecucion;
 
 //Vector de contadores
 //vector<int> contCuadruplos();
@@ -384,6 +388,38 @@ void hacerPrint(string op1){
                             }
 }
 
+
+
+/*
+void hacerIgual(string op1, int operando1, int direccion){
+
+    int base1, base2;			 //varaible para mapear direccion;
+    int op1dir;
+    int num1;
+    string valor;
+
+
+    base1 = getBase(operando1);
+
+
+
+
+                	    //ChecarRango
+                	       if (checarRango(op1)==1)  {	//es int
+                                 num1=getValorVectorInt(op1, operando1, base1);
+                            }
+                            else if (checarRango(op1)==2){	//es float
+                                 num1= getValorVectorFloat(op1, operando1, base1);
+                            }
+                             else if (checarRango(op1)==3){	//es float
+                                 num1= getValorVectorString(op1, operando1, base1);
+                            }
+
+
+
+}*/
+
+
 int main(){
 
    //Lector del archivos de cuiadruplos
@@ -400,6 +436,9 @@ int main(){
 	int numeroConstantes;
 	int direccion;
 	string texto;
+	int numCuadruplos=0;
+	 string cuadruplos[100][5];
+	 int dirRetorno;
 
     string linea;
     int numLinea=0;
@@ -440,8 +479,12 @@ int main(){
 
 	            generarMemoria(direccion,valores);
 			}
+			
+			
 			//Cuadruplos
             else {
+                 numCuadruplos++;
+                 
 				texto = linea;
 				pos = texto.find("/");
 				l= texto.substr(0,pos);
@@ -467,26 +510,149 @@ int main(){
 				cout<<op1<<" - ";
 				cout<<op2<<" - ";
 				cout<<temp<<"\n";
-
-                /*Empieza el Switch*/
+				
+				cuadruplos[numCuadruplos][0]= l;
+				cuadruplos[numCuadruplos][1]= op;
+				cuadruplos[numCuadruplos][2]= op1;
+				cuadruplos[numCuadruplos][3]= op2;
+				cuadruplos[numCuadruplos][4]= temp;
+				
+/*
+                //Empieza el Switch
                 switch(atoi(op.c_str())){
-              		case 0 /*Suma*/:{ //instrucciones
+              		case 0 :{ //suma instrucciones
          		       hacerOperacion(0, op1, op2 ,temp);
                     }
                 	break;
 
-                	case 1/*Resta*/:{//instrucciones
+                	case 1:{//resta instrucciones
                     	hacerOperacion(1, op1, op2 ,temp);
                     }
                 	break;
 
-                	case 2/*multiplicaciÃ³n*/:{//instrucciones
+                	case 2:{//mul instrucciones
                          hacerOperacion(2, op1, op2 ,temp);
                     }
                 	break;
 
-                	case 3/*divisiÃ³n*/:{//instrucciones
+                	case 3:{//instrucciones division
                 	      hacerOperacion(3, op1, op2 ,temp);
+                    }
+                	break;
+
+                	case 4 ://==  instrucciones
+                	break;
+
+                	case 5 ://   =!  instrucciones
+                	break;
+
+                	case 6 :// > instrucciones
+                	break;
+
+                	case 7 ://<instrucciones
+                	break;
+
+                	case 8 ://  and 
+                	break;
+
+                	case 9 ://or
+                	break;
+
+                	case 10 ://=
+                	break;
+
+                	case 11 ://goto
+                	
+                	break;
+
+                	case 12 ://gotof
+                	break;
+
+                	case 13 ://gotov
+                	break;
+
+                	case 14 ://gotosub
+                	break;
+
+                	case 20 ://era
+                	break;
+
+                	case 21 ://gosub
+                	break;
+
+                	case 22 : //ret
+                	break;
+
+                	case 23 ://param
+                	break;
+
+                	case 24 : //return
+                	break;
+
+                	case 25 ://read
+                	break;
+
+                	case 26 ://print
+                    hacerPrint(op1);
+                	break;
+
+                	case 30 : //end
+                	break;
+
+                }//Termina el switch
+                */
+
+			}
+			
+			
+		}//while
+
+	}//if
+	archivo.close();
+
+
+cout<<"num de lineas del archivo"<<numLinea<<"\n";
+cout<<"num de cuadruplos del archivo"<<numCuadruplos<<"\n";
+
+
+/*
+//Imprimir matriz
+for(int x=0;x<numCuadruplos;x++)  // loop 3 times for three lines
+    {
+        for(int y=0;y<5;y++)  // loop for the three elements on the line
+        {
+            //cout<<cuadruplos[x][y]<<",";  // display the current element out of the array
+        }
+    cout<<endl;  // when the inner loop is done, go to a new line
+    }
+*/
+int i=0;
+
+while (i<numCuadruplos){
+      i++;
+      /*Empieza el Switch*/
+                switch(atoi(cuadruplos[i][1].c_str())){
+
+
+              		case 0 /*Suma*/:{ //instrucciones
+              		
+              		
+         		       hacerOperacion(0, cuadruplos[i][2], cuadruplos[i][3] ,cuadruplos[i][4]);
+                    }
+                	break;
+
+                	case 1/*Resta*/:{//instrucciones
+                    	 hacerOperacion(1, cuadruplos[i][2], cuadruplos[i][3] ,cuadruplos[i][4]);
+                    }
+                	break;
+
+                	case 2/*multiplicación*/:{//instrucciones
+                         hacerOperacion(2, cuadruplos[i][2], cuadruplos[i][3] ,cuadruplos[i][4]);
+                    }
+                	break;
+
+                	case 3/*división*/:{//instrucciones
+                	       hacerOperacion(3, cuadruplos[i][2], cuadruplos[i][3] ,cuadruplos[i][4]);
                     }
                 	break;
 
@@ -509,30 +675,77 @@ int main(){
                 	break;
 
                 	case 10 /*=*/://instrucciones
+
+
+                      //  hacerIgual(cuadruplos[i][2] ,atoi(cuadruplos[i][2].c_str()), atoi(cuadruplos[i][4].c_str()) );
+
                 	break;
 
                 	case 11 /*GOTO*/://instrucciones
+                   //  dirGoto = atoi(l.c_str());
+                   cout<<"\n Goto >"<<cuadruplos[i][4]<<"\n";
+                   i=atoi(cuadruplos[i][4].c_str())-1;
+
+
                 	break;
 
+
                 	case 12 /*GOTOF*/://instrucciones
+                
+                    	
+             	   cout<<"\n Goto Falso >"<<cuadruplos[i][4]<<"\n";
+                   i=atoi(cuadruplos[i][4].c_str())-1;
+                	
                 	break;
+                	
+                	
 
                 	case 13 /*GOTOV*/://instrucciones
                 	break;
 
                 	case 14 /*GOTOSUB*/://instrucciones
+
+
                 	break;
+
+                	case 19://ver
+                        break;
 
                 	case 20 /*ERA*/://instrucciones
+                    //salvar la base actual previa a la llamada
+                    
+                    
+                	//Definir el tamaño de la memoria
+                	//Actualizar la base local
+                	//Generar el espacio de memoria
+
                 	break;
 
-                	case 21 /**/://instrucciones
+                	case 21 /*gosub*/://instrucciones
+                	     //Meter la direccion de retorno en la pila de ejecución
+
+                	     dirRetorno = atoi( cuadruplos[i][1].c_str());
+
+                	     pilaEjecucion.push(dirRetorno);
+
+                	    cout<< "\n Pila de Ejecucion " << pilaEjecucion.top();
+
+                	    //Transferir el control de hecucion a la direccion donde inicia el procedimiento
+
+
+
                 	break;
 
                 	case 22 /*RET*/: //instrucciones
+                	    //actualizar la base local(previa a la llamada)
+                	    //destruir el registro de activación del proc d ememoria local
+                	    //Recuperar la dirección de rerono y transeferir el control de ejeciucpin
                 	break;
 
                 	case 23 /*param*/://instrucciones
+
+                	    //Meter los valores al amemoria local
+
                 	break;
 
                 	case 24 /*Return*/: //instrucciones
@@ -542,7 +755,7 @@ int main(){
                 	break;
 
                 	case 26 /*PRINT*/://instrucciones
-                    hacerPrint(op1);
+                    hacerPrint(cuadruplos[i][2]);
                 	break;
 
                 	case 30 /*END*/: //instrucciones
@@ -550,45 +763,44 @@ int main(){
 
                 }/*Termina el switch*/
 
-			}
-		}//while
-
-	}//if
-	archivo.close();
+      
+      
+      
+      }
 
 	 int acabar;
 	cin>>acabar;
-
+/*
 	//Indice de Memoria
 
-	/*Dir. Globales*/
+	//Dir. Globales
 	int enteroGlobal_I=5000, enteroGlobal_F=5999;
 	int flotanteGlobal_I=6000, flotanteGlobal_F=6999;
 	int stringGlobal_I=7000, stringGlobal_F=7999;
 	int boleanoGlobal_I=8000, boleanoGlobal_F=8999;
 
-	/*Dir Locales*/
+	//Dir Locales
 	int enteroLocal_I=9000, enteroLocal_F=9999;
 	int flotanteLocal_I=10000, flotanteLocal_F=10999;
 	int stringLocal_I=11000, stringLocal_F=11999;
 	int boleanoLocal_I=12000, boleanoLocal_F=12999;
 
-	/*Dir Contantes*/
+	//Dir Contantes
 	int enteroConstante_I=13000, enteroConstante_F=13500;
 	int flotanteConstante_I=13501, flotanteConstante_F=13999;
 	int stringConstante_I=14000, stringConstante_F=14500;
 	int boleanoConstante_I=14501, boleanoConstante_F=14999;
 
-	/*Dir. temporales*/
+	//Dir. temporales
 	int enteroTemp_I=15000, enteroTemp_F=15999;
 	int flotanteTemp_I=16000, flotanteTemp_F=16999;
 	int stringTemp_I=17000, stringTemp_F=17999;
 	int boleanoTemp_I=18000, boleanoTemp_F=18999;
 
-
+*/
 
     return 0;
-}
+} 
 
 
 
