@@ -39,7 +39,7 @@ programa prueba {
 			sebas = 4 / 2;
 		}
 		sebas = 3 + 3;
-		sebas = areglo;
+		sebas = areglo[1][1];
 		sebas = 3;
 		regresar 3
 		

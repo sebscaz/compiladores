@@ -424,7 +424,10 @@ TERMINO3: multiplicacion 	{push(&pilaOperando,$1,-1, -1);}
 
 FACTOR:  parentesisa  { push(&pilaOperando,$1,-1,-1); } EXPRESION parentesisc {pop(&pilaOperando);} /*se queita el fondo falso*/
 	| VARCTE
-	| id  ASIGNACION2	{/*int tipoId = getType(&tbl,$1);
+	| id  
+	
+	{/*int tipoId = getType(&tbl,$1);
+
 				int direccionVirtual = generarDireccion(tipoId, alcanceDireccion);
 				push(&pilaOperadores, $1, tipoId, direccionVirtual); */
 	//////////////////
@@ -434,14 +437,14 @@ FACTOR:  parentesisa  { push(&pilaOperando,$1,-1,-1); } EXPRESION parentesisc {p
 					printf("\nVariable %s\n no declarada", $1);
 				else{
 					//direccion=generarDireccion(tipoId, alcanceDireccion);
+					printf("\n\n\n´´´´´´´´USAARR Variable %s\n\n", $1);
  					push(&pilaOperadores, $1, tipoId, direccion);
 				}
 			
 				 
-
-//////////////////
-
-}	;/*Meter en pilaTipos el tipo de id que es*/					
+}
+	
+	ASIGNACION2		;/*Meter en pilaTipos el tipo de id que es*/					
 
  	
 
@@ -1042,12 +1045,13 @@ void generarDimension1(){
 	ptr operador1= malloc (sizeof(p_Nodo)); 
 	ptr id= malloc (sizeof(p_Nodo)); 
 
+	//dimension 1
 	operador1->valor = pilaOperadores->valor;
 	operador1->tipo = pilaOperadores->tipo; 
 	operador1->direccion = pilaOperadores->direccion; 
 	pop(&pilaOperadores);
 
-
+	//id
 	id->valor = pilaOperadores->valor;
 	id->tipo = pilaOperadores->tipo; 
 	id->direccion = pilaOperadores->direccion; 
@@ -1056,13 +1060,15 @@ void generarDimension1(){
 	int limInf=0;
 	int limSup= d.cantidad-1;
 
-	printf("\n\n-########## ### # ### ### ## # ##    CANTIDADD %i, DIRECCION %i\n", d.cantidad, id->direccion );
+	printf("\n\n\n\n-########## ### # ### ### ## # ##    CANTIDADD %i, DIRECCION %i\n\n", d.cantidad, id->direccion );
 	
 	generarCuadruplo(numeroVerifica,atoi(operador1->valor),limInf,limSup);// param=23
-/*
+
 	//verificar si hay otra dimension
-	dimensionArreglo d2 = getDimension2(getPointerTbl(&tblProc,nombreFuncion),operador1->valor);
+	dimensionArreglo d2 = getDimension2(getPointerTbl(&tblProc,nombreFuncion),id->valor);
 	if(d2.cantidad == 0){	//la dimension 2 esta vacia
+
+		pop(&pilaOperadores);	//Quitar el id 
 
 		sprintf(nombreT, "t%i", contT++);
 
@@ -1073,9 +1079,10 @@ void generarDimension1(){
 
 	} else {	//si hay una segunda dimension
 
-		ptr operador1= malloc (sizeof(p_Nodo)); 
-		ptr operador2= malloc (sizeof(p_Nodo)); 
+		//ptr operador1= malloc (sizeof(p_Nodo)); 
+		//ptr operador2= malloc (sizeof(p_Nodo)); 
 		
+		/*
 		operador1->valor = pilaOperadores->valor;
 		operador1->tipo = pilaOperadores->tipo; 
 		operador1->direccion = pilaOperadores->direccion; 
@@ -1085,35 +1092,57 @@ void generarDimension1(){
 		operador2->tipo = pilaOperadores->tipo; 
 		operador2->direccion = pilaOperadores->direccion; 
 		pop(&pilaOperadores);
-
+		*/
 		sprintf(nombreT, "t%i", contT++);
 
 		int res = generarDireccion(1,3); //3:direccion temporal entera
 		insert(&tablaTemporal,nombreT,nombreT,1,res,dimensiones[0], dimensiones[1]);
-		generarCuadruplo(2, d.m ,atoi(operador1->valor), res);	// multiplocacion	
+		generarCuadruplo(2, atoi(operador1->valor), d.m, res);	// multiplocacion	
 		push(&pilaOperadores,nombreT,1,res);//3: direccion temporal
 	}
-*/
+
 }
 
 void generarDimension2(){
-/*
-		char nombreT[10];
 
-		ptr operador1= malloc (sizeof(p_Nodo)); 
+		char nombreT[10];
+		int numeroVerifica = 27;
 		
+		ptr operador1= malloc (sizeof(p_Nodo)); 
+		ptr aux= malloc (sizeof(p_Nodo)); 
+		ptr id= malloc (sizeof(p_Nodo)); 
+		
+		//Indice Segunda dimension
 		operador1->valor = pilaOperadores->valor;
 		operador1->tipo = pilaOperadores->tipo; 
 		operador1->direccion = pilaOperadores->direccion; 
 		pop(&pilaOperadores);
+			
+		//M almacenada
+		aux->valor = pilaOperadores->valor;
+		aux->tipo = pilaOperadores->tipo; 
+		aux->direccion = pilaOperadores->direccion; 
+		pop(&pilaOperadores);
 
+		//id
+		id->valor = pilaOperadores->valor;
+		id->tipo = pilaOperadores->tipo; 
+		id->direccion = pilaOperadores->direccion; 
+		pop(&pilaOperadores);
+			
+		dimensionArreglo d = getDimension2(getPointerTbl(&tblProc,nombreFuncion),id->valor);
+		int limInf=0;
+		int limSup= d.cantidad-1;
+	
+		generarCuadruplo(numeroVerifica,atoi(operador1->valor),limInf,limSup);// param=23
+	
 		sprintf(nombreT, "t%i", contT++);
 
 		int res = generarDireccion(1,3); //3:direccion temporal entera
 		insert(&tablaTemporal,nombreT,nombreT,1,res,dimensiones[0], dimensiones[1]);
-		generarCuadruplo(0, atoi(operador1->valor),operador1->direccion, res);	// multiplocacion	
+		generarCuadruplo(0, atoi(operador1->valor),aux->direccion, res);	// multiplocacion	
 		push(&pilaOperadores,nombreT,1,res);//3: direccion temporal
-	*/
+	
 }
 
 void generarVerifica(){
