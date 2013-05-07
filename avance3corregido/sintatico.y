@@ -26,10 +26,11 @@ void generarCuadruplo(int numOp ,int tipo1, int tipo2, int res);
 void generarEra(int tamano);
 void generarParametro();
 void generarGoSub();
-void generarEnd();
+void generarReturn();
 void generarDimension1();
 void generarDimension2();
 void generarVerifica();
+void generarEnd();
 
 int hacerPush = 1;	//bool para saber si meter variables a la pila - 1:hacer push, 0:no hacer push
 
@@ -361,7 +362,7 @@ CREARFUNCION: funcion CREARFUNCION2 id {numeroParametros=0;
 					 
 					setCuadruploInicial(&tblProc,nombreFuncion,contS);
 					 }
-					BLOQUE regresar EXP llavec {generarRetorno();};
+					BLOQUE regresar EXP {generarReturn();} llavec {generarRetorno();};
 
 CREARFUNCION2: TIPO
 			| neutral; 	
@@ -1028,6 +1029,21 @@ void generarGoSub(){
 
 	int numeroGoSub = 21;
 	generarCuadruplo(numeroGoSub,getCuadruploInicial(&tblProc,nombreFuncion),-1,-1);// param=23
+}
+
+void generarReturn(){
+
+	int numeroReturn = 24;
+	
+	ptr regresar= malloc (sizeof(p_Nodo)); 
+	
+	regresar->valor = pilaOperadores->valor;
+	regresar->tipo = pilaOperadores->tipo; 
+	regresar->direccion = pilaOperadores->direccion; 
+	
+	pop(&pilaOperadores);
+	
+	generarCuadruplo(numeroReturn,regresar->direccion,-1,-1);// param=23
 }
 
 void generarEnd(){

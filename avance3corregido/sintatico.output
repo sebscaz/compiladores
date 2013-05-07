@@ -144,118 +144,120 @@ Grammar
 
    83 $@20: /* empty */
 
-   84 CREARFUNCION: funcion CREARFUNCION2 id $@18 parentesisa CREARFUNCION3 parentesisc $@19 llavea DECLARACIONFUNCIONCICLO $@20 BLOQUE regresar EXP llavec
+   84 $@21: /* empty */
 
-   85 CREARFUNCION2: TIPO
-   86              | neutral
+   85 CREARFUNCION: funcion CREARFUNCION2 id $@18 parentesisa CREARFUNCION3 parentesisc $@19 llavea DECLARACIONFUNCIONCICLO $@20 BLOQUE regresar EXP $@21 llavec
 
-   87 CREARFUNCION3: /* empty */
-   88              | CREARFUNCION4
+   86 CREARFUNCION2: TIPO
+   87              | neutral
 
-   89 $@21: /* empty */
+   88 CREARFUNCION3: /* empty */
+   89              | CREARFUNCION4
 
-   90 CREARFUNCION4: TIPO id $@21 CREARFUNCION5
+   90 $@22: /* empty */
 
-   91 CREARFUNCION5: /* empty */
-   92              | coma CREARFUNCION4
+   91 CREARFUNCION4: TIPO id $@22 CREARFUNCION5
 
-   93 $@22: /* empty */
+   92 CREARFUNCION5: /* empty */
+   93              | coma CREARFUNCION4
 
-   94 LLAMARFUNCION: id $@22 parentesisa LLAMARFUNCION2 parentesisc ptocoma
+   94 $@23: /* empty */
 
-   95 $@23: /* empty */
+   95 LLAMARFUNCION: id $@23 parentesisa LLAMARFUNCION2 parentesisc ptocoma
 
-   96 LLAMARFUNCION2: EXP $@23 LLAMARFUNCION3
+   96 $@24: /* empty */
 
-   97 $@24: /* empty */
+   97 LLAMARFUNCION2: EXP $@24 LLAMARFUNCION3
 
-   98 LLAMARFUNCION3: coma $@24 LLAMARFUNCION2
-   99               | /* empty */
+   98 $@25: /* empty */
 
-  100 SUPEREXPRESION: EXPRESION SUPEREXPRESION2
+   99 LLAMARFUNCION3: coma $@25 LLAMARFUNCION2
+  100               | /* empty */
 
-  101 SUPEREXPRESION2: /* empty */
-  102                | SUPEREXPRESION3 EXPRESION
+  101 SUPEREXPRESION: EXPRESION SUPEREXPRESION2
 
-  103 SUPEREXPRESION3: and
-  104                | or
+  102 SUPEREXPRESION2: /* empty */
+  103                | SUPEREXPRESION3 EXPRESION
 
-  105 EXPRESION: EXP EXPRESION2
+  104 SUPEREXPRESION3: and
+  105                | or
 
-  106 EXPRESION2: /* empty */
-  107           | EXPRESION3 EXP
+  106 EXPRESION: EXP EXPRESION2
 
-  108 EXPRESION3: menor
-  109           | mayor
-  110           | igual
-  111           | diferente igual
+  107 EXPRESION2: /* empty */
+  108           | EXPRESION3 EXP
 
-  112 $@25: /* empty */
+  109 EXPRESION3: menor
+  110           | mayor
+  111           | igual
+  112           | diferente igual
 
-  113 EXP: TERMINO $@25 EXP2
+  113 $@26: /* empty */
 
-  114 EXP2: /* empty */
-  115     | EXP3 EXP
+  114 EXP: TERMINO $@26 EXP2
 
-  116 EXP3: mas
-  117     | menos
+  115 EXP2: /* empty */
+  116     | EXP3 EXP
 
-  118 $@26: /* empty */
+  117 EXP3: mas
+  118     | menos
 
-  119 TERMINO: FACTOR $@26 TERMINO2
+  119 $@27: /* empty */
 
-  120 TERMINO2: /* empty */
-  121         | TERMINO3 TERMINO
+  120 TERMINO: FACTOR $@27 TERMINO2
 
-  122 TERMINO3: multiplicacion
-  123         | division
+  121 TERMINO2: /* empty */
+  122         | TERMINO3 TERMINO
 
-  124 $@27: /* empty */
+  123 TERMINO3: multiplicacion
+  124         | division
 
-  125 FACTOR: parentesisa $@27 EXPRESION parentesisc
-  126       | VARCTE
+  125 $@28: /* empty */
 
-  127 $@28: /* empty */
+  126 FACTOR: parentesisa $@28 EXPRESION parentesisc
+  127       | VARCTE
 
-  128 FACTOR: id $@28 ASIGNACION2
+  128 $@29: /* empty */
 
-  129 VARCTE: ctetexto
-  130       | cteentero
-  131       | ctedecimal
-  132       | ctebooleano
+  129 FACTOR: id $@29 ASIGNACION2
 
-  133 DIBUJARFIGURA: dibujarFigura parentesisa FIGURA coma id parentesisc ptocoma
+  130 VARCTE: ctetexto
+  131       | cteentero
+  132       | ctedecimal
+  133       | ctebooleano
 
-  134 FIGURA: perro
-  135       | persona
-  136       | gato
-  137       | carro
+  134 DIBUJARFIGURA: dibujarFigura parentesisa FIGURA coma id parentesisc ptocoma
 
-  138 BORRARFIGURA: borrarFigura parentesisa id parentesisc ptocoma
+  135 FIGURA: perro
+  136       | persona
+  137       | gato
+  138       | carro
 
-  139 HABLAR: hablar parentesisa id coma EXP parentesisc ptocoma
+  139 BORRARFIGURA: borrarFigura parentesisa id parentesisc ptocoma
 
-  140 MOVER: mover parentesisa id coma EXP coma EXP parentesisc ptocoma
+  140 HABLAR: hablar parentesisa id coma EXP parentesisc ptocoma
 
-  141 OBTENERPOSICION: obtenerPosicion parentesisa id parentesisc ptocoma
+  141 MOVER: mover parentesisa id coma EXP coma EXP parentesisc ptocoma
 
-  142 GIRARDER: girarDerecha parentesisa id coma EXP parentesisc ptocoma
+  142 OBTENERPOSICION: obtenerPosicion parentesisa id parentesisc ptocoma
 
-  143 GIRARIZQ: girarIzquierda parentesisa id coma EXP parentesisc ptocoma
+  143 GIRARDER: girarDerecha parentesisa id coma EXP parentesisc ptocoma
 
-  144 OBTENERALTURA: obtenerAltura parentesisa id parentesisc ptocoma
+  144 GIRARIZQ: girarIzquierda parentesisa id coma EXP parentesisc ptocoma
 
-  145 OBTENERANCHURA: obtenerAnchura parentesisa id parentesisc ptocoma
+  145 OBTENERALTURA: obtenerAltura parentesisa id parentesisc ptocoma
 
-  146 CAMBIARALTURA: cambiarAltura parentesisa id coma EXP parentesisc ptocoma
+  146 OBTENERANCHURA: obtenerAnchura parentesisa id parentesisc ptocoma
 
-  147 CAMBIARANCHURA: cambiarAnchura parentesisa id coma EXP parentesisc ptocoma
+  147 CAMBIARALTURA: cambiarAltura parentesisa id coma EXP parentesisc ptocoma
 
-  148 COLORFONDO: colorFondo parentesisa COLOR parentesisc ptocoma
+  148 CAMBIARANCHURA: cambiarAnchura parentesisa id coma EXP parentesisc ptocoma
 
-  149 COLOR: rojo
-  150      | azul
-  151      | verde
+  149 COLORFONDO: colorFondo parentesisa COLOR parentesisc ptocoma
+
+  150 COLOR: rojo
+  151      | azul
+  152      | verde
 
 
 Terminals, with rules where they appear
@@ -271,61 +273,61 @@ leer (263) 72
 crear (264) 42 50
 mientras (265) 80
 hacer (266) 80
-funcion (267) 84
-neutral (268) 86
-regresar (269) 84
-id (270) 3 42 50 60 84 90 94 128 133 138 139 140 141 142 143 144 145
-    146 147
-ctetexto (271) 129
-cteentero (272) 54 56 130
-ctedecimal (273) 131
-ctebooleano (274) 132
+funcion (267) 85
+neutral (268) 87
+regresar (269) 85
+id (270) 3 42 50 60 85 91 95 129 134 139 140 141 142 143 144 145 146
+    147 148
+ctetexto (271) 130
+cteentero (272) 54 56 131
+ctedecimal (273) 132
+ctebooleano (274) 133
 entero (275) 15
 decimal (276) 16
 texto (277) 14
 booleano (278) 17
-igual (279) 60 110 111
-diferente (280) 111
-mas (281) 116
-menos (282) 117
-multiplicacion (283) 122
-division (284) 123
-mayor (285) 109
-menor (286) 108
-and (287) 103
-or (288) 104
-ptocoma (289) 42 50 60 71 94 133 138 139 140 141 142 143 144 145 146
-    147 148
+igual (279) 60 111 112
+diferente (280) 112
+mas (281) 117
+menos (282) 118
+multiplicacion (283) 123
+division (284) 124
+mayor (285) 110
+menor (286) 109
+and (287) 104
+or (288) 105
+ptocoma (289) 42 50 60 71 95 134 139 140 141 142 143 144 145 146 147
+    148 149
 dospuntos (290)
 punto (291)
-coma (292) 92 98 133 139 140 142 143 146 147
-parentesisa (293) 19 71 72 74 80 84 94 125 133 138 139 140 141 142
-    143 144 145 146 147 148
-parentesisc (294) 19 71 72 74 80 84 94 125 133 138 139 140 141 142
-    143 144 145 146 147 148
-llavea (295) 3 19 74 76 80 84
-llavec (296) 3 19 74 76 80 84
+coma (292) 93 99 134 140 141 143 144 147 148
+parentesisa (293) 19 71 72 74 80 85 95 126 134 139 140 141 142 143
+    144 145 146 147 148 149
+parentesisc (294) 19 71 72 74 80 85 95 126 134 139 140 141 142 143
+    144 145 146 147 148 149
+llavea (295) 3 19 74 76 80 85
+llavec (296) 3 19 74 76 80 85
 corchetea (297) 54 56 67 69
 corchetec (298) 54 56 67 69
-dibujarFigura (299) 133
-borrarFigura (300) 138
-girarIzquierda (301) 143
-girarDerecha (302) 142
-mover (303) 140
-obtenerPosicion (304) 141
-hablar (305) 139
-obtenerAltura (306) 144
-obtenerAnchura (307) 145
-cambiarAltura (308) 146
-cambiarAnchura (309) 147
-colorFondo (310) 148
-rojo (311) 149
-azul (312) 150
-verde (313) 151
-carro (314) 137
-persona (315) 135
-perro (316) 134
-gato (317) 136
+dibujarFigura (299) 134
+borrarFigura (300) 139
+girarIzquierda (301) 144
+girarDerecha (302) 143
+mover (303) 141
+obtenerPosicion (304) 142
+hablar (305) 140
+obtenerAltura (306) 145
+obtenerAnchura (307) 146
+cambiarAltura (308) 147
+cambiarAnchura (309) 148
+colorFondo (310) 149
+rojo (311) 150
+azul (312) 151
+verde (313) 152
+carro (314) 138
+persona (315) 136
+perro (316) 135
+gato (317) 137
 verdadero (318)
 falso (319)
 
@@ -355,13 +357,13 @@ PROGRAMASIG (74)
 PROGRAMASIG2 (75)
     on left: 12 13, on right: 11
 TIPO (76)
-    on left: 14 15 16 17, on right: 42 50 85 90
+    on left: 14 15 16 17, on right: 42 50 86 91
 PRINCIPAL (77)
     on left: 19, on right: 3
 $@4 (78)
     on left: 18, on right: 19
 BLOQUE (79)
-    on left: 20, on right: 19 21 74 76 80 84
+    on left: 20, on right: 19 21 74 76 80 85
 BLOQUE1 (80)
     on left: 21 22, on right: 20
 ESTATUTO (81)
@@ -373,7 +375,7 @@ DECLARACION (83)
 DECLARACION2 (84)
     on left: 43 44, on right: 42
 DECLARACIONFUNCIONCICLO (85)
-    on left: 46, on right: 47 84
+    on left: 46, on right: 47 85
 $@5 (86)
     on left: 45, on right: 46
 DECLARACIONFUNCIONCICLO2 (87)
@@ -401,7 +403,7 @@ $@10 (97)
 ASIGNACION3 (98)
     on left: 61 62, on right: 60
 ASIGNACION2 (99)
-    on left: 64 65, on right: 60 128
+    on left: 64 65, on right: 60 129
 $@11 (100)
     on left: 63, on right: 64
 ARREGLOSASIG (101)
@@ -431,100 +433,102 @@ $@16 (112)
 $@17 (113)
     on left: 79, on right: 80
 CREARFUNCION (114)
-    on left: 84, on right: 8
+    on left: 85, on right: 8
 $@18 (115)
-    on left: 81, on right: 84
+    on left: 81, on right: 85
 $@19 (116)
-    on left: 82, on right: 84
+    on left: 82, on right: 85
 $@20 (117)
-    on left: 83, on right: 84
-CREARFUNCION2 (118)
-    on left: 85 86, on right: 84
-CREARFUNCION3 (119)
-    on left: 87 88, on right: 84
-CREARFUNCION4 (120)
-    on left: 90, on right: 88 92
-$@21 (121)
-    on left: 89, on right: 90
-CREARFUNCION5 (122)
-    on left: 91 92, on right: 90
-LLAMARFUNCION (123)
-    on left: 94, on right: 29
-$@22 (124)
-    on left: 93, on right: 94
-LLAMARFUNCION2 (125)
-    on left: 96, on right: 94 98
-$@23 (126)
-    on left: 95, on right: 96
-LLAMARFUNCION3 (127)
-    on left: 98 99, on right: 96
-$@24 (128)
-    on left: 97, on right: 98
-SUPEREXPRESION (129)
-    on left: 100, on right: 74 80
-SUPEREXPRESION2 (130)
-    on left: 101 102, on right: 100
-SUPEREXPRESION3 (131)
-    on left: 103 104, on right: 102
-EXPRESION (132)
-    on left: 105, on right: 100 102 125
-EXPRESION2 (133)
-    on left: 106 107, on right: 105
-EXPRESION3 (134)
-    on left: 108 109 110 111, on right: 107
-EXP (135)
-    on left: 113, on right: 62 67 69 71 84 96 105 107 115 139 140 142
-    143 146 147
-$@25 (136)
-    on left: 112, on right: 113
-EXP2 (137)
-    on left: 114 115, on right: 113
-EXP3 (138)
-    on left: 116 117, on right: 115
-TERMINO (139)
-    on left: 119, on right: 113 121
-$@26 (140)
-    on left: 118, on right: 119
-TERMINO2 (141)
-    on left: 120 121, on right: 119
-TERMINO3 (142)
-    on left: 122 123, on right: 121
-FACTOR (143)
-    on left: 125 126 128, on right: 119
-$@27 (144)
-    on left: 124, on right: 125
+    on left: 83, on right: 85
+$@21 (118)
+    on left: 84, on right: 85
+CREARFUNCION2 (119)
+    on left: 86 87, on right: 85
+CREARFUNCION3 (120)
+    on left: 88 89, on right: 85
+CREARFUNCION4 (121)
+    on left: 91, on right: 89 93
+$@22 (122)
+    on left: 90, on right: 91
+CREARFUNCION5 (123)
+    on left: 92 93, on right: 91
+LLAMARFUNCION (124)
+    on left: 95, on right: 29
+$@23 (125)
+    on left: 94, on right: 95
+LLAMARFUNCION2 (126)
+    on left: 97, on right: 95 99
+$@24 (127)
+    on left: 96, on right: 97
+LLAMARFUNCION3 (128)
+    on left: 99 100, on right: 97
+$@25 (129)
+    on left: 98, on right: 99
+SUPEREXPRESION (130)
+    on left: 101, on right: 74 80
+SUPEREXPRESION2 (131)
+    on left: 102 103, on right: 101
+SUPEREXPRESION3 (132)
+    on left: 104 105, on right: 103
+EXPRESION (133)
+    on left: 106, on right: 101 103 126
+EXPRESION2 (134)
+    on left: 107 108, on right: 106
+EXPRESION3 (135)
+    on left: 109 110 111 112, on right: 108
+EXP (136)
+    on left: 114, on right: 62 67 69 71 85 97 106 108 116 140 141 143
+    144 147 148
+$@26 (137)
+    on left: 113, on right: 114
+EXP2 (138)
+    on left: 115 116, on right: 114
+EXP3 (139)
+    on left: 117 118, on right: 116
+TERMINO (140)
+    on left: 120, on right: 114 122
+$@27 (141)
+    on left: 119, on right: 120
+TERMINO2 (142)
+    on left: 121 122, on right: 120
+TERMINO3 (143)
+    on left: 123 124, on right: 122
+FACTOR (144)
+    on left: 126 127 129, on right: 120
 $@28 (145)
-    on left: 127, on right: 128
-VARCTE (146)
-    on left: 129 130 131 132, on right: 126
-DIBUJARFIGURA (147)
-    on left: 133, on right: 30
-FIGURA (148)
-    on left: 134 135 136 137, on right: 133
-BORRARFIGURA (149)
-    on left: 138, on right: 31
-HABLAR (150)
-    on left: 139, on right: 32
-MOVER (151)
-    on left: 140, on right: 33
-OBTENERPOSICION (152)
-    on left: 141, on right: 41
-GIRARDER (153)
-    on left: 142, on right: 35
-GIRARIZQ (154)
-    on left: 143, on right: 34
-OBTENERALTURA (155)
-    on left: 144, on right: 36
-OBTENERANCHURA (156)
-    on left: 145, on right: 38
-CAMBIARALTURA (157)
-    on left: 146, on right: 37
-CAMBIARANCHURA (158)
-    on left: 147, on right: 39
-COLORFONDO (159)
-    on left: 148, on right: 40
-COLOR (160)
-    on left: 149 150 151, on right: 148
+    on left: 125, on right: 126
+$@29 (146)
+    on left: 128, on right: 129
+VARCTE (147)
+    on left: 130 131 132 133, on right: 127
+DIBUJARFIGURA (148)
+    on left: 134, on right: 30
+FIGURA (149)
+    on left: 135 136 137 138, on right: 134
+BORRARFIGURA (150)
+    on left: 139, on right: 31
+HABLAR (151)
+    on left: 140, on right: 32
+MOVER (152)
+    on left: 141, on right: 33
+OBTENERPOSICION (153)
+    on left: 142, on right: 41
+GIRARDER (154)
+    on left: 143, on right: 35
+GIRARIZQ (155)
+    on left: 144, on right: 34
+OBTENERALTURA (156)
+    on left: 145, on right: 36
+OBTENERANCHURA (157)
+    on left: 146, on right: 38
+CAMBIARALTURA (158)
+    on left: 147, on right: 37
+CAMBIARANCHURA (159)
+    on left: 148, on right: 39
+COLORFONDO (160)
+    on left: 149, on right: 40
+COLOR (161)
+    on left: 150 151 152, on right: 149
 
 
 state 0
@@ -688,7 +692,7 @@ state 16
 
 state 17
 
-   84 CREARFUNCION: funcion . CREARFUNCION2 id $@18 parentesisa CREARFUNCION3 parentesisc $@19 llavea DECLARACIONFUNCIONCICLO $@20 BLOQUE regresar EXP llavec
+   85 CREARFUNCION: funcion . CREARFUNCION2 id $@18 parentesisa CREARFUNCION3 parentesisc $@19 llavea DECLARACIONFUNCIONCICLO $@20 BLOQUE regresar EXP $@21 llavec
 
     neutral   shift, and go to state 32
     entero    shift, and go to state 22
@@ -818,21 +822,21 @@ state 31
 
 state 32
 
-   86 CREARFUNCION2: neutral .
+   87 CREARFUNCION2: neutral .
 
-    $default  reduce using rule 86 (CREARFUNCION2)
+    $default  reduce using rule 87 (CREARFUNCION2)
 
 
 state 33
 
-   85 CREARFUNCION2: TIPO .
+   86 CREARFUNCION2: TIPO .
 
-    $default  reduce using rule 85 (CREARFUNCION2)
+    $default  reduce using rule 86 (CREARFUNCION2)
 
 
 state 34
 
-   84 CREARFUNCION: funcion CREARFUNCION2 . id $@18 parentesisa CREARFUNCION3 parentesisc $@19 llavea DECLARACIONFUNCIONCICLO $@20 BLOQUE regresar EXP llavec
+   85 CREARFUNCION: funcion CREARFUNCION2 . id $@18 parentesisa CREARFUNCION3 parentesisc $@19 llavea DECLARACIONFUNCIONCICLO $@20 BLOQUE regresar EXP $@21 llavec
 
     id  shift, and go to state 51
 
@@ -890,48 +894,48 @@ state 40
 
 state 41
 
-  128 FACTOR: id . $@28 ASIGNACION2
+  129 FACTOR: id . $@29 ASIGNACION2
 
-    $default  reduce using rule 127 ($@28)
+    $default  reduce using rule 128 ($@29)
 
-    $@28  go to state 58
+    $@29  go to state 58
 
 
 state 42
 
-  129 VARCTE: ctetexto .
-
-    $default  reduce using rule 129 (VARCTE)
-
-
-state 43
-
-  130 VARCTE: cteentero .
+  130 VARCTE: ctetexto .
 
     $default  reduce using rule 130 (VARCTE)
 
 
-state 44
+state 43
 
-  131 VARCTE: ctedecimal .
+  131 VARCTE: cteentero .
 
     $default  reduce using rule 131 (VARCTE)
 
 
-state 45
+state 44
 
-  132 VARCTE: ctebooleano .
+  132 VARCTE: ctedecimal .
 
     $default  reduce using rule 132 (VARCTE)
 
 
+state 45
+
+  133 VARCTE: ctebooleano .
+
+    $default  reduce using rule 133 (VARCTE)
+
+
 state 46
 
-  125 FACTOR: parentesisa . $@27 EXPRESION parentesisc
+  126 FACTOR: parentesisa . $@28 EXPRESION parentesisc
 
-    $default  reduce using rule 124 ($@27)
+    $default  reduce using rule 125 ($@28)
 
-    $@27  go to state 59
+    $@28  go to state 59
 
 
 state 47
@@ -945,32 +949,32 @@ state 47
 
 state 48
 
-  113 EXP: TERMINO . $@25 EXP2
+  114 EXP: TERMINO . $@26 EXP2
 
-    $default  reduce using rule 112 ($@25)
+    $default  reduce using rule 113 ($@26)
 
-    $@25  go to state 61
+    $@26  go to state 61
 
 
 state 49
 
-  119 TERMINO: FACTOR . $@26 TERMINO2
+  120 TERMINO: FACTOR . $@27 TERMINO2
 
-    $default  reduce using rule 118 ($@26)
+    $default  reduce using rule 119 ($@27)
 
-    $@26  go to state 62
+    $@27  go to state 62
 
 
 state 50
 
-  126 FACTOR: VARCTE .
+  127 FACTOR: VARCTE .
 
-    $default  reduce using rule 126 (FACTOR)
+    $default  reduce using rule 127 (FACTOR)
 
 
 state 51
 
-   84 CREARFUNCION: funcion CREARFUNCION2 id . $@18 parentesisa CREARFUNCION3 parentesisc $@19 llavea DECLARACIONFUNCIONCICLO $@20 BLOQUE regresar EXP llavec
+   85 CREARFUNCION: funcion CREARFUNCION2 id . $@18 parentesisa CREARFUNCION3 parentesisc $@19 llavea DECLARACIONFUNCIONCICLO $@20 BLOQUE regresar EXP $@21 llavec
 
     $default  reduce using rule 81 ($@18)
 
@@ -1034,7 +1038,7 @@ state 57
 
 state 58
 
-  128 FACTOR: id $@28 . ASIGNACION2
+  129 FACTOR: id $@29 . ASIGNACION2
 
     corchetea  reduce using rule 63 ($@11)
     $default   reduce using rule 65 (ASIGNACION2)
@@ -1045,7 +1049,7 @@ state 58
 
 state 59
 
-  125 FACTOR: parentesisa $@27 . EXPRESION parentesisc
+  126 FACTOR: parentesisa $@28 . EXPRESION parentesisc
 
     id           shift, and go to state 41
     ctetexto     shift, and go to state 42
@@ -1070,12 +1074,12 @@ state 60
 
 state 61
 
-  113 EXP: TERMINO $@25 . EXP2
+  114 EXP: TERMINO $@26 . EXP2
 
     mas    shift, and go to state 75
     menos  shift, and go to state 76
 
-    $default  reduce using rule 114 (EXP2)
+    $default  reduce using rule 115 (EXP2)
 
     EXP2  go to state 77
     EXP3  go to state 78
@@ -1083,12 +1087,12 @@ state 61
 
 state 62
 
-  119 TERMINO: FACTOR $@26 . TERMINO2
+  120 TERMINO: FACTOR $@27 . TERMINO2
 
     multiplicacion  shift, and go to state 79
     division        shift, and go to state 80
 
-    $default  reduce using rule 120 (TERMINO2)
+    $default  reduce using rule 121 (TERMINO2)
 
     TERMINO2  go to state 81
     TERMINO3  go to state 82
@@ -1096,7 +1100,7 @@ state 62
 
 state 63
 
-   84 CREARFUNCION: funcion CREARFUNCION2 id $@18 . parentesisa CREARFUNCION3 parentesisc $@19 llavea DECLARACIONFUNCIONCICLO $@20 BLOQUE regresar EXP llavec
+   85 CREARFUNCION: funcion CREARFUNCION2 id $@18 . parentesisa CREARFUNCION3 parentesisc $@19 llavea DECLARACIONFUNCIONCICLO $@20 BLOQUE regresar EXP $@21 llavec
 
     parentesisa  shift, and go to state 83
 
@@ -1154,28 +1158,28 @@ state 70
 
 state 71
 
-  128 FACTOR: id $@28 ASIGNACION2 .
+  129 FACTOR: id $@29 ASIGNACION2 .
 
-    $default  reduce using rule 128 (FACTOR)
+    $default  reduce using rule 129 (FACTOR)
 
 
 state 72
 
-  125 FACTOR: parentesisa $@27 EXPRESION . parentesisc
+  126 FACTOR: parentesisa $@28 EXPRESION . parentesisc
 
     parentesisc  shift, and go to state 88
 
 
 state 73
 
-  105 EXPRESION: EXP . EXPRESION2
+  106 EXPRESION: EXP . EXPRESION2
 
     igual      shift, and go to state 89
     diferente  shift, and go to state 90
     mayor      shift, and go to state 91
     menor      shift, and go to state 92
 
-    $default  reduce using rule 106 (EXPRESION2)
+    $default  reduce using rule 107 (EXPRESION2)
 
     EXPRESION2  go to state 93
     EXPRESION3  go to state 94
@@ -1194,28 +1198,28 @@ state 74
 
 state 75
 
-  116 EXP3: mas .
-
-    $default  reduce using rule 116 (EXP3)
-
-
-state 76
-
-  117 EXP3: menos .
+  117 EXP3: mas .
 
     $default  reduce using rule 117 (EXP3)
 
 
+state 76
+
+  118 EXP3: menos .
+
+    $default  reduce using rule 118 (EXP3)
+
+
 state 77
 
-  113 EXP: TERMINO $@25 EXP2 .
+  114 EXP: TERMINO $@26 EXP2 .
 
-    $default  reduce using rule 113 (EXP)
+    $default  reduce using rule 114 (EXP)
 
 
 state 78
 
-  115 EXP2: EXP3 . EXP
+  116 EXP2: EXP3 . EXP
 
     id           shift, and go to state 41
     ctetexto     shift, and go to state 42
@@ -1232,28 +1236,28 @@ state 78
 
 state 79
 
-  122 TERMINO3: multiplicacion .
-
-    $default  reduce using rule 122 (TERMINO3)
-
-
-state 80
-
-  123 TERMINO3: division .
+  123 TERMINO3: multiplicacion .
 
     $default  reduce using rule 123 (TERMINO3)
 
 
+state 80
+
+  124 TERMINO3: division .
+
+    $default  reduce using rule 124 (TERMINO3)
+
+
 state 81
 
-  119 TERMINO: FACTOR $@26 TERMINO2 .
+  120 TERMINO: FACTOR $@27 TERMINO2 .
 
-    $default  reduce using rule 119 (TERMINO)
+    $default  reduce using rule 120 (TERMINO)
 
 
 state 82
 
-  121 TERMINO2: TERMINO3 . TERMINO
+  122 TERMINO2: TERMINO3 . TERMINO
 
     id           shift, and go to state 41
     ctetexto     shift, and go to state 42
@@ -1269,14 +1273,14 @@ state 82
 
 state 83
 
-   84 CREARFUNCION: funcion CREARFUNCION2 id $@18 parentesisa . CREARFUNCION3 parentesisc $@19 llavea DECLARACIONFUNCIONCICLO $@20 BLOQUE regresar EXP llavec
+   85 CREARFUNCION: funcion CREARFUNCION2 id $@18 parentesisa . CREARFUNCION3 parentesisc $@19 llavea DECLARACIONFUNCIONCICLO $@20 BLOQUE regresar EXP $@21 llavec
 
     entero    shift, and go to state 22
     decimal   shift, and go to state 23
     texto     shift, and go to state 24
     booleano  shift, and go to state 25
 
-    $default  reduce using rule 87 (CREARFUNCION3)
+    $default  reduce using rule 88 (CREARFUNCION3)
 
     TIPO           go to state 99
     CREARFUNCION3  go to state 100
@@ -1313,49 +1317,49 @@ state 87
 
 state 88
 
-  125 FACTOR: parentesisa $@27 EXPRESION parentesisc .
+  126 FACTOR: parentesisa $@28 EXPRESION parentesisc .
 
-    $default  reduce using rule 125 (FACTOR)
+    $default  reduce using rule 126 (FACTOR)
 
 
 state 89
 
-  110 EXPRESION3: igual .
+  111 EXPRESION3: igual .
 
-    $default  reduce using rule 110 (EXPRESION3)
+    $default  reduce using rule 111 (EXPRESION3)
 
 
 state 90
 
-  111 EXPRESION3: diferente . igual
+  112 EXPRESION3: diferente . igual
 
     igual  shift, and go to state 105
 
 
 state 91
 
-  109 EXPRESION3: mayor .
+  110 EXPRESION3: mayor .
 
-    $default  reduce using rule 109 (EXPRESION3)
+    $default  reduce using rule 110 (EXPRESION3)
 
 
 state 92
 
-  108 EXPRESION3: menor .
+  109 EXPRESION3: menor .
 
-    $default  reduce using rule 108 (EXPRESION3)
+    $default  reduce using rule 109 (EXPRESION3)
 
 
 state 93
 
-  105 EXPRESION: EXP EXPRESION2 .
+  106 EXPRESION: EXP EXPRESION2 .
 
-    $default  reduce using rule 105 (EXPRESION)
+    $default  reduce using rule 106 (EXPRESION)
 
 
 state 94
 
-  107 EXPRESION2: EXPRESION3 . EXP
+  108 EXPRESION2: EXPRESION3 . EXP
 
     id           shift, and go to state 41
     ctetexto     shift, and go to state 42
@@ -1396,37 +1400,37 @@ state 96
 
 state 97
 
-  115 EXP2: EXP3 EXP .
+  116 EXP2: EXP3 EXP .
 
-    $default  reduce using rule 115 (EXP2)
+    $default  reduce using rule 116 (EXP2)
 
 
 state 98
 
-  121 TERMINO2: TERMINO3 TERMINO .
+  122 TERMINO2: TERMINO3 TERMINO .
 
-    $default  reduce using rule 121 (TERMINO2)
+    $default  reduce using rule 122 (TERMINO2)
 
 
 state 99
 
-   90 CREARFUNCION4: TIPO . id $@21 CREARFUNCION5
+   91 CREARFUNCION4: TIPO . id $@22 CREARFUNCION5
 
     id  shift, and go to state 108
 
 
 state 100
 
-   84 CREARFUNCION: funcion CREARFUNCION2 id $@18 parentesisa CREARFUNCION3 . parentesisc $@19 llavea DECLARACIONFUNCIONCICLO $@20 BLOQUE regresar EXP llavec
+   85 CREARFUNCION: funcion CREARFUNCION2 id $@18 parentesisa CREARFUNCION3 . parentesisc $@19 llavea DECLARACIONFUNCIONCICLO $@20 BLOQUE regresar EXP $@21 llavec
 
     parentesisc  shift, and go to state 109
 
 
 state 101
 
-   88 CREARFUNCION3: CREARFUNCION4 .
+   89 CREARFUNCION3: CREARFUNCION4 .
 
-    $default  reduce using rule 88 (CREARFUNCION3)
+    $default  reduce using rule 89 (CREARFUNCION3)
 
 
 state 102
@@ -1494,16 +1498,16 @@ state 104
 
 state 105
 
-  111 EXPRESION3: diferente igual .
+  112 EXPRESION3: diferente igual .
 
-    $default  reduce using rule 111 (EXPRESION3)
+    $default  reduce using rule 112 (EXPRESION3)
 
 
 state 106
 
-  107 EXPRESION2: EXPRESION3 EXP .
+  108 EXPRESION2: EXPRESION3 EXP .
 
-    $default  reduce using rule 107 (EXPRESION2)
+    $default  reduce using rule 108 (EXPRESION2)
 
 
 state 107
@@ -1517,16 +1521,16 @@ state 107
 
 state 108
 
-   90 CREARFUNCION4: TIPO id . $@21 CREARFUNCION5
+   91 CREARFUNCION4: TIPO id . $@22 CREARFUNCION5
 
-    $default  reduce using rule 89 ($@21)
+    $default  reduce using rule 90 ($@22)
 
-    $@21  go to state 150
+    $@22  go to state 150
 
 
 state 109
 
-   84 CREARFUNCION: funcion CREARFUNCION2 id $@18 parentesisa CREARFUNCION3 parentesisc . $@19 llavea DECLARACIONFUNCIONCICLO $@20 BLOQUE regresar EXP llavec
+   85 CREARFUNCION: funcion CREARFUNCION2 id $@18 parentesisa CREARFUNCION3 parentesisc . $@19 llavea DECLARACIONFUNCIONCICLO $@20 BLOQUE regresar EXP $@21 llavec
 
     $default  reduce using rule 82 ($@19)
 
@@ -1559,97 +1563,97 @@ state 112
 state 113
 
    60 ASIGNACION: id . ASIGNACION2 $@9 igual $@10 ASIGNACION3 ptocoma
-   94 LLAMARFUNCION: id . $@22 parentesisa LLAMARFUNCION2 parentesisc ptocoma
+   95 LLAMARFUNCION: id . $@23 parentesisa LLAMARFUNCION2 parentesisc ptocoma
 
     igual        reduce using rule 65 (ASIGNACION2)
-    parentesisa  reduce using rule 93 ($@22)
+    parentesisa  reduce using rule 94 ($@23)
     $default     reduce using rule 63 ($@11)
 
     ASIGNACION2  go to state 15
     $@11         go to state 16
-    $@22         go to state 155
+    $@23         go to state 155
 
 
 state 114
 
-  133 DIBUJARFIGURA: dibujarFigura . parentesisa FIGURA coma id parentesisc ptocoma
+  134 DIBUJARFIGURA: dibujarFigura . parentesisa FIGURA coma id parentesisc ptocoma
 
     parentesisa  shift, and go to state 156
 
 
 state 115
 
-  138 BORRARFIGURA: borrarFigura . parentesisa id parentesisc ptocoma
+  139 BORRARFIGURA: borrarFigura . parentesisa id parentesisc ptocoma
 
     parentesisa  shift, and go to state 157
 
 
 state 116
 
-  143 GIRARIZQ: girarIzquierda . parentesisa id coma EXP parentesisc ptocoma
+  144 GIRARIZQ: girarIzquierda . parentesisa id coma EXP parentesisc ptocoma
 
     parentesisa  shift, and go to state 158
 
 
 state 117
 
-  142 GIRARDER: girarDerecha . parentesisa id coma EXP parentesisc ptocoma
+  143 GIRARDER: girarDerecha . parentesisa id coma EXP parentesisc ptocoma
 
     parentesisa  shift, and go to state 159
 
 
 state 118
 
-  140 MOVER: mover . parentesisa id coma EXP coma EXP parentesisc ptocoma
+  141 MOVER: mover . parentesisa id coma EXP coma EXP parentesisc ptocoma
 
     parentesisa  shift, and go to state 160
 
 
 state 119
 
-  141 OBTENERPOSICION: obtenerPosicion . parentesisa id parentesisc ptocoma
+  142 OBTENERPOSICION: obtenerPosicion . parentesisa id parentesisc ptocoma
 
     parentesisa  shift, and go to state 161
 
 
 state 120
 
-  139 HABLAR: hablar . parentesisa id coma EXP parentesisc ptocoma
+  140 HABLAR: hablar . parentesisa id coma EXP parentesisc ptocoma
 
     parentesisa  shift, and go to state 162
 
 
 state 121
 
-  144 OBTENERALTURA: obtenerAltura . parentesisa id parentesisc ptocoma
+  145 OBTENERALTURA: obtenerAltura . parentesisa id parentesisc ptocoma
 
     parentesisa  shift, and go to state 163
 
 
 state 122
 
-  145 OBTENERANCHURA: obtenerAnchura . parentesisa id parentesisc ptocoma
+  146 OBTENERANCHURA: obtenerAnchura . parentesisa id parentesisc ptocoma
 
     parentesisa  shift, and go to state 164
 
 
 state 123
 
-  146 CAMBIARALTURA: cambiarAltura . parentesisa id coma EXP parentesisc ptocoma
+  147 CAMBIARALTURA: cambiarAltura . parentesisa id coma EXP parentesisc ptocoma
 
     parentesisa  shift, and go to state 165
 
 
 state 124
 
-  147 CAMBIARANCHURA: cambiarAnchura . parentesisa id coma EXP parentesisc ptocoma
+  148 CAMBIARANCHURA: cambiarAnchura . parentesisa id coma EXP parentesisc ptocoma
 
     parentesisa  shift, and go to state 166
 
 
 state 125
 
-  148 COLORFONDO: colorFondo . parentesisa COLOR parentesisc ptocoma
+  149 COLORFONDO: colorFondo . parentesisa COLOR parentesisc ptocoma
 
     parentesisa  shift, and go to state 167
 
@@ -1865,18 +1869,18 @@ state 149
 
 state 150
 
-   90 CREARFUNCION4: TIPO id $@21 . CREARFUNCION5
+   91 CREARFUNCION4: TIPO id $@22 . CREARFUNCION5
 
     coma  shift, and go to state 173
 
-    $default  reduce using rule 91 (CREARFUNCION5)
+    $default  reduce using rule 92 (CREARFUNCION5)
 
     CREARFUNCION5  go to state 174
 
 
 state 151
 
-   84 CREARFUNCION: funcion CREARFUNCION2 id $@18 parentesisa CREARFUNCION3 parentesisc $@19 . llavea DECLARACIONFUNCIONCICLO $@20 BLOQUE regresar EXP llavec
+   85 CREARFUNCION: funcion CREARFUNCION2 id $@18 parentesisa CREARFUNCION3 parentesisc $@19 . llavea DECLARACIONFUNCIONCICLO $@20 BLOQUE regresar EXP $@21 llavec
 
     llavea  shift, and go to state 175
 
@@ -1926,14 +1930,14 @@ state 154
 
 state 155
 
-   94 LLAMARFUNCION: id $@22 . parentesisa LLAMARFUNCION2 parentesisc ptocoma
+   95 LLAMARFUNCION: id $@23 . parentesisa LLAMARFUNCION2 parentesisc ptocoma
 
     parentesisa  shift, and go to state 180
 
 
 state 156
 
-  133 DIBUJARFIGURA: dibujarFigura parentesisa . FIGURA coma id parentesisc ptocoma
+  134 DIBUJARFIGURA: dibujarFigura parentesisa . FIGURA coma id parentesisc ptocoma
 
     carro    shift, and go to state 181
     persona  shift, and go to state 182
@@ -1945,77 +1949,77 @@ state 156
 
 state 157
 
-  138 BORRARFIGURA: borrarFigura parentesisa . id parentesisc ptocoma
+  139 BORRARFIGURA: borrarFigura parentesisa . id parentesisc ptocoma
 
     id  shift, and go to state 186
 
 
 state 158
 
-  143 GIRARIZQ: girarIzquierda parentesisa . id coma EXP parentesisc ptocoma
+  144 GIRARIZQ: girarIzquierda parentesisa . id coma EXP parentesisc ptocoma
 
     id  shift, and go to state 187
 
 
 state 159
 
-  142 GIRARDER: girarDerecha parentesisa . id coma EXP parentesisc ptocoma
+  143 GIRARDER: girarDerecha parentesisa . id coma EXP parentesisc ptocoma
 
     id  shift, and go to state 188
 
 
 state 160
 
-  140 MOVER: mover parentesisa . id coma EXP coma EXP parentesisc ptocoma
+  141 MOVER: mover parentesisa . id coma EXP coma EXP parentesisc ptocoma
 
     id  shift, and go to state 189
 
 
 state 161
 
-  141 OBTENERPOSICION: obtenerPosicion parentesisa . id parentesisc ptocoma
+  142 OBTENERPOSICION: obtenerPosicion parentesisa . id parentesisc ptocoma
 
     id  shift, and go to state 190
 
 
 state 162
 
-  139 HABLAR: hablar parentesisa . id coma EXP parentesisc ptocoma
+  140 HABLAR: hablar parentesisa . id coma EXP parentesisc ptocoma
 
     id  shift, and go to state 191
 
 
 state 163
 
-  144 OBTENERALTURA: obtenerAltura parentesisa . id parentesisc ptocoma
+  145 OBTENERALTURA: obtenerAltura parentesisa . id parentesisc ptocoma
 
     id  shift, and go to state 192
 
 
 state 164
 
-  145 OBTENERANCHURA: obtenerAnchura parentesisa . id parentesisc ptocoma
+  146 OBTENERANCHURA: obtenerAnchura parentesisa . id parentesisc ptocoma
 
     id  shift, and go to state 193
 
 
 state 165
 
-  146 CAMBIARALTURA: cambiarAltura parentesisa . id coma EXP parentesisc ptocoma
+  147 CAMBIARALTURA: cambiarAltura parentesisa . id coma EXP parentesisc ptocoma
 
     id  shift, and go to state 194
 
 
 state 166
 
-  147 CAMBIARANCHURA: cambiarAnchura parentesisa . id coma EXP parentesisc ptocoma
+  148 CAMBIARANCHURA: cambiarAnchura parentesisa . id coma EXP parentesisc ptocoma
 
     id  shift, and go to state 195
 
 
 state 167
 
-  148 COLORFONDO: colorFondo parentesisa . COLOR parentesisc ptocoma
+  149 COLORFONDO: colorFondo parentesisa . COLOR parentesisc ptocoma
 
     rojo   shift, and go to state 196
     azul   shift, and go to state 197
@@ -2063,7 +2067,7 @@ state 172
 
 state 173
 
-   92 CREARFUNCION5: coma . CREARFUNCION4
+   93 CREARFUNCION5: coma . CREARFUNCION4
 
     entero    shift, and go to state 22
     decimal   shift, and go to state 23
@@ -2076,14 +2080,14 @@ state 173
 
 state 174
 
-   90 CREARFUNCION4: TIPO id $@21 CREARFUNCION5 .
+   91 CREARFUNCION4: TIPO id $@22 CREARFUNCION5 .
 
-    $default  reduce using rule 90 (CREARFUNCION4)
+    $default  reduce using rule 91 (CREARFUNCION4)
 
 
 state 175
 
-   84 CREARFUNCION: funcion CREARFUNCION2 id $@18 parentesisa CREARFUNCION3 parentesisc $@19 llavea . DECLARACIONFUNCIONCICLO $@20 BLOQUE regresar EXP llavec
+   85 CREARFUNCION: funcion CREARFUNCION2 id $@18 parentesisa CREARFUNCION3 parentesisc $@19 llavea . DECLARACIONFUNCIONCICLO $@20 BLOQUE regresar EXP $@21 llavec
 
     $default  reduce using rule 45 ($@5)
 
@@ -2100,12 +2104,12 @@ state 176
 
 state 177
 
-  100 SUPEREXPRESION: EXPRESION . SUPEREXPRESION2
+  101 SUPEREXPRESION: EXPRESION . SUPEREXPRESION2
 
     and  shift, and go to state 205
     or   shift, and go to state 206
 
-    $default  reduce using rule 101 (SUPEREXPRESION2)
+    $default  reduce using rule 102 (SUPEREXPRESION2)
 
     SUPEREXPRESION2  go to state 207
     SUPEREXPRESION3  go to state 208
@@ -2139,7 +2143,7 @@ state 179
 
 state 180
 
-   94 LLAMARFUNCION: id $@22 parentesisa . LLAMARFUNCION2 parentesisc ptocoma
+   95 LLAMARFUNCION: id $@23 parentesisa . LLAMARFUNCION2 parentesisc ptocoma
 
     id           shift, and go to state 41
     ctetexto     shift, and go to state 42
@@ -2157,133 +2161,133 @@ state 180
 
 state 181
 
-  137 FIGURA: carro .
+  138 FIGURA: carro .
 
-    $default  reduce using rule 137 (FIGURA)
+    $default  reduce using rule 138 (FIGURA)
 
 
 state 182
 
-  135 FIGURA: persona .
-
-    $default  reduce using rule 135 (FIGURA)
-
-
-state 183
-
-  134 FIGURA: perro .
-
-    $default  reduce using rule 134 (FIGURA)
-
-
-state 184
-
-  136 FIGURA: gato .
+  136 FIGURA: persona .
 
     $default  reduce using rule 136 (FIGURA)
 
 
+state 183
+
+  135 FIGURA: perro .
+
+    $default  reduce using rule 135 (FIGURA)
+
+
+state 184
+
+  137 FIGURA: gato .
+
+    $default  reduce using rule 137 (FIGURA)
+
+
 state 185
 
-  133 DIBUJARFIGURA: dibujarFigura parentesisa FIGURA . coma id parentesisc ptocoma
+  134 DIBUJARFIGURA: dibujarFigura parentesisa FIGURA . coma id parentesisc ptocoma
 
     coma  shift, and go to state 213
 
 
 state 186
 
-  138 BORRARFIGURA: borrarFigura parentesisa id . parentesisc ptocoma
+  139 BORRARFIGURA: borrarFigura parentesisa id . parentesisc ptocoma
 
     parentesisc  shift, and go to state 214
 
 
 state 187
 
-  143 GIRARIZQ: girarIzquierda parentesisa id . coma EXP parentesisc ptocoma
+  144 GIRARIZQ: girarIzquierda parentesisa id . coma EXP parentesisc ptocoma
 
     coma  shift, and go to state 215
 
 
 state 188
 
-  142 GIRARDER: girarDerecha parentesisa id . coma EXP parentesisc ptocoma
+  143 GIRARDER: girarDerecha parentesisa id . coma EXP parentesisc ptocoma
 
     coma  shift, and go to state 216
 
 
 state 189
 
-  140 MOVER: mover parentesisa id . coma EXP coma EXP parentesisc ptocoma
+  141 MOVER: mover parentesisa id . coma EXP coma EXP parentesisc ptocoma
 
     coma  shift, and go to state 217
 
 
 state 190
 
-  141 OBTENERPOSICION: obtenerPosicion parentesisa id . parentesisc ptocoma
+  142 OBTENERPOSICION: obtenerPosicion parentesisa id . parentesisc ptocoma
 
     parentesisc  shift, and go to state 218
 
 
 state 191
 
-  139 HABLAR: hablar parentesisa id . coma EXP parentesisc ptocoma
+  140 HABLAR: hablar parentesisa id . coma EXP parentesisc ptocoma
 
     coma  shift, and go to state 219
 
 
 state 192
 
-  144 OBTENERALTURA: obtenerAltura parentesisa id . parentesisc ptocoma
+  145 OBTENERALTURA: obtenerAltura parentesisa id . parentesisc ptocoma
 
     parentesisc  shift, and go to state 220
 
 
 state 193
 
-  145 OBTENERANCHURA: obtenerAnchura parentesisa id . parentesisc ptocoma
+  146 OBTENERANCHURA: obtenerAnchura parentesisa id . parentesisc ptocoma
 
     parentesisc  shift, and go to state 221
 
 
 state 194
 
-  146 CAMBIARALTURA: cambiarAltura parentesisa id . coma EXP parentesisc ptocoma
+  147 CAMBIARALTURA: cambiarAltura parentesisa id . coma EXP parentesisc ptocoma
 
     coma  shift, and go to state 222
 
 
 state 195
 
-  147 CAMBIARANCHURA: cambiarAnchura parentesisa id . coma EXP parentesisc ptocoma
+  148 CAMBIARANCHURA: cambiarAnchura parentesisa id . coma EXP parentesisc ptocoma
 
     coma  shift, and go to state 223
 
 
 state 196
 
-  149 COLOR: rojo .
-
-    $default  reduce using rule 149 (COLOR)
-
-
-state 197
-
-  150 COLOR: azul .
+  150 COLOR: rojo .
 
     $default  reduce using rule 150 (COLOR)
 
 
-state 198
+state 197
 
-  151 COLOR: verde .
+  151 COLOR: azul .
 
     $default  reduce using rule 151 (COLOR)
 
 
+state 198
+
+  152 COLOR: verde .
+
+    $default  reduce using rule 152 (COLOR)
+
+
 state 199
 
-  148 COLORFONDO: colorFondo parentesisa COLOR . parentesisc ptocoma
+  149 COLORFONDO: colorFondo parentesisa COLOR . parentesisc ptocoma
 
     parentesisc  shift, and go to state 224
 
@@ -2297,14 +2301,14 @@ state 200
 
 state 201
 
-   92 CREARFUNCION5: coma CREARFUNCION4 .
+   93 CREARFUNCION5: coma CREARFUNCION4 .
 
-    $default  reduce using rule 92 (CREARFUNCION5)
+    $default  reduce using rule 93 (CREARFUNCION5)
 
 
 state 202
 
-   84 CREARFUNCION: funcion CREARFUNCION2 id $@18 parentesisa CREARFUNCION3 parentesisc $@19 llavea DECLARACIONFUNCIONCICLO . $@20 BLOQUE regresar EXP llavec
+   85 CREARFUNCION: funcion CREARFUNCION2 id $@18 parentesisa CREARFUNCION3 parentesisc $@19 llavea DECLARACIONFUNCIONCICLO . $@20 BLOQUE regresar EXP $@21 llavec
 
     $default  reduce using rule 83 ($@20)
 
@@ -2331,28 +2335,28 @@ state 204
 
 state 205
 
-  103 SUPEREXPRESION3: and .
-
-    $default  reduce using rule 103 (SUPEREXPRESION3)
-
-
-state 206
-
-  104 SUPEREXPRESION3: or .
+  104 SUPEREXPRESION3: and .
 
     $default  reduce using rule 104 (SUPEREXPRESION3)
 
 
+state 206
+
+  105 SUPEREXPRESION3: or .
+
+    $default  reduce using rule 105 (SUPEREXPRESION3)
+
+
 state 207
 
-  100 SUPEREXPRESION: EXPRESION SUPEREXPRESION2 .
+  101 SUPEREXPRESION: EXPRESION SUPEREXPRESION2 .
 
-    $default  reduce using rule 100 (SUPEREXPRESION)
+    $default  reduce using rule 101 (SUPEREXPRESION)
 
 
 state 208
 
-  102 SUPEREXPRESION2: SUPEREXPRESION3 . EXPRESION
+  103 SUPEREXPRESION2: SUPEREXPRESION3 . EXPRESION
 
     id           shift, and go to state 41
     ctetexto     shift, and go to state 42
@@ -2384,37 +2388,37 @@ state 210
 
 state 211
 
-   94 LLAMARFUNCION: id $@22 parentesisa LLAMARFUNCION2 . parentesisc ptocoma
+   95 LLAMARFUNCION: id $@23 parentesisa LLAMARFUNCION2 . parentesisc ptocoma
 
     parentesisc  shift, and go to state 233
 
 
 state 212
 
-   96 LLAMARFUNCION2: EXP . $@23 LLAMARFUNCION3
+   97 LLAMARFUNCION2: EXP . $@24 LLAMARFUNCION3
 
-    $default  reduce using rule 95 ($@23)
+    $default  reduce using rule 96 ($@24)
 
-    $@23  go to state 234
+    $@24  go to state 234
 
 
 state 213
 
-  133 DIBUJARFIGURA: dibujarFigura parentesisa FIGURA coma . id parentesisc ptocoma
+  134 DIBUJARFIGURA: dibujarFigura parentesisa FIGURA coma . id parentesisc ptocoma
 
     id  shift, and go to state 235
 
 
 state 214
 
-  138 BORRARFIGURA: borrarFigura parentesisa id parentesisc . ptocoma
+  139 BORRARFIGURA: borrarFigura parentesisa id parentesisc . ptocoma
 
     ptocoma  shift, and go to state 236
 
 
 state 215
 
-  143 GIRARIZQ: girarIzquierda parentesisa id coma . EXP parentesisc ptocoma
+  144 GIRARIZQ: girarIzquierda parentesisa id coma . EXP parentesisc ptocoma
 
     id           shift, and go to state 41
     ctetexto     shift, and go to state 42
@@ -2431,7 +2435,7 @@ state 215
 
 state 216
 
-  142 GIRARDER: girarDerecha parentesisa id coma . EXP parentesisc ptocoma
+  143 GIRARDER: girarDerecha parentesisa id coma . EXP parentesisc ptocoma
 
     id           shift, and go to state 41
     ctetexto     shift, and go to state 42
@@ -2448,7 +2452,7 @@ state 216
 
 state 217
 
-  140 MOVER: mover parentesisa id coma . EXP coma EXP parentesisc ptocoma
+  141 MOVER: mover parentesisa id coma . EXP coma EXP parentesisc ptocoma
 
     id           shift, and go to state 41
     ctetexto     shift, and go to state 42
@@ -2465,14 +2469,14 @@ state 217
 
 state 218
 
-  141 OBTENERPOSICION: obtenerPosicion parentesisa id parentesisc . ptocoma
+  142 OBTENERPOSICION: obtenerPosicion parentesisa id parentesisc . ptocoma
 
     ptocoma  shift, and go to state 240
 
 
 state 219
 
-  139 HABLAR: hablar parentesisa id coma . EXP parentesisc ptocoma
+  140 HABLAR: hablar parentesisa id coma . EXP parentesisc ptocoma
 
     id           shift, and go to state 41
     ctetexto     shift, and go to state 42
@@ -2489,21 +2493,21 @@ state 219
 
 state 220
 
-  144 OBTENERALTURA: obtenerAltura parentesisa id parentesisc . ptocoma
+  145 OBTENERALTURA: obtenerAltura parentesisa id parentesisc . ptocoma
 
     ptocoma  shift, and go to state 242
 
 
 state 221
 
-  145 OBTENERANCHURA: obtenerAnchura parentesisa id parentesisc . ptocoma
+  146 OBTENERANCHURA: obtenerAnchura parentesisa id parentesisc . ptocoma
 
     ptocoma  shift, and go to state 243
 
 
 state 222
 
-  146 CAMBIARALTURA: cambiarAltura parentesisa id coma . EXP parentesisc ptocoma
+  147 CAMBIARALTURA: cambiarAltura parentesisa id coma . EXP parentesisc ptocoma
 
     id           shift, and go to state 41
     ctetexto     shift, and go to state 42
@@ -2520,7 +2524,7 @@ state 222
 
 state 223
 
-  147 CAMBIARANCHURA: cambiarAnchura parentesisa id coma . EXP parentesisc ptocoma
+  148 CAMBIARANCHURA: cambiarAnchura parentesisa id coma . EXP parentesisc ptocoma
 
     id           shift, and go to state 41
     ctetexto     shift, and go to state 42
@@ -2537,7 +2541,7 @@ state 223
 
 state 224
 
-  148 COLORFONDO: colorFondo parentesisa COLOR parentesisc . ptocoma
+  149 COLORFONDO: colorFondo parentesisa COLOR parentesisc . ptocoma
 
     ptocoma  shift, and go to state 246
 
@@ -2551,7 +2555,7 @@ state 225
 
 state 226
 
-   84 CREARFUNCION: funcion CREARFUNCION2 id $@18 parentesisa CREARFUNCION3 parentesisc $@19 llavea DECLARACIONFUNCIONCICLO $@20 . BLOQUE regresar EXP llavec
+   85 CREARFUNCION: funcion CREARFUNCION2 id $@18 parentesisa CREARFUNCION3 parentesisc $@19 llavea DECLARACIONFUNCIONCICLO $@20 . BLOQUE regresar EXP $@21 llavec
 
     si               shift, and go to state 110
     imprimir         shift, and go to state 111
@@ -2627,9 +2631,9 @@ state 229
 
 state 230
 
-  102 SUPEREXPRESION2: SUPEREXPRESION3 EXPRESION .
+  103 SUPEREXPRESION2: SUPEREXPRESION3 EXPRESION .
 
-    $default  reduce using rule 102 (SUPEREXPRESION2)
+    $default  reduce using rule 103 (SUPEREXPRESION2)
 
 
 state 231
@@ -2648,109 +2652,109 @@ state 232
 
 state 233
 
-   94 LLAMARFUNCION: id $@22 parentesisa LLAMARFUNCION2 parentesisc . ptocoma
+   95 LLAMARFUNCION: id $@23 parentesisa LLAMARFUNCION2 parentesisc . ptocoma
 
     ptocoma  shift, and go to state 253
 
 
 state 234
 
-   96 LLAMARFUNCION2: EXP $@23 . LLAMARFUNCION3
+   97 LLAMARFUNCION2: EXP $@24 . LLAMARFUNCION3
 
     coma  shift, and go to state 254
 
-    $default  reduce using rule 99 (LLAMARFUNCION3)
+    $default  reduce using rule 100 (LLAMARFUNCION3)
 
     LLAMARFUNCION3  go to state 255
 
 
 state 235
 
-  133 DIBUJARFIGURA: dibujarFigura parentesisa FIGURA coma id . parentesisc ptocoma
+  134 DIBUJARFIGURA: dibujarFigura parentesisa FIGURA coma id . parentesisc ptocoma
 
     parentesisc  shift, and go to state 256
 
 
 state 236
 
-  138 BORRARFIGURA: borrarFigura parentesisa id parentesisc ptocoma .
+  139 BORRARFIGURA: borrarFigura parentesisa id parentesisc ptocoma .
 
-    $default  reduce using rule 138 (BORRARFIGURA)
+    $default  reduce using rule 139 (BORRARFIGURA)
 
 
 state 237
 
-  143 GIRARIZQ: girarIzquierda parentesisa id coma EXP . parentesisc ptocoma
+  144 GIRARIZQ: girarIzquierda parentesisa id coma EXP . parentesisc ptocoma
 
     parentesisc  shift, and go to state 257
 
 
 state 238
 
-  142 GIRARDER: girarDerecha parentesisa id coma EXP . parentesisc ptocoma
+  143 GIRARDER: girarDerecha parentesisa id coma EXP . parentesisc ptocoma
 
     parentesisc  shift, and go to state 258
 
 
 state 239
 
-  140 MOVER: mover parentesisa id coma EXP . coma EXP parentesisc ptocoma
+  141 MOVER: mover parentesisa id coma EXP . coma EXP parentesisc ptocoma
 
     coma  shift, and go to state 259
 
 
 state 240
 
-  141 OBTENERPOSICION: obtenerPosicion parentesisa id parentesisc ptocoma .
+  142 OBTENERPOSICION: obtenerPosicion parentesisa id parentesisc ptocoma .
 
-    $default  reduce using rule 141 (OBTENERPOSICION)
+    $default  reduce using rule 142 (OBTENERPOSICION)
 
 
 state 241
 
-  139 HABLAR: hablar parentesisa id coma EXP . parentesisc ptocoma
+  140 HABLAR: hablar parentesisa id coma EXP . parentesisc ptocoma
 
     parentesisc  shift, and go to state 260
 
 
 state 242
 
-  144 OBTENERALTURA: obtenerAltura parentesisa id parentesisc ptocoma .
+  145 OBTENERALTURA: obtenerAltura parentesisa id parentesisc ptocoma .
 
-    $default  reduce using rule 144 (OBTENERALTURA)
+    $default  reduce using rule 145 (OBTENERALTURA)
 
 
 state 243
 
-  145 OBTENERANCHURA: obtenerAnchura parentesisa id parentesisc ptocoma .
+  146 OBTENERANCHURA: obtenerAnchura parentesisa id parentesisc ptocoma .
 
-    $default  reduce using rule 145 (OBTENERANCHURA)
+    $default  reduce using rule 146 (OBTENERANCHURA)
 
 
 state 244
 
-  146 CAMBIARALTURA: cambiarAltura parentesisa id coma EXP . parentesisc ptocoma
+  147 CAMBIARALTURA: cambiarAltura parentesisa id coma EXP . parentesisc ptocoma
 
     parentesisc  shift, and go to state 261
 
 
 state 245
 
-  147 CAMBIARANCHURA: cambiarAnchura parentesisa id coma EXP . parentesisc ptocoma
+  148 CAMBIARANCHURA: cambiarAnchura parentesisa id coma EXP . parentesisc ptocoma
 
     parentesisc  shift, and go to state 262
 
 
 state 246
 
-  148 COLORFONDO: colorFondo parentesisa COLOR parentesisc ptocoma .
+  149 COLORFONDO: colorFondo parentesisa COLOR parentesisc ptocoma .
 
-    $default  reduce using rule 148 (COLORFONDO)
+    $default  reduce using rule 149 (COLORFONDO)
 
 
 state 247
 
-   84 CREARFUNCION: funcion CREARFUNCION2 id $@18 parentesisa CREARFUNCION3 parentesisc $@19 llavea DECLARACIONFUNCIONCICLO $@20 BLOQUE . regresar EXP llavec
+   85 CREARFUNCION: funcion CREARFUNCION2 id $@18 parentesisa CREARFUNCION3 parentesisc $@19 llavea DECLARACIONFUNCIONCICLO $@20 BLOQUE . regresar EXP $@21 llavec
 
     regresar  shift, and go to state 263
 
@@ -2832,51 +2836,51 @@ state 252
 
 state 253
 
-   94 LLAMARFUNCION: id $@22 parentesisa LLAMARFUNCION2 parentesisc ptocoma .
+   95 LLAMARFUNCION: id $@23 parentesisa LLAMARFUNCION2 parentesisc ptocoma .
 
-    $default  reduce using rule 94 (LLAMARFUNCION)
+    $default  reduce using rule 95 (LLAMARFUNCION)
 
 
 state 254
 
-   98 LLAMARFUNCION3: coma . $@24 LLAMARFUNCION2
+   99 LLAMARFUNCION3: coma . $@25 LLAMARFUNCION2
 
-    $default  reduce using rule 97 ($@24)
+    $default  reduce using rule 98 ($@25)
 
-    $@24  go to state 267
+    $@25  go to state 267
 
 
 state 255
 
-   96 LLAMARFUNCION2: EXP $@23 LLAMARFUNCION3 .
+   97 LLAMARFUNCION2: EXP $@24 LLAMARFUNCION3 .
 
-    $default  reduce using rule 96 (LLAMARFUNCION2)
+    $default  reduce using rule 97 (LLAMARFUNCION2)
 
 
 state 256
 
-  133 DIBUJARFIGURA: dibujarFigura parentesisa FIGURA coma id parentesisc . ptocoma
+  134 DIBUJARFIGURA: dibujarFigura parentesisa FIGURA coma id parentesisc . ptocoma
 
     ptocoma  shift, and go to state 268
 
 
 state 257
 
-  143 GIRARIZQ: girarIzquierda parentesisa id coma EXP parentesisc . ptocoma
+  144 GIRARIZQ: girarIzquierda parentesisa id coma EXP parentesisc . ptocoma
 
     ptocoma  shift, and go to state 269
 
 
 state 258
 
-  142 GIRARDER: girarDerecha parentesisa id coma EXP parentesisc . ptocoma
+  143 GIRARDER: girarDerecha parentesisa id coma EXP parentesisc . ptocoma
 
     ptocoma  shift, and go to state 270
 
 
 state 259
 
-  140 MOVER: mover parentesisa id coma EXP coma . EXP parentesisc ptocoma
+  141 MOVER: mover parentesisa id coma EXP coma . EXP parentesisc ptocoma
 
     id           shift, and go to state 41
     ctetexto     shift, and go to state 42
@@ -2893,28 +2897,28 @@ state 259
 
 state 260
 
-  139 HABLAR: hablar parentesisa id coma EXP parentesisc . ptocoma
+  140 HABLAR: hablar parentesisa id coma EXP parentesisc . ptocoma
 
     ptocoma  shift, and go to state 272
 
 
 state 261
 
-  146 CAMBIARALTURA: cambiarAltura parentesisa id coma EXP parentesisc . ptocoma
+  147 CAMBIARALTURA: cambiarAltura parentesisa id coma EXP parentesisc . ptocoma
 
     ptocoma  shift, and go to state 273
 
 
 state 262
 
-  147 CAMBIARANCHURA: cambiarAnchura parentesisa id coma EXP parentesisc . ptocoma
+  148 CAMBIARANCHURA: cambiarAnchura parentesisa id coma EXP parentesisc . ptocoma
 
     ptocoma  shift, and go to state 274
 
 
 state 263
 
-   84 CREARFUNCION: funcion CREARFUNCION2 id $@18 parentesisa CREARFUNCION3 parentesisc $@19 llavea DECLARACIONFUNCIONCICLO $@20 BLOQUE regresar . EXP llavec
+   85 CREARFUNCION: funcion CREARFUNCION2 id $@18 parentesisa CREARFUNCION3 parentesisc $@19 llavea DECLARACIONFUNCIONCICLO $@20 BLOQUE regresar . EXP $@21 llavec
 
     id           shift, and go to state 41
     ctetexto     shift, and go to state 42
@@ -2954,7 +2958,7 @@ state 266
 
 state 267
 
-   98 LLAMARFUNCION3: coma $@24 . LLAMARFUNCION2
+   99 LLAMARFUNCION3: coma $@25 . LLAMARFUNCION2
 
     id           shift, and go to state 41
     ctetexto     shift, and go to state 42
@@ -2972,58 +2976,60 @@ state 267
 
 state 268
 
-  133 DIBUJARFIGURA: dibujarFigura parentesisa FIGURA coma id parentesisc ptocoma .
+  134 DIBUJARFIGURA: dibujarFigura parentesisa FIGURA coma id parentesisc ptocoma .
 
-    $default  reduce using rule 133 (DIBUJARFIGURA)
+    $default  reduce using rule 134 (DIBUJARFIGURA)
 
 
 state 269
 
-  143 GIRARIZQ: girarIzquierda parentesisa id coma EXP parentesisc ptocoma .
+  144 GIRARIZQ: girarIzquierda parentesisa id coma EXP parentesisc ptocoma .
 
-    $default  reduce using rule 143 (GIRARIZQ)
+    $default  reduce using rule 144 (GIRARIZQ)
 
 
 state 270
 
-  142 GIRARDER: girarDerecha parentesisa id coma EXP parentesisc ptocoma .
+  143 GIRARDER: girarDerecha parentesisa id coma EXP parentesisc ptocoma .
 
-    $default  reduce using rule 142 (GIRARDER)
+    $default  reduce using rule 143 (GIRARDER)
 
 
 state 271
 
-  140 MOVER: mover parentesisa id coma EXP coma EXP . parentesisc ptocoma
+  141 MOVER: mover parentesisa id coma EXP coma EXP . parentesisc ptocoma
 
     parentesisc  shift, and go to state 280
 
 
 state 272
 
-  139 HABLAR: hablar parentesisa id coma EXP parentesisc ptocoma .
+  140 HABLAR: hablar parentesisa id coma EXP parentesisc ptocoma .
 
-    $default  reduce using rule 139 (HABLAR)
+    $default  reduce using rule 140 (HABLAR)
 
 
 state 273
 
-  146 CAMBIARALTURA: cambiarAltura parentesisa id coma EXP parentesisc ptocoma .
+  147 CAMBIARALTURA: cambiarAltura parentesisa id coma EXP parentesisc ptocoma .
 
-    $default  reduce using rule 146 (CAMBIARALTURA)
+    $default  reduce using rule 147 (CAMBIARALTURA)
 
 
 state 274
 
-  147 CAMBIARANCHURA: cambiarAnchura parentesisa id coma EXP parentesisc ptocoma .
+  148 CAMBIARANCHURA: cambiarAnchura parentesisa id coma EXP parentesisc ptocoma .
 
-    $default  reduce using rule 147 (CAMBIARANCHURA)
+    $default  reduce using rule 148 (CAMBIARANCHURA)
 
 
 state 275
 
-   84 CREARFUNCION: funcion CREARFUNCION2 id $@18 parentesisa CREARFUNCION3 parentesisc $@19 llavea DECLARACIONFUNCIONCICLO $@20 BLOQUE regresar EXP . llavec
+   85 CREARFUNCION: funcion CREARFUNCION2 id $@18 parentesisa CREARFUNCION3 parentesisc $@19 llavea DECLARACIONFUNCIONCICLO $@20 BLOQUE regresar EXP . $@21 llavec
 
-    llavec  shift, and go to state 281
+    $default  reduce using rule 84 ($@21)
+
+    $@21  go to state 281
 
 
 state 276
@@ -3096,30 +3102,30 @@ state 278
 
 state 279
 
-   98 LLAMARFUNCION3: coma $@24 LLAMARFUNCION2 .
+   99 LLAMARFUNCION3: coma $@25 LLAMARFUNCION2 .
 
-    $default  reduce using rule 98 (LLAMARFUNCION3)
+    $default  reduce using rule 99 (LLAMARFUNCION3)
 
 
 state 280
 
-  140 MOVER: mover parentesisa id coma EXP coma EXP parentesisc . ptocoma
+  141 MOVER: mover parentesisa id coma EXP coma EXP parentesisc . ptocoma
 
     ptocoma  shift, and go to state 287
 
 
 state 281
 
-   84 CREARFUNCION: funcion CREARFUNCION2 id $@18 parentesisa CREARFUNCION3 parentesisc $@19 llavea DECLARACIONFUNCIONCICLO $@20 BLOQUE regresar EXP llavec .
+   85 CREARFUNCION: funcion CREARFUNCION2 id $@18 parentesisa CREARFUNCION3 parentesisc $@19 llavea DECLARACIONFUNCIONCICLO $@20 BLOQUE regresar EXP $@21 . llavec
 
-    $default  reduce using rule 84 (CREARFUNCION)
+    llavec  shift, and go to state 288
 
 
 state 282
 
    50 DECLARACIONFUNCION: crear TIPO id $@6 DECLARACIONFUNCION2 . ptocoma
 
-    ptocoma  shift, and go to state 288
+    ptocoma  shift, and go to state 289
 
 
 state 283
@@ -3135,7 +3141,7 @@ state 284
 
     $default  reduce using rule 75 ($@15)
 
-    $@15  go to state 289
+    $@15  go to state 290
 
 
 state 285
@@ -3149,38 +3155,45 @@ state 286
 
    80 CICLO: mientras $@16 parentesisa SUPEREXPRESION parentesisc hacer $@17 llavea BLOQUE . llavec
 
-    llavec  shift, and go to state 290
+    llavec  shift, and go to state 291
 
 
 state 287
 
-  140 MOVER: mover parentesisa id coma EXP coma EXP parentesisc ptocoma .
+  141 MOVER: mover parentesisa id coma EXP coma EXP parentesisc ptocoma .
 
-    $default  reduce using rule 140 (MOVER)
+    $default  reduce using rule 141 (MOVER)
 
 
 state 288
+
+   85 CREARFUNCION: funcion CREARFUNCION2 id $@18 parentesisa CREARFUNCION3 parentesisc $@19 llavea DECLARACIONFUNCIONCICLO $@20 BLOQUE regresar EXP $@21 llavec .
+
+    $default  reduce using rule 85 (CREARFUNCION)
+
+
+state 289
 
    50 DECLARACIONFUNCION: crear TIPO id $@6 DECLARACIONFUNCION2 ptocoma .
 
     $default  reduce using rule 50 (DECLARACIONFUNCION)
 
 
-state 289
+state 290
 
    76 CONDICION2: no $@15 . llavea BLOQUE llavec
 
-    llavea  shift, and go to state 291
+    llavea  shift, and go to state 292
 
 
-state 290
+state 291
 
    80 CICLO: mientras $@16 parentesisa SUPEREXPRESION parentesisc hacer $@17 llavea BLOQUE llavec .
 
     $default  reduce using rule 80 (CICLO)
 
 
-state 291
+state 292
 
    76 CONDICION2: no $@15 llavea . BLOQUE llavec
 
@@ -3202,7 +3215,7 @@ state 291
     cambiarAnchura   shift, and go to state 124
     colorFondo       shift, and go to state 125
 
-    BLOQUE           go to state 292
+    BLOQUE           go to state 293
     ESTATUTO         go to state 127
     FUNCIONESPECIAL  go to state 128
     ASIGNACION       go to state 129
@@ -3225,14 +3238,14 @@ state 291
     COLORFONDO       go to state 146
 
 
-state 292
+state 293
 
    76 CONDICION2: no $@15 llavea BLOQUE . llavec
 
-    llavec  shift, and go to state 293
+    llavec  shift, and go to state 294
 
 
-state 293
+state 294
 
    76 CONDICION2: no $@15 llavea BLOQUE llavec .
 
