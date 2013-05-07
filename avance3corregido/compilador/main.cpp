@@ -390,34 +390,33 @@ void hacerPrint(string op1){
 
 
 
-/*
-void hacerIgual(string op1, int operando1, int direccion){
+
+void hacerIgual(string op1,string temp, int direccion){
 
     int base1, base2;			 //varaible para mapear direccion;
     int op1dir;
     int num1;
     string valor;
 
+ base1 = getBase(direccion);
+   // base1 = getBase(direccion);
+    generarMemoria(direccion, op1);
 
-    base1 = getBase(operando1);
-
-
-
-
-                	    //ChecarRango
-                	       if (checarRango(op1)==1)  {	//es int
-                                 num1=getValorVectorInt(op1, operando1, base1);
+                              if (checarRango(temp)==1)  {	//es int
+                                 cout<< "Print "<< getValorVectorInt(temp, direccion, base1)<<"\n";
                             }
-                            else if (checarRango(op1)==2){	//es float
-                                 num1= getValorVectorFloat(op1, operando1, base1);
+                            else if (checarRango(temp)==2){	//es float
+                                 cout<<"Print " <<getValorVectorFloat(temp, direccion, base1)<<"\n";
                             }
-                             else if (checarRango(op1)==3){	//es float
-                                 num1= getValorVectorString(op1, operando1, base1);
+                             else if (checarRango(temp)==3){	//es float
+                                 cout<<"Print "<< getValorVectorString(temp, direccion, base1)<<"\n";
                             }
 
 
+                	  
 
-}*/
+
+}
 
 
 int main(){
@@ -511,96 +510,16 @@ int main(){
 				cout<<op2<<" - ";
 				cout<<temp<<"\n";
 				
+				
+				//mete elos cuasruplos a la matriz
 				cuadruplos[numCuadruplos][0]= l;
 				cuadruplos[numCuadruplos][1]= op;
 				cuadruplos[numCuadruplos][2]= op1;
 				cuadruplos[numCuadruplos][3]= op2;
 				cuadruplos[numCuadruplos][4]= temp;
-				
-/*
-                //Empieza el Switch
-                switch(atoi(op.c_str())){
-              		case 0 :{ //suma instrucciones
-         		       hacerOperacion(0, op1, op2 ,temp);
-                    }
-                	break;
 
-                	case 1:{//resta instrucciones
-                    	hacerOperacion(1, op1, op2 ,temp);
-                    }
-                	break;
 
-                	case 2:{//mul instrucciones
-                         hacerOperacion(2, op1, op2 ,temp);
-                    }
-                	break;
-
-                	case 3:{//instrucciones division
-                	      hacerOperacion(3, op1, op2 ,temp);
-                    }
-                	break;
-
-                	case 4 ://==  instrucciones
-                	break;
-
-                	case 5 ://   =!  instrucciones
-                	break;
-
-                	case 6 :// > instrucciones
-                	break;
-
-                	case 7 ://<instrucciones
-                	break;
-
-                	case 8 ://  and 
-                	break;
-
-                	case 9 ://or
-                	break;
-
-                	case 10 ://=
-                	break;
-
-                	case 11 ://goto
-                	
-                	break;
-
-                	case 12 ://gotof
-                	break;
-
-                	case 13 ://gotov
-                	break;
-
-                	case 14 ://gotosub
-                	break;
-
-                	case 20 ://era
-                	break;
-
-                	case 21 ://gosub
-                	break;
-
-                	case 22 : //ret
-                	break;
-
-                	case 23 ://param
-                	break;
-
-                	case 24 : //return
-                	break;
-
-                	case 25 ://read
-                	break;
-
-                	case 26 ://print
-                    hacerPrint(op1);
-                	break;
-
-                	case 30 : //end
-                	break;
-
-                }//Termina el switch
-                */
+              
 
 			}
 			
@@ -630,28 +549,33 @@ int i=0;
 
 while (i<numCuadruplos){
       i++;
+     
+     cout<<"---Numero i "<<i<<", num cuadruplo  "<<cuadruplos[i][0]<<", op  "<<cuadruplos[i][1]<<", op1  "<<cuadruplos[i][2]<<"\n";
       /*Empieza el Switch*/
                 switch(atoi(cuadruplos[i][1].c_str())){
 
 
               		case 0 /*Suma*/:{ //instrucciones
-              		
+              		        cout<<i<<"<<<<cuadruplo \n";
               		
          		       hacerOperacion(0, cuadruplos[i][2], cuadruplos[i][3] ,cuadruplos[i][4]);
                     }
                 	break;
 
                 	case 1/*Resta*/:{//instrucciones
+                	 cout<<i<<"<<<<cuadruplo \n";
                     	 hacerOperacion(1, cuadruplos[i][2], cuadruplos[i][3] ,cuadruplos[i][4]);
                     }
                 	break;
 
                 	case 2/*multiplicación*/:{//instrucciones
+                	 cout<<i<<"<<<<cuadruplo \n";
                          hacerOperacion(2, cuadruplos[i][2], cuadruplos[i][3] ,cuadruplos[i][4]);
                     }
                 	break;
 
                 	case 3/*división*/:{//instrucciones
+                	 cout<<i<<"<<<<cuadruplo \n";
                 	       hacerOperacion(3, cuadruplos[i][2], cuadruplos[i][3] ,cuadruplos[i][4]);
                     }
                 	break;
@@ -675,16 +599,18 @@ while (i<numCuadruplos){
                 	break;
 
                 	case 10 /*=*/://instrucciones
-
-
-                      //  hacerIgual(cuadruplos[i][2] ,atoi(cuadruplos[i][2].c_str()), atoi(cuadruplos[i][4].c_str()) );
+                   cout<<i<<"<<<<cuadruplo \n";
+                     cout<<"\n ASIGNACION >"<<cuadruplos[i][2]<<" ->" <<cuadruplos[i][4] <<"\n";
+                            
+                       hacerIgual(cuadruplos[i][2] ,cuadruplos[i][4] , atoi(cuadruplos[i][4].c_str()) );
 
                 	break;
 
                 	case 11 /*GOTO*/://instrucciones
                    //  dirGoto = atoi(l.c_str());
+                    cout<<i<<"<<<<cuadruplo \n";
                    cout<<"\n Goto >"<<cuadruplos[i][4]<<"\n";
-                   i=atoi(cuadruplos[i][4].c_str())-1;
+                   i=atoi(cuadruplos[i][4].c_str());
 
 
                 	break;
@@ -694,7 +620,8 @@ while (i<numCuadruplos){
                 
                     	
              	   cout<<"\n Goto Falso >"<<cuadruplos[i][4]<<"\n";
-                   i=atoi(cuadruplos[i][4].c_str())-1;
+             	    cout<<i<<"<<<<cuadruplo \n";
+                  // i=atoi(cuadruplos[i][4].c_str())-1;
                 	
                 	break;
                 	
@@ -723,14 +650,17 @@ while (i<numCuadruplos){
 
                 	case 21 /*gosub*/://instrucciones
                 	     //Meter la direccion de retorno en la pila de ejecución
+                	      cout<<i<<"<<<<cuadruplo \n";
 
                 	     dirRetorno = atoi( cuadruplos[i][1].c_str());
 
-                	     pilaEjecucion.push(dirRetorno);
+                	     pilaEjecucion.push(i);
 
-                	    cout<< "\n Pila de Ejecucion " << pilaEjecucion.top();
+                	    cout<< "\n Pila de Ejecucion " << i;
 
                 	    //Transferir el control de hecucion a la direccion donde inicia el procedimiento
+                	    cout<<"\n GO SUB >"<<cuadruplos[i][2]<<"\n";
+                         i=atoi(cuadruplos[i][2].c_str());
 
 
 
@@ -740,10 +670,16 @@ while (i<numCuadruplos){
                 	    //actualizar la base local(previa a la llamada)
                 	    //destruir el registro de activación del proc d ememoria local
                 	    //Recuperar la dirección de rerono y transeferir el control de ejeciucpin
+                	   
+                        // cout<<"\n RET >"<<pilaEjecucion.top();
+                	     i= pilaEjecucion.top();//Regresa a donde estaba 
+                	    
+                	    
                 	break;
 
                 	case 23 /*param*/://instrucciones
-
+                          cout<<i<<"<<<<cuadruplo \n";
+                          cout<<"PARAM\n";
                 	    //Meter los valores al amemoria local
 
                 	break;
@@ -752,13 +688,19 @@ while (i<numCuadruplos){
                 	break;
 
                 	case 25 /*read*/://instrucciones
+                	 cout<<i<<"<<<<cuadruplo \n";
+                	 cout<<"READ\n";
                 	break;
 
                 	case 26 /*PRINT*/://instrucciones
+                	 cout<<i<<"<<<<cuadruplo \n";
                     hacerPrint(cuadruplos[i][2]);
                 	break;
 
                 	case 30 /*END*/: //instrucciones
+                	
+                	 cout<<i<<"<<<<cuadruplo \n";
+                	 cout<<"END\n";
                 	break;
 
                 }/*Termina el switch*/
