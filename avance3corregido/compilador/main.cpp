@@ -401,6 +401,8 @@ void hacerIgual(string op1,string temp, int direccion){
  base1 = getBase(direccion);
    // base1 = getBase(direccion);
     generarMemoria(direccion, op1);
+    
+                              //Verificar que la direecion se haya guardado en temporal
 
                               if (checarRango(temp)==1)  {	//es int
                                  cout<< "Print "<< getValorVectorInt(temp, direccion, base1)<<"\n";
