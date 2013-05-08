@@ -352,10 +352,7 @@ DECLARACIONFUNCIONCICLO2: DECLARACIONFUNCIONCICLO
 
 DECLARACIONFUNCION: crear TIPO id {
 
-				direccionEnteroLocal=11000;
-				direccionDobleLocal=21000;
-				direccionTextoLocal=31000;
-				direccionBooleanoLocal=41000;
+
 
 				numeroDimension=0;
 				dimensionArreglo dimensionNueva = {0,0,0};
@@ -412,6 +409,11 @@ CONDICION2: no {secuenciaElse();} llavea BLOQUE llavec
 CICLO: mientras {secuenciaWhile1();} parentesisa SUPEREXPRESION parentesisc hacer {secuenciaWhile2();}  llavea BLOQUE llavec {secuenciaWhile3();} ;
 
 CREARFUNCION: funcion CREARFUNCION2 id {
+				direccionEnteroLocal=11000;
+				direccionDobleLocal=21000;
+				direccionTextoLocal=31000;
+				direccionBooleanoLocal=41000;
+
 					strcpy(nombreFuncion, $3); 
 					/*numeroParametros=0;
 					strcpy(nombreFuncion, $3); 
