@@ -1161,7 +1161,7 @@ void generarDimension1(){
 
 		int res = generarDireccion(1,3); //3:direccion temporal entera
 		insert(&tablaTemporal,nombreT,nombreT,1,res,dimensiones[0], dimensiones[1]);
-		generarCuadruplo(42, atoi(operador1->valor),id->direccion, res);	// multiplocacion	
+		generarCuadruplo(40, operador1->direccion,id->direccion, res);	// multiplocacion	
 		push(&pilaOperadores,nombreT,1,res);//3: direccion temporal
 
 	} else {	//si hay una segunda dimension
