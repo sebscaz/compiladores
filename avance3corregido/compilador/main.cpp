@@ -31,6 +31,7 @@ param  23
 Return 24
 write  25
 PRINT  26
+VER  	27
 END   30
 */
 
@@ -137,7 +138,7 @@ vector<string> booleanoConstantes(contBoolC);
 
 int checarRango(string operando){
 
-    if (operando.at(0)=='1'){ cout<<"....Rango  "<<1<<"\n"; return 1;}
+    if (operando.at(0)=='1'){ return 1;}
     else if (operando.at(0)=='2'){return 2;}
     else if (operando.at(0)=='3'){ return 3; }
 	else if (operando.at(0)=='4'){ return 3; }
@@ -216,9 +217,9 @@ void generarMemoria(int direccion, string valor){
           enterosLocales[direccion-11000]=atoi(valor.c_str());
      }
      else if(direccion >= 12000 && direccion <= 12999){
-             cout<<"\n --INTERSUME..1---  >"<<enterosConstantes[1]<<"\n";
+            // cout<<"\n --INTERSUME..1---  >"<<enterosConstantes[1]<<"\n";
           enterosTemporales[direccion-12000]=atoi(valor.c_str());
-             cout<<"\n --INTERSUME..2---  >"<<enterosConstantes[1]<<"\n";
+          //   cout<<"\n --INTERSUME..2---  >"<<enterosConstantes[1]<<"\n";
           cout<<"\nDIRECCION!! " <<direccion<< ",, valor : "<< enterosTemporales[direccion-12000]<<"\n";
      }
      else if(direccion >= 13000 && direccion <= 13999){
@@ -325,15 +326,15 @@ void hacerOperacion(int operacion, string op1, string op2 , string temp){
     //Hacer operacion
     //SUMA
     if(operacion==0){
-                     cout<<"\n --PRESUMA---  >"<<enterosConstantes[1]<<"\n";
+                    
         //Checar que tipo sera el resultado
         if(checarRango(temp)==1){
                                  
         	resultadoInt = (int)(op1ValorReal + op2ValorReal);
-        	cout<<"\n --PRESUMA2---  >"<<enterosConstantes[1]<<"\n";
+        	//cout<<"\n --PRESUMA2---  >"<<enterosConstantes[1]<<"\n";
         	//Meter valor del temporal en memoria, hay que convertir a string el resultado
             generarMemoria(atoi(temp.c_str()), static_cast<ostringstream*>( &(ostringstream() << resultadoInt) )->str());
-            cout<<"\n --PRESUMA3---  >"<<enterosConstantes[1]<<"\n";
+          //  cout<<"\n --PRESUMA3---  >"<<enterosConstantes[1]<<"\n";
          	cout<<"sumaInt "<<"op1 "<<op1ValorReal<<" op2 "<<op2ValorReal<<" temp " << temp <<" Resultado: " <<resultadoInt<<"\n";
         } else if (checarRango(temp)==2){
             resultadoFloat = op1ValorReal + op2ValorReal;
@@ -341,8 +342,7 @@ void hacerOperacion(int operacion, string op1, string op2 , string temp){
             generarMemoria(atoi(temp.c_str()), static_cast<ostringstream*>( &(ostringstream() << resultadoFloat) )->str());
         	cout<<"sumaF "<<"op1 "<<op1ValorReal<<" op2 "<<op2ValorReal<<" temp " << temp <<" Resultado: " <<resultadoFloat<<"\n";
         }
-        
-         cout<<"\n --POSTSUMA---  >"<<enterosConstantes[1]<<"\n";
+ 
     }
     else if (operacion==1){
         //Checar que tipo sera el resultado
@@ -418,7 +418,7 @@ void hacerOperacion(int operacion, string op1, string op2 , string temp){
     }
     
     else if (operacion==10){
-         
+         /*
             cout<<"= ASIG op:"<<operacion <<" op1 "<<op1ValorReal<<" op2 "<<op2ValorReal<<" temp " << temp <<" Resultado: " <<resultadoFloat<<"\n";
      
       		//Asignar valor si op1 es una constante
@@ -452,7 +452,7 @@ void hacerOperacion(int operacion, string op1, string op2 , string temp){
 					string op1ValorRealString= getValorVectorBoolean(op1, op1dir, base1);
 					generarMemoria(atoi(temp.c_str()),  op1ValorRealString);
 			}
-           
+          */ 
     }
     
 }
@@ -515,6 +515,23 @@ void hacerIgual(int op1, int temp, int direccion){
 				generarMemoria(temp, static_cast<ostringstream*>( &(ostringstream() << resultadoFloat) )->str());
 			}
 			 */      	  
+
+}
+
+
+void hacerVerifica(string indiceString, string limInfString, string limSupString){
+
+	int indice = atoi(indiceString.c_str());
+	int limInf = atoi(limInfString.c_str());
+	int limSup = atoi(limSupString.c_str());
+	
+	
+	cout<<"\nindice: "<<indice<<", limInf: "<<limInf<<",limSup: "<<limSup;
+	
+	
+	if(indice < limInf || indice > limSup){
+		cout<<"\nIndice fuera del arreglo\n";
+	}
 
 }
 
@@ -650,7 +667,7 @@ int i=0;
 while (i<numCuadruplos){
       i++;
      
-     //cout<<"---Numero i "<<i<<", num cuadruplo  "<<cuadruplos[i][0]<<", op  "<<cuadruplos[i][1]<<", op1  "<<cuadruplos[i][2]<<"\n";
+     cout<<"---Numero i "<<i<<", num cuadruplo  "<<cuadruplos[i][0]<<", op  "<<cuadruplos[i][1]<<", op1  "<<cuadruplos[i][2]<<", op2  "<<cuadruplos[i][3]<<", temp  "<<cuadruplos[i][4]<<"\n";
       /*Empieza el Switch*/
                 switch(atoi(cuadruplos[i][1].c_str())){
 
@@ -801,9 +818,18 @@ while (i<numCuadruplos){
                 	 //cout<<"READ\n";
                 	break;
 
-                	case 26 /*PRINT*/://instrucciones
+                	case 26 /*PRINT*/:{//instrucciones
                 	 cout<<i<<"<<<<cuadruplo \n";
                     hacerPrint(cuadruplos[i][2]);
+					
+					}
+                	break;
+					
+					case 27 /*PRINT*/:{//instrucciones
+          
+                     hacerVerifica(cuadruplos[i][2],cuadruplos[i][3],cuadruplos[i][4]);
+					
+					}
                 	break;
 
                 	case 30 /*END*/: //instrucciones
