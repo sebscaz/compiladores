@@ -274,6 +274,7 @@ int insert(struct StrHashTable *table, char *key,void *value, int type, int dire
 	}
 	else
 	{
+		printf("\nID nu: nueva\n");
    		node->key = key;
     		node->value = value;
 		node->type=type;
@@ -336,7 +337,7 @@ int insertProc(struct StrHashTableProc *table, struct StrHashTable *vartable, st
 	}
 	else
 	{
-		printf("=======================PROC ");
+		printf("=======================PROC %s\n", key);
    		node->key = key;
     		node->value = value;
 		node->vartable = vartable;

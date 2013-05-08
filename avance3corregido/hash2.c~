@@ -116,7 +116,7 @@ struct DimensionArreglo getDimension1(struct StrHashTable *table,const char *key
             return node->dimension1;
         return node->dimension1;
     } 
-	return -1;
+	//return -1;
 }
 
 struct DimensionArreglo getDimension2(struct StrHashTable *table,const char *key)
@@ -129,7 +129,7 @@ struct DimensionArreglo getDimension2(struct StrHashTable *table,const char *key
             return node->dimension2;
         return node->dimension2;
     } 
-	return -1;
+	//return -1;
 }
 
 
@@ -274,6 +274,7 @@ int insert(struct StrHashTable *table, char *key,void *value, int type, int dire
 	}
 	else
 	{
+		printf("\nID nu: nueva\n");
    		node->key = key;
     		node->value = value;
 		node->type=type;
@@ -307,7 +308,7 @@ unsigned int foo_strhash(const char *str)
 
 int insertProc(struct StrHashTableProc *table, struct StrHashTable *vartable, struct StrHashTable *partable, char *key,void *value, int numberParameters, int numberLocalVars, int cuadruploInicial)
 {
-    unsigned int bucket = table->hash(key)%NR_BUCKETS;
+    unsigned int bucket = table->hash(value)%NR_BUCKETS;
     struct StrHashNodeProc **tmp;
     struct StrHashNodeProc *node ;
     tmp = &table->buckets[bucket];
@@ -336,7 +337,7 @@ int insertProc(struct StrHashTableProc *table, struct StrHashTable *vartable, st
 	}
 	else
 	{
-		printf("=======================PROC ");
+		printf("=======================PROC %s\n", key);
    		node->key = key;
     		node->value = value;
 		node->vartable = vartable;

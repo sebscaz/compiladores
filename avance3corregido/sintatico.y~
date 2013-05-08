@@ -32,6 +32,20 @@ void generarDimension2();
 void generarVerifica();
 void generarEnd();
 
+void generarDibujarFigura();
+void generarBorrarFigura();
+void generarHablarFigura();
+void generarMoverFigura();
+void generarObtenerX();
+void generarObtenerY();
+void generarGirarD();
+void generarGirarI();
+void generarObtenerAnchura();
+void generarObtenerAltura();
+void generarCambiarAnchura();
+void generarCambiarAltura();
+void generarColorFondo();
+
 int hacerPush = 1;	//bool para saber si meter variables a la pila - 1:hacer push, 0:no hacer push
 
 void secuenciaIf1();
@@ -78,7 +92,6 @@ int direccionEnteroGlobal=10000;
 int direccionEnteroLocal=11000;
 int direccionEnteroTemp=12000;
 int direccionEnteroConstante=13000;
-
 
 int direccionDobleGlobal=20000;
 int direccionDobleLocal=21000;
@@ -156,6 +169,7 @@ int contadorConstantes =0;
 
 %token programa
 %token principal
+%token prototipo
 %token si
 %token no
 %token imprimir
@@ -230,11 +244,53 @@ int contadorConstantes =0;
 
 PROGRAMA: {file = fopen("cuadruplos.txt","w+"); generarMain();}
 	 programa id {struct StrHashTable tablaParametros = {{0},NULL,NULL,foo_strhash,strcmp};
-		     insertProc(&tblProc,&tablaGlobal,&tablaParametros,$3,$3, 0,0,0); numeroFunciones++;}  llavea PROGRAMA1 PROGRAMASIG PROGRAMA2 PRINCIPAL  llavec {generarEnd();};
+		     insertProc(&tblProc,&tablaGlobal,&tablaParametros,$3,$3, 0,0,0);
+ numeroFunciones++;}  llavea 
+{
+	strcpy(nombreFuncion, "main"); 
+		numeroParametros=0; 
+		struct StrHashTable tablaLocalFuncion = {{0},NULL,NULL,foo_strhash,strcmp};
+		struct StrHashTable tablaParametros = {{0},NULL,NULL,foo_strhash,strcmp};
+		insertProc(&tblProc,&tablaLocalFuncion,&tablaParametros,nombreFuncion,nombreFuncion,0,0,0);	
+}
+
+PROTOTIPOCICLO PROGRAMA1 PROGRAMASIG PROGRAMA2 PRINCIPAL  llavec {generarEnd();};
+
+PROTOTIPOCICLO:PROTOTIPO PROTOTIPOCICLO2;
+
+PROTOTIPOCICLO2: PROTOTIPOCICLO
+	|/**/;
+
+PROTOTIPO: prototipo PROTOTIPOFUNCION ptocoma;
+
+
+PROTOTIPOFUNCION: id parentesisa cteentero parentesisc {
+
+			direccionEnteroLocal=11000;
+			direccionDobleLocal=21000;
+			direccionTextoLocal=31000;
+			direccionBooleanoLocal=41000;
+			
+			numeroParametros=0;
+			strcpy(nombreFuncion, $1); 
+			int cantidadParametros = atoi($3);
+			printf("\n++++++++++Nombe Funcion:%s\n\n", nombreFuncion);
+			struct StrHashTable tablaLocalFuncion = {{0},NULL,NULL,foo_strhash,strcmp};
+			struct StrHashTable tablaParametros = {{0},NULL,NULL,foo_strhash,strcmp};
+			insertProc(&tblProc,&tablaLocalFuncion,&tablaParametros,nombreFuncion,nombreFuncion,cantidadParametros,0,0);
+			numeroFunciones++;
+				 
+		} 
+	;
+
+
+
+
 PROGRAMA1: {alcanceDireccion=1;/*global*/}DECLARACION PROGRAMA12;
 PROGRAMA12: PROGRAMA1
 		  | /*vacio*/;
 PROGRAMA2: CREARFUNCION PROGRAMA22;
+
 PROGRAMA22: PROGRAMA2
 		  | /*vacio*/;
 
@@ -248,7 +304,7 @@ TIPO: texto		{tipoOp = generarTipo($1); numeroStringLocales++;/*printf("========
 	| decimal	{tipoOp = generarTipo($1); numeroFloatLocales++;/*printf("===========tipo: %i\n", tipoOp);*/}
 	| booleano	{tipoOp = generarTipo($1); /*printf("===========tipo: %i\n", tipoOp);*/};	
 
-PRINCIPAL: principal {llenarMain();} parentesisa parentesisc llavea BLOQUE llavec;
+PRINCIPAL: principal {llenarMain(); strcpy(nombreFuncion, "main"); } parentesisa parentesisc llavea DECLARACIONFUNCIONCICLO BLOQUE llavec;
 	
 BLOQUE: ESTATUTO BLOQUE1;
 BLOQUE1: BLOQUE;
@@ -277,7 +333,7 @@ FUNCIONESPECIAL: DIBUJARFIGURA
 
 				
 DECLARACION: crear TIPO id DECLARACION2 ptocoma  {insert(&tablaGlobal,$3,$3,tipoOp,generarDireccion(tipoOp,1),dimensiones[0], dimensiones[1]);
-					printf("CREARR FUNCCC esAREGLOO---------------%i\n",esArreglo);
+			
 				direccionAux=m0;			   
 				if(esArreglo==1) {
 				    	esArreglo=0; /*la siguiente direccion base sera normal*/
@@ -293,7 +349,14 @@ DECLARACIONFUNCIONCICLO: {alcanceDireccion=2;/*local*/}DECLARACIONFUNCION DECLAR
 DECLARACIONFUNCIONCICLO2: DECLARACIONFUNCIONCICLO
 			| /*vacio*/;
 
-DECLARACIONFUNCION: crear TIPO id {numeroDimension=0;
+DECLARACIONFUNCION: crear TIPO id {
+
+				direccionEnteroLocal=11000;
+				direccionDobleLocal=21000;
+				direccionTextoLocal=31000;
+				direccionBooleanoLocal=41000;
+
+				numeroDimension=0;
 				dimensionArreglo dimensionNueva = {0,0,0};
 				dimensiones[0]= dimensionNueva;
 				dimensiones[1]= dimensionNueva;} 
@@ -347,13 +410,15 @@ CONDICION2: no {secuenciaElse();} llavea BLOQUE llavec
 
 CICLO: mientras {secuenciaWhile1();} parentesisa SUPEREXPRESION parentesisc hacer {secuenciaWhile2();}  llavea BLOQUE llavec {secuenciaWhile3();} ;
 
-CREARFUNCION: funcion CREARFUNCION2 id {numeroParametros=0;
+CREARFUNCION: funcion CREARFUNCION2 id {
+					strcpy(nombreFuncion, $3); 
+					/*numeroParametros=0;
 					strcpy(nombreFuncion, $3); 
 					printf("\n++++++++++Nombe Funcion:%s\n\n", nombreFuncion);
 					struct StrHashTable tablaLocalFuncion = {{0},NULL,NULL,foo_strhash,strcmp};
 					struct StrHashTable tablaParametros = {{0},NULL,NULL,foo_strhash,strcmp};
-					insertProc(&tblProc,&tablaLocalFuncion,&tablaParametros,nombreFuncion,nombreFuncion,0,0,0);	
-					numeroFunciones++;
+					insertProc(&tblProc,&tablaLocalFuncion,&tablaParametros,nombreFuncion,nombreFuncion,0,0,0);
+					numeroFunciones++;*/
 					} 
 	parentesisa CREARFUNCION3 parentesisc {
 					setNumberParameters(&tblProc,nombreFuncion,numeroParametros);
@@ -362,7 +427,8 @@ CREARFUNCION: funcion CREARFUNCION2 id {numeroParametros=0;
 					 
 					setCuadruploInicial(&tblProc,nombreFuncion,contS);
 					 }
-					BLOQUE regresar EXP {generarReturn();} llavec {generarRetorno();};
+					BLOQUE regresar EXP {generarReturn();} llavec {generarRetorno();}
+;
 
 CREARFUNCION2: TIPO
 			| neutral; 	
@@ -381,7 +447,9 @@ CREARFUNCION5: /*vacio*/
 				
 LLAMARFUNCION: id {	strcpy(nombreFuncion, $1); 
 			if(getProc(&tblProc,$1)==1){
+				printf("\n______Llamada EXISTENTE!!__ \"%s, %i\"\n", nombreFuncion,getNumberParameters(&tblProc,$1) );
 				 generarEra(getNumberLocalVars(&tblProc,$1));
+				
 			}
 			else printf("\nLlamada a un procedimiento que no existe: \"%s\"\n", nombreFuncion );
 			
@@ -467,7 +535,7 @@ VARCTE: ctetexto			{if(hacerPush==1) {
 						   	int direccion= getDirection(&tablaConstantes,$1);
 							if (direccion == -1)direccion=generarDireccion(1, 5);
 						   push(&pilaOperadores, $1, 1, direccion);
-						   printf("\n\nHIzo pussh: tipo %i, direcicn %i\n\n",1,direccion);
+						  // printf("\n\nHIzo pussh: tipo %i, direcicn %i\n\n",1,direccion);
 	   
 						   if(insert(&tablaConstantes,$1,$1,1,direccion,dimensiones[0], dimensiones[1])!= -1){
 							  contadorConstantes++;
@@ -504,35 +572,35 @@ VARCTE: ctetexto			{if(hacerPush==1) {
 						  }
 					}};
 		
-DIBUJARFIGURA: dibujarFigura parentesisa FIGURA coma id parentesisc ptocoma;
+DIBUJARFIGURA: dibujarFigura parentesisa FIGURA coma id {generarDibujarFigura();} parentesisc ptocoma;
 
 FIGURA: perro
 		|persona
 		|gato
 		|carro;
 
-BORRARFIGURA: borrarFigura parentesisa id parentesisc ptocoma;
+BORRARFIGURA: borrarFigura parentesisa id {generarBorrarFigura();} parentesisc ptocoma;
 
-HABLAR: hablar parentesisa id coma EXP parentesisc ptocoma;
+HABLAR: hablar parentesisa id coma EXP {generarHablarFigura();} parentesisc ptocoma;
 
 		
-MOVER: mover parentesisa id coma EXP coma EXP parentesisc ptocoma;
+MOVER: mover parentesisa id coma EXP coma EXP {generarMoverFigura();} parentesisc ptocoma;
 
-OBTENERPOSICION: obtenerPosicion parentesisa id parentesisc ptocoma ;
+OBTENERPOSICION: obtenerPosicion parentesisa id {/* generarObtenerPosicion();*/ } parentesisc ptocoma ;
 
-GIRARDER: girarDerecha parentesisa id coma EXP parentesisc ptocoma;
+GIRARDER: girarDerecha parentesisa id coma EXP {generarGirarD();} parentesisc ptocoma;
 
-GIRARIZQ: girarIzquierda parentesisa id coma EXP parentesisc ptocoma;
+GIRARIZQ: girarIzquierda parentesisa id coma EXP {generarGirarI();} parentesisc ptocoma;
 
-OBTENERALTURA: obtenerAltura parentesisa id parentesisc ptocoma;
+OBTENERALTURA: obtenerAltura parentesisa id {generarObtenerAltura();} parentesisc ptocoma;
 
-OBTENERANCHURA: obtenerAnchura parentesisa id parentesisc ptocoma;
+OBTENERANCHURA: obtenerAnchura parentesisa id {generarObtenerAnchura();} parentesisc ptocoma;
 
-CAMBIARALTURA: cambiarAltura parentesisa id coma EXP parentesisc ptocoma;
+CAMBIARALTURA: cambiarAltura parentesisa id coma EXP {generarCambiarAltura();} parentesisc ptocoma;
 
-CAMBIARANCHURA: cambiarAnchura parentesisa id coma EXP parentesisc ptocoma;
+CAMBIARANCHURA: cambiarAnchura parentesisa id coma EXP {generarCambiarAnchura();} parentesisc ptocoma;
 
-COLORFONDO: colorFondo parentesisa COLOR parentesisc ptocoma ;
+COLORFONDO: colorFondo parentesisa COLOR {generarColorFondo();} parentesisc ptocoma ;
 
 COLOR: rojo
 		| azul 	
@@ -561,7 +629,7 @@ int generarDireccion(int tipo, int alcance){
 	else
 		cantidadDirecciones = 1;
 
-	printf("\n***************CANTIDAD DIRECCIONSSS!!! %i**************\n", cantidadDirecciones );
+	//printf("\n***************CANTIDAD DIRECCIONSSS!!! %i**************\n", cantidadDirecciones );
 
 	//global	
 	if(alcance==1){ 
@@ -807,14 +875,14 @@ void checarOperando3(char *operando){
 				else{
 					pop(&pilaOperando);
 
-					operador1->valor = pilaOperadores->valor;
-					operador1->tipo = pilaOperadores->tipo; 
-					operador1->direccion = pilaOperadores->direccion;
-					pop(&pilaOperadores);
-
 					operador2->valor = pilaOperadores->valor;
 					operador2->tipo = pilaOperadores->tipo; 
 					operador2->direccion = pilaOperadores->direccion;
+					pop(&pilaOperadores);
+
+					operador1->valor = pilaOperadores->valor;
+					operador1->tipo = pilaOperadores->tipo; 
+					operador1->direccion = pilaOperadores->direccion;
 					pop(&pilaOperadores);
 
 					//printf("TIPO op1: %i , op2: %i \n", operador1->tipo, operador2->tipo);
@@ -1035,6 +1103,8 @@ void generarReturn(){
 
 	int numeroReturn = 24;
 	
+	ptr regresar= malloc (sizeof(p_Nodo)); 
+	
 	regresar->valor = pilaOperadores->valor;
 	regresar->tipo = pilaOperadores->tipo; 
 	regresar->direccion = pilaOperadores->direccion; 
@@ -1164,6 +1234,93 @@ void generarVerifica(){
 	
 }
 
+//funciones especiales
+
+void generarDibujarFigura()
+{
+	int numDibujaFigura=40;
+	
+	//generaCuadruplo(numDibujaFigura,dirID ,numPersonaje ,-1);
+	
+
+}
+
+void generarBorrarFigura(){
+
+	int borrar=41;
+
+	//generarCuadruplo(borrar, dirID  ,-1,-1);
+
+}
+
+
+void generarHablarFigura(){
+	int hablar=42;
+
+	//generarCuadruplo(hablar,dirEXP   ,-1,-1);
+
+}
+
+
+void generarMoverFigura(){
+	
+	//generarCuadruplo(43,idDir,x,y)
+
+}
+
+void generarObtenerX(){
+	
+	//generarCuadruplo(44,idDir,-1,-1)
+
+}
+
+void generarObtenerY(){
+	
+	//generarCuadruplo(45,idDir,-1,-1)
+
+}
+
+void generarGirarD(){
+	
+	//generarCuadruplo(46,idDir,-1,-1)
+
+}
+
+void generarGirarI(){
+	
+	//generarCuadruplo(47,idDir,-1,-1)
+
+}
+
+void generarObtenerAnchura(){
+	
+	//generarCuadruplo(48,idDir,-1,-1)
+
+}
+
+void generarObtenerAltura(){
+	
+	//generarCuadruplo(49,idDir,-1,-1)
+
+}
+
+void generarCambiarAnchura(){
+	
+	//generarCuadruplo(50,idDir,EXP,-1)
+
+}
+
+void generarCambiarAltura(){
+	
+	//generarCuadruplo(51,idDir,EXP,-1)
+
+}
+
+void generarColorFondo(){
+	
+	//generarCuadruplo(52,idDir,-1,-1)
+
+}
 
 
 /*
@@ -1213,6 +1370,9 @@ void operacionesArreglos(){
 		m = dimensiones[i].m;
 	}
 }
+
+
+
 
 /*
  ######  ######## ##     ##    ###    ##    ## ######## ####  ######     ###    

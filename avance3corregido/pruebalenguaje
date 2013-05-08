@@ -1,5 +1,8 @@
 programa prueba {
 
+	prototipo mak(2);
+	prototipo izak(0);
+
 	crear texto mak;
 	crear booleano what;
 	crear entero aldo;
@@ -45,8 +48,15 @@ programa prueba {
 		
 	}
 
+	funcion entero izak(){
+		crear entero ras;
+		ras = 1;
+		regresar ras
+	}
 
 	principal(){
+		crear entero variablemain;
+
 		imprimir("hola");
 		imprimir("adios");
 		mak(3+1,"what");

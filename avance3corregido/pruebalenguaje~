@@ -1,5 +1,7 @@
 programa prueba {
 
+	prototipo mak(2);
+
 	crear texto mak;
 	crear booleano what;
 	crear entero aldo;
@@ -41,12 +43,13 @@ programa prueba {
 		sebas = 3 + 3;
 		sebas = areglo[1][2];
 		sebas = 3;
-		regresar 3
+		regresar sebas
 		
 	}
 
-
 	principal(){
+		crear entero variablemain;
+
 		imprimir("hola");
 		imprimir("adios");
 		mak(3+1,"what");
