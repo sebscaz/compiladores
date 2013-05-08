@@ -1,0 +1,38 @@
+
+	pila operadores;
+	pila operandos;
+
+	ptrNodo cabezaOperandos = NULL;
+
+	
+	TERMINO3: multiplicacion 	{checarOperando($1);}
+	 |division				{checarOperando($1);};
+	 ....
+	 ....
+	 
+	checarOperando(char *operando){	
+		if(pilaOperandos->valor=="*" || pilaOperandos=="/" ){
+			operando = pop(pilaOperandos);
+			operador1 = pop(pilaOperadores);
+			operador2 = pop(pilaOperadores);
+		}
+		if(pilaOperandos->valor=="+" ||pilaOperandos->valor=="-"  ){
+			operando = pop(pilaOperandos);
+			operador1 = pop(pilaOperadores);
+			operador2 = pop(pilaOperadores);
+	}
+	
+	
+	
+	
+	
+	
+	semantica(int op1, int op2, int op){
+	
+	
+		if(matrizSemantica[op1][op2][op]==0)
+			printf("Error de tipos");
+		
+	
+	
+	}

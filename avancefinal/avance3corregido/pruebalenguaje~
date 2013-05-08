@@ -1,0 +1,69 @@
+programa prueba {
+
+	prototipo mak(2);
+	prototipo izak(0);
+
+	crear texto mak;
+	crear booleano what;
+	crear entero aldo;
+	
+	mak="probando";
+	aldo=1;
+	what=v;
+
+	funcion entero mak(entero holaz, texto mesa){
+		crear entero sebas;
+		crear entero galaxy;
+		crear entero areglo[3][3];
+		crear entero areglo2[10];
+		crear entero celular;
+		crear entero iphone;
+		crear entero areglo3[10];	
+		crear entero mochila;	
+		crear entero cartera;
+		crear decimal trouble;
+
+		holaz =1;
+		sebas = 1;
+		galaxy = 4 + sebas;
+		sebas = 2 + 3 / (4 * 3) - 4;
+		celular = 2;
+		
+		dibujarFigura(perro, prueba1);
+
+		si(4>3){
+			si(5>2){
+				imprimir("if anidado");
+				sebas = leer();
+			}
+			imprimir("hola");
+			sebas = 1 * 2;
+		} no {
+			imprimir("adios");
+			sebas = 4 / 2;
+		}
+		sebas = 3 + 3;
+		sebas = areglo[1][2];
+		sebas = 3;
+		regresar sebas
+		
+	}
+
+	funcion entero izak(){
+		crear entero ras;
+		ras = 1;
+		regresar ras
+	}
+
+	principal(){
+		crear entero variablemain;
+		crear entero elda;
+		variablemain = 3;
+		elda=1;
+
+		imprimir("hola");
+		imprimir("adios");
+		mak(3+1,"what");
+		
+	}
+}
