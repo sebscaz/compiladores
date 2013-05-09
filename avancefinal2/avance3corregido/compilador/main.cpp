@@ -148,7 +148,7 @@ vector<string> booleanoConstantes(contBoolC);
 
 int checarRango(string operando){
 
-    if (operando.at(0)=='1'){ cout<<"....Rango  "<<1<<"\n"; return 1;}
+    if (operando.at(0)=='1'){/* cout<<"....Rango  "<<1<<"\n";*/ return 1;}
     else if (operando.at(0)=='2'){return 2;}
     else if (operando.at(0)=='3'){ return 3; }
 	else if (operando.at(0)=='4'){ return 3; }
@@ -160,7 +160,9 @@ int getValorVectorInt(string operando, int direccion, int base){
     if (operando.at(1)=='0'){ return enterosGlobales[direccion-base];}
     else if (operando.at(1)=='1'){return enterosLocales[direccion-base];}
     else if (operando.at(1)=='2'){return enterosTemporales[direccion-base];}
-    else if (operando.at(1)=='3'){cout<<"_-_-_-__- ent const: "<< enterosConstantes[direccion-base]<<"\n"; return enterosConstantes[direccion-base];}
+    else if (operando.at(1)=='3'){
+         //cout<<"_-_-_-__- ent const: "<< enterosConstantes[direccion-base]<<"\n";
+          return enterosConstantes[direccion-base];}
 
 }
 
@@ -227,14 +229,14 @@ void generarMemoria(int direccion, string valor){
           enterosLocales[direccion-11000]=atoi(valor.c_str());
      }
      else if(direccion >= 12000 && direccion <= 12999){
-             cout<<"\n --INTERSUME..1---  >"<<enterosConstantes[1]<<"\n";
+            // cout<<"\n --INTERSUME..1---  >"<<enterosConstantes[1]<<"\n";
           enterosTemporales[direccion-12000]=atoi(valor.c_str());
-             cout<<"\n --INTERSUME..2---  >"<<enterosConstantes[1]<<"\n";
-          cout<<"\nDIRECCION!! " <<direccion<< ",, valor : "<< enterosTemporales[direccion-12000]<<"\n";
+             //cout<<"\n --INTERSUME..2---  >"<<enterosConstantes[1]<<"\n";
+          //cout<<"\nDIRECCION!! " <<direccion<< ",, valor : "<< enterosTemporales[direccion-12000]<<"\n";
      }
      else if(direccion >= 13000 && direccion <= 13999){
           enterosConstantes[direccion-13000]=atoi(valor.c_str());
-          cout<<"\nDIRECCION!! " <<direccion<< ",, valor : "<< enterosConstantes[direccion-13000]<<"\n";
+          //cout<<"\nDIRECCION!! " <<direccion<< ",, valor : "<< enterosConstantes[direccion-13000]<<"\n";
      }
 
      //Almacenar floats
@@ -306,7 +308,7 @@ void hacerOperacion(int operacion, string op1, string op2 , string temp){
     //Checar si op1 es int o float
     if (checarRango(op1)==1)  {	//es int
         op1ValorReal= (float)getValorVectorInt(op1, op1dir, base1);
-		cout << "______op1:" << op1 << " valor real: " << op1ValorReal <<"base: "<<base1<< "\n"; 
+	//	cout << "______op1:" << op1 << " valor real: " << op1ValorReal <<"base: "<<base1<< "\n"; 
     }
     else if(checarRango(op1)==2){	//es float
         op1ValorReal= getValorVectorFloat(op1, op1dir, base1);
@@ -336,15 +338,15 @@ void hacerOperacion(int operacion, string op1, string op2 , string temp){
     //Hacer operacion
     //SUMA
     if(operacion==0){
-                     cout<<"\n --PRESUMA---  >"<<enterosConstantes[1]<<"\n";
+                    // cout<<"\n --PRESUMA---  >"<<enterosConstantes[1]<<"\n";
         //Checar que tipo sera el resultado
         if(checarRango(temp)==1){
                                  
         	resultadoInt = (int)(op1ValorReal + op2ValorReal);
-        	cout<<"\n --PRESUMA2---  >"<<enterosConstantes[1]<<"\n";
+        //	cout<<"\n --PRESUMA2---  >"<<enterosConstantes[1]<<"\n";
         	//Meter valor del temporal en memoria, hay que convertir a string el resultado
             generarMemoria(atoi(temp.c_str()), static_cast<ostringstream*>( &(ostringstream() << resultadoInt) )->str());
-            cout<<"\n --PRESUMA3---  >"<<enterosConstantes[1]<<"\n";
+           // cout<<"\n --PRESUMA3---  >"<<enterosConstantes[1]<<"\n";
          	cout<<"sumaInt "<<"op1 "<<op1ValorReal<<" op2 "<<op2ValorReal<<" temp " << temp <<" Resultado: " <<resultadoInt<<"\n";
         } else if (checarRango(temp)==2){
             resultadoFloat = op1ValorReal + op2ValorReal;
@@ -353,7 +355,7 @@ void hacerOperacion(int operacion, string op1, string op2 , string temp){
         	cout<<"sumaF "<<"op1 "<<op1ValorReal<<" op2 "<<op2ValorReal<<" temp " << temp <<" Resultado: " <<resultadoFloat<<"\n";
         }
         
-         cout<<"\n --POSTSUMA---  >"<<enterosConstantes[1]<<"\n";
+        // cout<<"\n --POSTSUMA---  >"<<enterosConstantes[1]<<"\n";
     }
     else if (operacion==1){
         //Checar que tipo sera el resultado
@@ -468,31 +470,9 @@ void hacerOperacion(int operacion, string op1, string op2 , string temp){
            
     }
     
-        if(operacion==40){
-                     
        
-        
-             //Realizar suma dirBase + (s1*m1)                    
-        	resultadoInt =  getValorVectorInt(op1, op1dir, base1) + op2dir;
-        
-        	//Meter valor del temporal en memoria, hay que convertir a string el resultado
-            generarMemoria(atoi(temp.c_str()), static_cast<ostringstream*>( &(ostringstream() << resultadoInt) )->str());
-        
-        
-    }
     
-    
-         if(operacion==41){
-                     
-        
-             //Realizar la operacion s1*m1                 
-        	resultadoInt =  getValorVectorInt(op1, op1dir, base1) * op2dir;
-        
-        	//Meter valor del temporal en memoria, hay que convertir a string el resultado
-            generarMemoria(atoi(temp.c_str()), static_cast<ostringstream*>( &(ostringstream() << resultadoInt) )->str());
-        
-        
-    }
+         
     
     
 }
@@ -506,7 +486,7 @@ void hacerPrint(string op1){
     base1 = getBase(op1dir);
 
 
-
+cout<<"op1-----"<< op1;
 
                 	    //ChecarRango
                 	       if (checarRango(op1)==1)  {	//es int
@@ -523,38 +503,75 @@ void hacerPrint(string op1){
 
 
 
-void hacerIgual(int op1, int temp, int direccion){
+void sumaVector(int operacion, string op1, string op2 , string temp){
 
-/*
     int base1, base2;			 //varaible para mapear direccion;
-    int op1dir;
-    int num1;
-    string valor;
+    int op1dir, op2dir;			 //almacena en forma de entero la direccion virtual
+    int resultadoInt;
+    float resultadoFloat;
 
- base1 = getBase(direccion);
-   // base1 = getBase(direccion);
-    generarMemoria(direccion, op1);
+    op1dir = atoi(op1.c_str());
+    op2dir = atoi(op2.c_str());
+     
+    base1 = getBase(op1dir);
     
-                              //Verificar que la direecion se haya guardado en temporal
+     //Realizar suma dirBase + (s1*m1)                    
+        	resultadoInt =  getValorVectorInt(op1, op1dir, base1) + op2dir;
+        	
+            cout<<"Suma VEctor "<< getValorVectorInt(op1, op1dir, base1)<< "+++++++" << op2dir   << "\n"; 
+            cout << " suma vector REsultado "<< resultadoInt<<"\n";
+        
+        	//Meter valor del temporal en memoria, hay que convertir a string el resultado
+            generarMemoria(atoi(temp.c_str()), static_cast<ostringstream*>( &(ostringstream() << resultadoInt) )->str());
 
-                              if (checarRango(temp)==1)  {	//es int
-                                 cout<< "Print "<< getValorVectorInt(temp, direccion, base1)<<"\n";
-                            }
-                            else if (checarRango(temp)==2){	//es float
-                                 cout<<"Print " <<getValorVectorFloat(temp, direccion, base1)<<"\n";
-                            }
-                             else if (checarRango(temp)==3){	//es float
-                                 cout<<"Print "<< getValorVectorString(temp, direccion, base1)<<"\n";
-                            }
+    
 
+}
 
-         
+void multiplicaVector(int operacion, string op1, string op2 , string temp){
 
-			//checar si es constante o variable
-			if(direccion >= 13000 && direccion <= 13999){
-				generarMemoria(temp, static_cast<ostringstream*>( &(ostringstream() << resultadoFloat) )->str());
-			}
-			 */      	  
+    int base1, base2;			 //varaible para mapear direccion;
+    int op1dir, op2dir;			 //almacena en forma de entero la direccion virtual
+    int resultadoInt;
+    float resultadoFloat;
+
+    op1dir = atoi(op1.c_str());
+    op2dir = atoi(op2.c_str());
+     
+    base1 = getBase(op1dir);
+    
+            //cout<<"op1: "<<op1<<", op1dor:"<<op1dir<<", base1: "<<base1;
+            cout<<"Multiplica "<< getValorVectorInt(op1, op1dir, base1)<< "*****" << op2dir   << "\n"; 
+        
+                    //Realizar la operacion s1*m1                 
+        	resultadoInt =  getValorVectorInt(op1, op1dir, base1) * op2dir;
+        	cout << " suma vector REsultado "<< resultadoInt<<"\n";
+        
+        	//Meter valor del temporal en memoria, hay que convertir a string el resultado
+           generarMemoria(atoi(temp.c_str()), static_cast<ostringstream*>( &(ostringstream() << resultadoInt) )->str());
+
+    
+
+}
+
+void verifica(int operacion, string op1, string op2 , string temp){
+
+    int base1, base2;			 //varaible para mapear direccion;
+    int op1dir, tempInt;			 //almacena en forma de entero la direccion virtual
+    int resultadoInt;
+    float resultadoFloat;
+
+    op1dir = atoi(op1.c_str());
+    tempInt = atoi(temp.c_str());
+     
+      base1 = getBase(op1dir);
+        
+    if (getValorVectorInt(op1, op1dir, base1)<=tempInt){
+    cout<<"Verifica Correcto!! \n";
+    }
+    else cout<<"El valor es mayot al numero de casillas asignadas \n";
+
+    
 
 }
 
@@ -698,26 +715,26 @@ while (i<numCuadruplos){
 
 
               		case 0 :{ //Suma instrucciones
-              		        cout<<i<<"<<<<cuadruplo \n";
+              		      // cout<<i<<"<<<<cuadruplo \n";
               		
          		       hacerOperacion(0, cuadruplos[i][2], cuadruplos[i][3] ,cuadruplos[i][4]);
                     }
                 	break;
 
                 	case 1:{//resta instrucciones
-                	 cout<<i<<"<<<<cuadruplo \n";
+                	 //cout<<i<<"<<<<cuadruplo \n";
                     	 hacerOperacion(1, cuadruplos[i][2], cuadruplos[i][3] ,cuadruplos[i][4]);
                     }
                 	break;
 
                 	case 2:{// multipliacion instrucciones
-                	 cout<<i<<"<<<<cuadruplo \n";
+                	 //cout<<i<<"<<<<cuadruplo \n";
                          hacerOperacion(2, cuadruplos[i][2], cuadruplos[i][3] ,cuadruplos[i][4]);
                     }
                 	break;
 
                 	case 3:{// division  instrucciones
-                	 cout<<i<<"<<<<cuadruplo \n";
+                	 //cout<<i<<"<<<<cuadruplo \n";
                 	       hacerOperacion(3, cuadruplos[i][2], cuadruplos[i][3] ,cuadruplos[i][4]);
                     }
                 	break;
@@ -745,7 +762,7 @@ while (i<numCuadruplos){
                 	break;
 
                 	case 10 ://=  instrucciones
-                   cout<<i<<"<<<<cuadruplo \n";
+                  // cout<<i<<"<<<<cuadruplo \n";
                     // cout<<"\n ASIGNACION >"<<cuadruplos[i][2]<<" ->" <<cuadruplos[i][4] <<"\n";
                             
 					  hacerOperacion(10, cuadruplos[i][2], cuadruplos[i][3] ,cuadruplos[i][4]);
@@ -755,9 +772,9 @@ while (i<numCuadruplos){
 
                 	case 11 :// gootoo   instrucciones
                    //  dirGoto = atoi(l.c_str());
-                    cout<<i<<"<<<<cuadruplo \n";
-                   cout<<"\n Goto >"<<cuadruplos[i][4]<<"\n";
-                   i=atoi(cuadruplos[i][4].c_str());
+                   // cout<<i<<"<<<<cuadruplo \n";
+                      cout<<"\n Goto >"<<cuadruplos[i][4]<<"\n";
+                       i=atoi(cuadruplos[i][4].c_str());
 
 
                 	break;
@@ -767,7 +784,7 @@ while (i<numCuadruplos){
                 
                     	
              	   cout<<"\n Goto Falso >"<<cuadruplos[i][4]<<"\n";
-             	    cout<<i<<"<<<<cuadruplo \n";
+             	    //cout<<i<<"<<<<cuadruplo \n";
                   // i=atoi(cuadruplos[i][4].c_str())-1;
                 	
                 	break;
@@ -780,22 +797,16 @@ while (i<numCuadruplos){
                 
 
                 	case 19://ver
+                	
+                	//Verificar que el valor sea el correcto 
+                	
                         break;
 
                 	case 20 ://ERAA  ERAAA E EE E  instrucciones
                     //salvar la base actual previa a la llamada
-                    
-                    
-                	//Definir el tamaño de la memoria
-                	//Actualizar la base local
-                	//Generar el espacio de memoria
-
-                	break;
-
-                	case 21 :// gpooSUb   instrucciones
-                	
-                	
-                	//Guardar la memoria local actual en una pila
+                    	
+                        
+                        //Guardar la memoria local actual en una pila
                 	pilaLocalEntera.push(enterosLocales);
                 	pilaLocalFlotante.push(flotantesLocales);
                 	pilaLocalString.push(stringLocales);
@@ -806,11 +817,22 @@ while (i<numCuadruplos){
                 	pilaTemporalString.push(stringTemporales);
                 	pilaTemporalBoolean.push(booleanoTemporales);
                 	
+                    
+                	//Definir el tamaño de la memoria
+                	//Actualizar la base local
+                	//Generar el espacio de memoria
+
+                	break;
+
+                	case 21 :// gpooSUb   instrucciones
+                	
+                	
+                
                 	
                 	     //Meter la direccion de retorno en la pila de ejecución
                 	     
-                	     cout<<"\n prewhaat  >"<<enterosConstantes[1]<<"\n";
-                	      cout<<i<<"<<<<cuadruplo \n";
+                	    // cout<<"\n prewhaat  >"<<enterosConstantes[1]<<"\n";
+                	      //cout<<i<<"<<<<cuadruplo \n";
 
                 	     dirRetorno = atoi( cuadruplos[i][1].c_str());
 
@@ -819,7 +841,7 @@ while (i<numCuadruplos){
                 	    cout<< "\n Pila de Ejecucion " << i;
 
                 	    //Transferir el control de hecucion a la direccion donde inicia el procedimiento
-                	    cout<<"\n GO SUB >"<<cuadruplos[i][2]<<"\n";
+                	       cout<<"\n GO SUB >"<<cuadruplos[i][2]<<"\n";
                          i=atoi(cuadruplos[i][2].c_str());
 
                           
@@ -850,7 +872,7 @@ while (i<numCuadruplos){
                 	break;
 
                 	case 23 ://param    instrucciones
-                	cout<<"\n supeerwhaat  >"<<enterosConstantes[1]<<"\n";
+                //	cout<<"\n supeerwhaat  >"<<enterosConstantes[1]<<"\n";
                 	
                           //cout<<i<<"<<<<cuadruplo \n";
                           //cout<<"PARAM\n";
@@ -866,28 +888,36 @@ while (i<numCuadruplos){
                 	 //cout<<"READ\n";
                 	break;
 
+
                 	case 26 ://print   instrucciones
-                	 cout<<i<<"<<<<cuadruplo \n";
+                //	 cout<<i<<"<<<<cuadruplo \n";
                     hacerPrint(cuadruplos[i][2]);
+                	break;
+
+                   case 27 :// VERifica  instrucciones
+                	
+                		//Verificar que el valor sea el correcto 
+                	verifica(27, cuadruplos[i][2], cuadruplos[i][3] ,cuadruplos[i][4]);
+                	
                 	break;
 
                 	case 30 : //end 
                 	
-                	 cout<<i<<"<<<<cuadruplo \n";
+                //	 cout<<i<<"<<<<cuadruplo \n";
                 	 cout<<"END\n";
                 	break;
                 	
                 	
                 		case 40 : //instrucciones suma vecto
-                	 hacerOperacion(40, cuadruplos[i][2], cuadruplos[i][3] ,cuadruplos[i][4]);
+                	 sumaVector(40, cuadruplos[i][2], cuadruplos[i][3] ,cuadruplos[i][4]);
                 	 
-                	 cout<<"SUMA VECTOR\n";
+                	 //cout<<"SUMA VECTOR\n";
                 	break;
                 	
-                		case 42 : //instrucciones
-                	 hacerOperacion(42, cuadruplos[i][2], cuadruplos[i][3] ,cuadruplos[i][4]);
+                		case 41 : //instrucciones
+                	 multiplicaVector(41, cuadruplos[i][2], cuadruplos[i][3] ,cuadruplos[i][4]);
                 	 
-                	 cout<<"Multiplica S1*m1 \n";
+                	// cout<<"\nMultiplicacion "<<41<<" ,"<<cuadruplos[i][2]<<" ,"<< cuadruplos[i][3]<<" ,"<<cuadruplos[i][4];
                 	break;
 
                 }///termina swuitx
