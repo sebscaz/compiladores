@@ -27,6 +27,8 @@ void push( ptr *cabeza_ptr, char *valor, int tipo, int direccion ){
 		nuevo_ptr->siguienteNodo=*cabeza_ptr;
 
 		*cabeza_ptr=nuevo_ptr;
+
+		//printf("\nSe acaba de pushear %s, %i\n", nuevo_ptr->valor, nuevo_ptr->direccion);
 	}//end if
 
 	else {
@@ -55,10 +57,10 @@ void imprimirPila( ptr actual_ptr){
 	else{
 		while (actual_ptr!= NULL){
 			//printf("%c -->", *(actual_ptr->valor));
-			printf("%i -->", (actual_ptr->direccion));
+			//printf("%i -->", (actual_ptr->direccion));
 			actual_ptr=actual_ptr->siguienteNodo;
 		}//end while
-		printf("NULL\n");
+		//printf("NULL\n");
 	}//end else
 }
 

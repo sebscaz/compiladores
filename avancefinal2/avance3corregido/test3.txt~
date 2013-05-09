@@ -15,8 +15,10 @@ programa test3 {
 	principal(){
 		crear entero num1;
 		crear entero num2;
+		crear entero matriz[2][2];
 		crear entero arreglo[3];
 
+		matriz[0][1]=1;
 		arreglo[0]=1;
 		arreglo[1]=1;
 		arreglo[2]=3;

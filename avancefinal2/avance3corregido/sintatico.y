@@ -142,8 +142,8 @@ int m0=1;		//indica la cantidad de elementos en el arreglo, en todas sus dimensi
 int direccionAux=1;	//direccion que se sumara a la direccion base en caso de ser necesario	
 int numeroDimension;	//indica la dimension actual del arreglo (1 o 2)
 dimensionArreglo dimensiones[2];	//almacenar las dimensiones de un arreglo (1 o 2)
-
-
+char idDelArreglo[20];
+int direccionIdArreglo;
 
 //PILAS
 ptr pilaOperadores=NULL;
@@ -354,14 +354,18 @@ DECLARACIONFUNCIONCICLO2: DECLARACIONFUNCIONCICLO
 
 DECLARACIONFUNCION: crear TIPO id {
 
-
-
 				numeroDimension=0;
 				dimensionArreglo dimensionNueva = {0,0,0};
 				dimensiones[0]= dimensionNueva;
-				dimensiones[1]= dimensionNueva;} 
+				dimensiones[1]= dimensionNueva;
+} 
 			DECLARACIONFUNCION2 ptocoma 
-			{insert(getPointerTbl(&tblProc,nombreFuncion),$3,$3,tipoOp,generarDireccion(tipoOp,2),dimensiones[0], dimensiones[1]);
+			{
+insert(getPointerTbl(&tblProc,nombreFuncion),$3,$3,tipoOp,generarDireccion(tipoOp,2),dimensiones[0], dimensiones[1]);
+printf("\n\ndimencion cero %s cant %i, dim uno cant %i\n",$3, dimensiones[0].cantidad, dimensiones[1].cantidad);
+struct DimensionArreglo dim =  getDimension1(getPointerTbl(&tblProc,nombreFuncion),$3);
+printf("\n\ndimencion cero %s cant %i\n",$3, dim.cantidad);
+
 			direccionAux=m0;			
 			if(esArreglo==1) {
 				esArreglo=0; /*la siguiente direccion base sera normal*/
@@ -379,17 +383,22 @@ ARREGLOS2: corchetea cteentero {{dimensionesArreglos2(atoi($2));}} corchetec
 	| /*vacio*/;
 	
 
-ASIGNACION: id ASIGNACION2 {int tipoId = getType(&tablaGlobal,$1);
+ASIGNACION: id 		{ strcpy(idDelArreglo, $1);
+
+			int tipoId = getType(&tablaGlobal,$1);
 			    if(tipoId==0)
 				tipoId = getType(getPointerTbl(&tblProc,nombreFuncion),$1);
 			    int direccionVirtual = getDirection(&tablaGlobal,$1);
 			    if(direccionVirtual==-1)
 				direccionVirtual = getDirection(getPointerTbl(&tblProc,nombreFuncion),$1);
-			    push(&pilaOperadores, $1, tipoId, direccionVirtual); 
-				//printf("\n\nHIzo pussh: tipo %i, direcicn %i\n\n",tipoId,direccionVirtual);
-}	
-	    igual { push(&pilaOperando, $4, -1, -1);} 
+			  push(&pilaOperadores, $1, tipoId, direccionVirtual); 
+			  printf("\nHIzo pussh:%s, tipo %i, direcicn %i\n",$1,tipoId,direccionVirtual);
+		
+			}
+	    ASIGNACION2 	
+	    igual 	{ push(&pilaOperando, $4, -1, -1);} 
 	    ASIGNACION3 ptocoma {checarOperando3();} ;
+
 ASIGNACION3: LECTURA
 		| EXP;
 ASIGNACION2: {numeroDimension=1;}  ARREGLOSASIG  {hacerPush=1;} 
@@ -542,6 +551,11 @@ VARCTE: ctetexto			{if(hacerPush==1) {
 	   
 						   if(insert(&tablaConstantes,$1,$1,1,direccion,dimensiones[0], dimensiones[1])!= -1){
 							  contadorConstantes++;
+
+							printf("\ndimension[0] del entero %s:%i \n", $1, dimensiones[0].cantidad);
+						
+						struct DimensionArreglo dim =  getDimension1(getPointerTbl(&tblProc,nombreFuncion),$1);
+							printf("\ndimension[0] del entero %s:%i \n", $1, dim.cantidad);
 							  char integer_string[32];
 							  sprintf(integer_string, "%d/", direccion);
 							  strcat(strDirecciones, integer_string); 
@@ -679,19 +693,19 @@ int generarDireccion(int tipo, int alcance){
 		//printf(">>>>>>>>>>>>>>>>>>ALCANCE TEMPORAL\n");
 		if(tipo==1){// entero
 			contEnteroTemp++;
-			direccionEnteroTemp += cantidadDirecciones;
+			direccionEnteroTemp ++;
 			return direccionEnteroTemp;}
 		else if(tipo==2) {//doble
 			contDobleTemp++;
-			direccionDobleTemp += cantidadDirecciones;
+			direccionDobleTemp ++;
 			return direccionDobleTemp;}
 		else if(tipo==3){ //texto
 			contTextoTemp++;
-			direccionTextoTemp += cantidadDirecciones;
+			direccionTextoTemp++;
 			return direccionTextoTemp;}
 		else if(tipo==4){ //booleano
 			contBooleanoTemp++;
-			direccionBooleanoTemp += cantidadDirecciones;
+			direccionBooleanoTemp++;
 			return direccionBooleanoTemp;}
 	}
 	//Constante
@@ -1144,16 +1158,18 @@ void generarDimension1(){
 	id->direccion = pilaOperadores->direccion; 
 
 	dimensionArreglo d = getDimension1(getPointerTbl(&tblProc,nombreFuncion),id->valor);
-	int limInf=0;
-	int limSup= d.cantidad-1;
 
-	printf("\n\n\n\n-########## ### # ### ### ## # ##    CANTIDADD %i, DIRECCION %i\n\n", d.cantidad, id->direccion );
-	
+	printf("\nd.cantidad %i\n", d.cantidad);	
+
+	int limInf=0;
+	int limSup= d.cantidad -1;
+	printf("\n---Direcciiones: op1 %i, id %i ---Valores: op1 %s, id %s, limSup %i",operador1->direccion, id->direccion, operador1->valor,idDelArreglo,limSup);	
 	generarCuadruplo(numeroVerifica,operador1->direccion,limInf,limSup);// param=23
 
 	//verificar si hay otra dimension
 	dimensionArreglo d2 = getDimension2(getPointerTbl(&tblProc,nombreFuncion),id->valor);
-	if(d2.cantidad == 0){	//la dimension 2 esta vacia
+
+	if(d2.cantidad== 0){	//la dimension 2 esta vacia
 
 		pop(&pilaOperadores);	//Quitar el id 
 
@@ -1161,7 +1177,7 @@ void generarDimension1(){
 
 		int res = generarDireccion(1,3); //3:direccion temporal entera
 		insert(&tablaTemporal,nombreT,nombreT,1,res,dimensiones[0], dimensiones[1]);
-		generarCuadruplo(40, operador1->direccion,id->direccion, res);	// multiplocacion	
+		generarCuadruplo(40, operador1->direccion,id->direccion, res);	// suma indice + direccion
 		push(&pilaOperadores,nombreT,1,res);//3: direccion temporal
 
 	} else {	//si hay una segunda dimension
@@ -1218,9 +1234,9 @@ void generarDimension2(){
 		id->direccion = pilaOperadores->direccion; 
 		pop(&pilaOperadores);
 			
-		dimensionArreglo d = getDimension2(getPointerTbl(&tblProc,nombreFuncion),id->valor);
+		dimensionArreglo d2 = getDimension2(getPointerTbl(&tblProc,nombreFuncion),id->valor);
 		int limInf=0;
-		int limSup= d.cantidad-1;
+		int limSup= d2.cantidad-1;
 	
 		generarCuadruplo(numeroVerifica,operador1->direccion,limInf,limSup);// param=23
 	
@@ -1228,7 +1244,7 @@ void generarDimension2(){
 
 		int res = generarDireccion(1,3); //3:direccion temporal entera
 		insert(&tablaTemporal,nombreT,nombreT,1,res,dimensiones[0], dimensiones[1]);
-		generarCuadruplo(40, operador1->direccion,aux->direccion, res);	// multiplocacion
+		generarCuadruplo(0, operador1->direccion,aux->direccion, res);	// multiplocacion
 		push(&pilaOperadores,nombreT,1,res);//3: direccion temporal
 	
 
