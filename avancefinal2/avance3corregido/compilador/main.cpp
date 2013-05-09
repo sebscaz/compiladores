@@ -455,6 +455,33 @@ void hacerOperacion(int operacion, string op1, string op2 , string temp){
            
     }
     
+        if(operacion==40){
+                     
+       
+        
+             //Realizar suma dirBase + (s1*m1)                    
+        	resultadoInt = op1dir + op2dir;
+        
+        	//Meter valor del temporal en memoria, hay que convertir a string el resultado
+            generarMemoria(atoi(temp.c_str()), static_cast<ostringstream*>( &(ostringstream() << resultadoInt) )->str());
+        
+        
+    }
+    
+    
+         if(operacion==41){
+                     
+        
+             //Realizar la operacion s1*m1                 
+        	resultadoInt =  getValorVectorInt(op1, op1dir, base1) * op2dir;
+        
+        	//Meter valor del temporal en memoria, hay que convertir a string el resultado
+            generarMemoria(atoi(temp.c_str()), static_cast<ostringstream*>( &(ostringstream() << resultadoInt) )->str());
+        
+        
+    }
+    
+    
 }
 
 void hacerPrint(string op1){
@@ -810,6 +837,19 @@ while (i<numCuadruplos){
                 	
                 	 cout<<i<<"<<<<cuadruplo \n";
                 	 cout<<"END\n";
+                	break;
+                	
+                	
+                		case 40 /*sumaVector*/: //instrucciones
+                	 hacerOperacion(40, cuadruplos[i][2], cuadruplos[i][3] ,cuadruplos[i][4]);
+                	 
+                	 cout<<"SUMA VECTOR\n";
+                	break;
+                	
+                		case 42 /*sumaVector*/: //instrucciones
+                	 hacerOperacion(42, cuadruplos[i][2], cuadruplos[i][3] ,cuadruplos[i][4]);
+                	 
+                	 cout<<"Multiplica S1*m1 \n";
                 	break;
 
                 }/*Termina el switch*/
