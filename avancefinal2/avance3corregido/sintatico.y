@@ -302,10 +302,18 @@ TIPO: texto		{tipoOp = generarTipo($1); numeroStringLocales++;/*printf("========
 	| booleano	{tipoOp = generarTipo($1); /*printf("===========tipo: %i\n", tipoOp);*/};	
 
 PRINCIPAL: principal {llenarMain(); strcpy(nombreFuncion, "main"); } parentesisa parentesisc llavea {
+			
+			//Resetear direcciones locales y temporales
 			direccionEnteroLocal=11000;
 			direccionDobleLocal=21000;
 			direccionTextoLocal=31000;
 			direccionBooleanoLocal=41000;
+
+			direccionEnteroTemp=12000;
+			direccionDobleTemp=22000;
+			direccionTextoTemp=32000;
+			direccionBooleanoTemp=42000;
+
 }
 DECLARACIONFUNCIONCICLO BLOQUE llavec;
 	
@@ -425,6 +433,12 @@ CREARFUNCION: funcion CREARFUNCION2 id {
 				direccionDobleLocal=21000;
 				direccionTextoLocal=31000;
 				direccionBooleanoLocal=41000;
+
+				direccionEnteroTemp=12000;
+				direccionDobleTemp=22000;
+				direccionTextoTemp=32000;
+				direccionBooleanoTemp=42000;
+
 
 					strcpy(nombreFuncion, $3); 
 					/*numeroParametros=0;
