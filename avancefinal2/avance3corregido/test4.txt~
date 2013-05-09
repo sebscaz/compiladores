@@ -16,10 +16,11 @@ programa test3 {
 	principal(){
 		crear entero num1;
 		crear entero num2;
-
-		num1 = 10;
-		num2 = 5;
-		num2 = varglobal + num1;
+		crear entero r;
 		
+		num1=1;
+		num2=2;
+		suma(1,2);
+		r = suma(num1,num2);
 	}
 }

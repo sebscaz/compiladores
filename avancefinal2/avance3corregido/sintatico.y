@@ -366,6 +366,7 @@ DECLARACIONFUNCION: crear TIPO id {
 				dimensionArreglo dimensionNueva = {0,0,0};
 				dimensiones[0]= dimensionNueva;
 				dimensiones[1]= dimensionNueva;
+				
 } 
 			DECLARACIONFUNCION2 ptocoma 
 			{
@@ -408,6 +409,7 @@ ASIGNACION: id 		{ strcpy(idDelArreglo, $1);
 	    ASIGNACION3 ptocoma {checarOperando3();} ;
 
 ASIGNACION3: LECTURA
+		| LLAMARFUNCION
 		| EXP;
 ASIGNACION2: {numeroDimension=1;}  ARREGLOSASIG  {hacerPush=1;} 
 	|/*vacio*/;
@@ -439,6 +441,7 @@ CREARFUNCION: funcion CREARFUNCION2 id {
 				direccionTextoTemp=32000;
 				direccionBooleanoTemp=42000;
 
+				insert(&tablaGlobal,$3,$3,tipoOp,generarDireccion(tipoOp,1),dimensiones[0], dimensiones[1]);
 
 					strcpy(nombreFuncion, $3); 
 					/*numeroParametros=0;
@@ -488,7 +491,11 @@ LLAMARFUNCION: id {	strcpy(nombreFuncion, $1);
 			}
 			else printf("\n____________Llamada a un procedimiento que no existe: \"%s\"\n", nombreFuncion );
 			
-		} parentesisa LLAMARFUNCION2 parentesisc ptocoma {generarGoSub();} ;
+		} parentesisa LLAMARFUNCION2 parentesisc ptocoma 
+			{
+			push(&pilaOperadores, $1, getType(&tablaGlobal,$1), getDirection(&tablaGlobal,$1));
+			generarGoSub();
+			} ;
 LLAMARFUNCION2: EXP {generarParametro();} LLAMARFUNCION3;
 LLAMARFUNCION3: coma {apuntadorParametro++;} LLAMARFUNCION2
 			  | /*vacio*/;
