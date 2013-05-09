@@ -308,7 +308,7 @@ unsigned int foo_strhash(const char *str)
 
 int insertProc(struct StrHashTableProc *table, struct StrHashTable *vartable, struct StrHashTable *partable, char *key,void *value, int numberParameters, int numberLocalVars, int cuadruploInicial)
 {
-    unsigned int bucket = table->hash(value)%NR_BUCKETS;
+    unsigned int bucket = table->hash(key)%NR_BUCKETS;
     struct StrHashNodeProc **tmp;
     struct StrHashNodeProc *node ;
     tmp = &table->buckets[bucket];

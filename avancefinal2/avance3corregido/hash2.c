@@ -292,7 +292,7 @@ int insert(struct StrHashTable *table, char *key,void *value, int type, int dire
 		node->dimensiones[1]->cantidad = dimensiones[1]->cantidad;
 		node->dimensiones[1]->m = dimensiones[1]->m;
 */
-		printf("%s\t%i\t%i\t%i\t%i\n", node->key , node->type ,node->direction, node->dimension1.cantidad, node->dimension2.cantidad);
+		//printf("%s\t%i\t%i\t%i\t%i\n", node->key , node->type ,node->direction, node->dimension1.cantidad, node->dimension2.cantidad);
 	}
     return 0;
 }

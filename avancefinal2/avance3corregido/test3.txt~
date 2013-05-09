@@ -1,0 +1,22 @@
+programa test3 {
+	prototipo suma(2);
+
+	crear entero varglobal;
+	varglobal=1;
+
+	funcion entero suma(entero x, entero y){
+		crear entero resultado;
+		
+		resultado =1;
+		resultado = x + y;
+		regresar resultado
+	}
+
+	principal(){
+		crear entero num1;
+		crear entero num2;
+		num1 = 10;
+		num2 = 3;
+		suma(num1,num2);
+	}
+}

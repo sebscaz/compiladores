@@ -247,11 +247,13 @@ PROGRAMA: {file = fopen("cuadruplos.txt","w+"); generarMain();}
 		     insertProc(&tblProc,&tablaGlobal,&tablaParametros,$3,$3, 0,0,0);
  numeroFunciones++;}  llavea 
 {
+	printf("\n\n====INSERT MIAN\n");
 	strcpy(nombreFuncion, "main"); 
 		numeroParametros=0; 
 		struct StrHashTable tablaLocalFuncion = {{0},NULL,NULL,foo_strhash,strcmp};
 		struct StrHashTable tablaParametros = {{0},NULL,NULL,foo_strhash,strcmp};
 		insertProc(&tblProc,&tablaLocalFuncion,&tablaParametros,nombreFuncion,nombreFuncion,0,0,0);	
+
 }
 
 PROTOTIPOCICLO PROGRAMA1 PROGRAMASIG PROGRAMA2 PRINCIPAL  llavec {generarEnd();};
@@ -384,7 +386,8 @@ ASIGNACION: id ASIGNACION2 {int tipoId = getType(&tablaGlobal,$1);
 			    if(direccionVirtual==-1)
 				direccionVirtual = getDirection(getPointerTbl(&tblProc,nombreFuncion),$1);
 			    push(&pilaOperadores, $1, tipoId, direccionVirtual); 
-				printf("\n\nHIzo pussh: tipo %i, direcicn %i\n\n",tipoId,direccionVirtual);}	
+				//printf("\n\nHIzo pussh: tipo %i, direcicn %i\n\n",tipoId,direccionVirtual);
+}	
 	    igual { push(&pilaOperando, $4, -1, -1);} 
 	    ASIGNACION3 ptocoma {checarOperando3();} ;
 ASIGNACION3: LECTURA
@@ -437,24 +440,28 @@ CREARFUNCION2: TIPO
 			| neutral; 	
 CREARFUNCION3: /*vacio*/
 		| CREARFUNCION4;
-CREARFUNCION4: TIPO id  {int direccion = generarDireccion(tipoOp,2);
-			char numeroParametrosString[3];
-			numeroParametros++;
-			sprintf(numeroParametrosString, "%i", numeroParametros);
-			insert(getPointerParTbl(&tblProc,nombreFuncion),numeroParametrosString,$2,tipoOp,direccion,dimensiones[0], dimensiones[1]);
-			printf("\n\nDIRECCION PARAMETRO %i, %i,%s\n\n", direccion, getType(getPointerParTbl(&tblProc,nombreFuncion),numeroParametrosString), numeroParametrosString);
-			} 
+CREARFUNCION4: TIPO id  {
+	int direccion = generarDireccion(tipoOp,2);
+	//Convertir numero de parametros a stirng e insertarlo en hashtabel
+	char numeroParametrosString[3];
+	numeroParametros++;
+	sprintf(numeroParametrosString, "%i", numeroParametros);
+
+	insert(getPointerParTbl(&tblProc,nombreFuncion),numeroParametrosString,$2,tipoOp,direccion,dimensiones[0], dimensiones[1]);
+	insert(getPointerTbl(&tblProc,nombreFuncion),$2,$2,tipoOp,direccion,dimensiones[0], dimensiones[1]);
+
+		} 
 		CREARFUNCION5;
 CREARFUNCION5: /*vacio*/
 		| coma CREARFUNCION4;
 				
 LLAMARFUNCION: id {	strcpy(nombreFuncion, $1); 
 			if(getProc(&tblProc,$1)==1){
-				printf("\n______Llamada EXISTENTE!!__ \"%s, %i\"\n", nombreFuncion,getNumberParameters(&tblProc,$1) );
+				printf("\n____________Llamada EXISTENTE!!__ \"%s, %i\"\n", nombreFuncion,getNumberParameters(&tblProc,$1) );
 				 generarEra(getNumberLocalVars(&tblProc,$1));
 				
 			}
-			else printf("\nLlamada a un procedimiento que no existe: \"%s\"\n", nombreFuncion );
+			else printf("\n____________Llamada a un procedimiento que no existe: \"%s\"\n", nombreFuncion );
 			
 		} parentesisa LLAMARFUNCION2 parentesisc ptocoma {generarGoSub();} ;
 LLAMARFUNCION2: EXP {generarParametro();} LLAMARFUNCION3;
@@ -496,27 +503,18 @@ TERMINO3: multiplicacion 	{push(&pilaOperando,$1,-1, -1);}
 
 FACTOR:  parentesisa  { push(&pilaOperando,$1,-1,-1); } EXPRESION parentesisc {pop(&pilaOperando);} /*se queita el fondo falso*/
 	| VARCTE
-	| id  
+	| id  {		int direccion= getDirection(getPointerTbl(&tblProc,nombreFuncion),$1);
+			int tipo = getType(getPointerTbl(&tblProc,nombreFuncion),$1);
+			if (direccion == -1) 
+				printf("\nVariable %s no declarada", $1);
+			else{
+				printf("\n\n\n´´´´´´´´USAARR Variable %s\n\n", $1);
+				/*Meter en pilaTipos el tipo de id que es*/
+	 			push(&pilaOperadores, $1, tipo, direccion);
+			}	
+	      }
 	
-	{/*int tipoId = getType(&tbl,$1);
-
-				int direccionVirtual = generarDireccion(tipoId, alcanceDireccion);
-				push(&pilaOperadores, $1, tipoId, direccionVirtual); */
-	//////////////////
-				int tipoId = getType(getPointerTbl(&tblProc,nombreFuncion),$1);
-				int direccion= getDirection(getPointerTbl(&tblProc,nombreFuncion),$1);
-				if (direccion == -1) 
-					printf("\nVariable %s\n no declarada", $1);
-				else{
-					//direccion=generarDireccion(tipoId, alcanceDireccion);
-					printf("\n\n\n´´´´´´´´USAARR Variable %s\n\n", $1);
- 					push(&pilaOperadores, $1, tipoId, direccion);
-				}
-			
-				 
-}
-	
-	ASIGNACION2		;/*Meter en pilaTipos el tipo de id que es*/					
+	ASIGNACION2;					
 
  	
 
@@ -1085,7 +1083,7 @@ void generarParametro(){
 		char apuntadorParametroString[3];
 		sprintf(apuntadorParametroString, "%i", apuntadorParametro);
 
-		//Checar si los tipos son consistentes
+		//Checar si los tipos de los args son consistentes con los de la tabla de param
 		if(arg->tipo != getType(getPointerParTbl(&tblProc,nombreFuncion), apuntadorParametroString) ){
 			printf("\nEl tipo del parametro es inconsistente con la definicion del procedimiento\n:%s, %i, %i, %s\n",nombreFuncion, arg->tipo, getType(getPointerParTbl(&tblProc,nombreFuncion), apuntadorParametroString), apuntadorParametroString);
 		}
@@ -1161,7 +1159,7 @@ void generarDimension1(){
 
 		int res = generarDireccion(1,3); //3:direccion temporal entera
 		insert(&tablaTemporal,nombreT,nombreT,1,res,dimensiones[0], dimensiones[1]);
-		generarCuadruplo(42, operador1->direccion,id->direccion, res);	// multiplocacion	
+		generarCuadruplo(40, operador1->direccion,id->direccion, res);	// multiplocacion	
 		push(&pilaOperadores,nombreT,1,res);//3: direccion temporal
 
 	} else {	//si hay una segunda dimension
