@@ -1,10 +1,19 @@
 programa test3 {
 	prototipo suma(2);
+	prototipo resta(2);
 
 	crear entero varglobal;
 	varglobal=1;
 
 	funcion entero suma(entero x, entero y){
+		crear entero resultado;
+		
+		resultado =1;
+		resultado = x + y;
+		regresar resultado
+	}
+
+	funcion entero resta(entero x, entero y){
 		crear entero resultado;
 		
 		resultado =1;
@@ -18,13 +27,14 @@ programa test3 {
 		crear entero matriz[2][2];
 		crear entero arreglo[3];
 
-		matriz[0][1]=1;
+		matriz[1][1]=1;
 		arreglo[0]=1;
 		arreglo[1]=1;
 		arreglo[2]=3;
 
 		num1 = 10;
-		num2 = 3;
+		num2 = 1;
 		suma(1+1,num2);
+		resta(1+1,num2);
 	}
 }

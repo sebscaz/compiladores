@@ -370,9 +370,9 @@ DECLARACIONFUNCION: crear TIPO id {
 			DECLARACIONFUNCION2 ptocoma 
 			{
 insert(getPointerTbl(&tblProc,nombreFuncion),$3,$3,tipoOp,generarDireccion(tipoOp,2),dimensiones[0], dimensiones[1]);
-printf("\n\ndimencion cero %s cant %i, dim uno cant %i\n",$3, dimensiones[0].cantidad, dimensiones[1].cantidad);
+//printf("\n\ndimencion cero %s cant %i, dim uno cant %i\n",$3, dimensiones[0].cantidad, dimensiones[1].cantidad);
 struct DimensionArreglo dim =  getDimension1(getPointerTbl(&tblProc,nombreFuncion),$3);
-printf("\n\ndimencion cero %s cant %i\n",$3, dim.cantidad);
+//printf("\n\ndimencion cero %s cant %i\n",$3, dim.cantidad);
 
 			direccionAux=m0;			
 			if(esArreglo==1) {
@@ -528,8 +528,15 @@ TERMINO3: multiplicacion 	{push(&pilaOperando,$1,-1, -1);}
 
 FACTOR:  parentesisa  { push(&pilaOperando,$1,-1,-1); } EXPRESION parentesisc {pop(&pilaOperando);} /*se queita el fondo falso*/
 	| VARCTE
-	| id  {		int direccion= getDirection(getPointerTbl(&tblProc,nombreFuncion),$1);
+	| id  {		//Checar tipo y direccion en tabla local y global		
+			int direccion= getDirection(getPointerTbl(&tblProc,nombreFuncion),$1);
+			if(direccion==-1)
+				direccion= getDirection(&tablaGlobal,$1);
+
 			int tipo = getType(getPointerTbl(&tblProc,nombreFuncion),$1);
+			if(tipo==0)
+				tipo= getType(&tablaGlobal,$1);
+
 			if (direccion == -1) 
 				printf("\nVariable %s no declarada", $1);
 			else{
@@ -566,10 +573,10 @@ VARCTE: ctetexto			{if(hacerPush==1) {
 						   if(insert(&tablaConstantes,$1,$1,1,direccion,dimensiones[0], dimensiones[1])!= -1){
 							  contadorConstantes++;
 
-							printf("\ndimension[0] del entero %s:%i \n", $1, dimensiones[0].cantidad);
+							//printf("\ndimension[0] del entero %s:%i \n", $1, dimensiones[0].cantidad);
 						
 						struct DimensionArreglo dim =  getDimension1(getPointerTbl(&tblProc,nombreFuncion),$1);
-							printf("\ndimension[0] del entero %s:%i \n", $1, dim.cantidad);
+							//printf("\ndimension[0] del entero %s:%i \n", $1, dim.cantidad);
 							  char integer_string[32];
 							  sprintf(integer_string, "%d/", direccion);
 							  strcat(strDirecciones, integer_string); 
@@ -844,6 +851,8 @@ void checarOperando2(){
 			
 				semanticaValida = checarSemantica(numOp ,operador1->tipo, operador2->tipo);
 				res = generarDireccion(semanticaValida,3); //3:direccion temporal
+
+				printf("\nSEMANTICA VALIDA %i, RES: %i\n, tipo op1 %i, tipo op2 %i", semanticaValida, res, operador1->tipo, operador2->tipo);
 
 				insert(&tablaTemporal,nombreT,nombreT,semanticaValida,res,dimensiones[0], dimensiones[1]);
 
@@ -1173,11 +1182,11 @@ void generarDimension1(){
 
 	dimensionArreglo d = getDimension1(getPointerTbl(&tblProc,nombreFuncion),id->valor);
 
-	printf("\nd.cantidad %i\n", d.cantidad);	
+	//printf("\nd.cantidad %i\n", d.cantidad);	
 
 	int limInf=0;
 	int limSup= d.cantidad -1;
-	printf("\n---Direcciiones: op1 %i, id %i ---Valores: op1 %s, id %s, limSup %i",operador1->direccion, id->direccion, operador1->valor,idDelArreglo,limSup);	
+	//printf("\n---Direcciiones: op1 %i, id %i ---Valores: op1 %s, id %s, limSup %i",operador1->direccion, id->direccion, operador1->valor,idDelArreglo,limSup);	
 	generarCuadruplo(numeroVerifica,operador1->direccion,limInf,limSup);// param=23
 
 	//verificar si hay otra dimension
@@ -1393,7 +1402,7 @@ void dimensionesArreglos1(int cantidadElementos){
 
 	dimensionArreglo dimensionNueva = {numeroDimension,cantidadElementos,0};
 	dimensiones[0] = dimensionNueva;
-	printf("\nDIMENSION 1 !!! %i\n", cantidadElementos);
+	//printf("\nDIMENSION 1 !!! %i\n", cantidadElementos);
 }
 
 void dimensionesArreglos2(int cantidadElementos){
@@ -1403,7 +1412,7 @@ void dimensionesArreglos2(int cantidadElementos){
 	r = r * cantidadElementos;
 	m0=r;
 
-	printf("\nDIMENSION 2 !!! %i\n", cantidadElementos);
+	//printf("\nDIMENSION 2 !!! %i\n", cantidadElementos);
 
 	dimensionArreglo dimensionNueva = {numeroDimension,cantidadElementos,0};
 	dimensiones[1] = dimensionNueva;

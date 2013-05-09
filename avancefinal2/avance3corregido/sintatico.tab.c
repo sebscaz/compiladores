@@ -722,11 +722,11 @@ static const yytype_uint16 yyrline[] =
      480,   481,   483,   483,   492,   492,   493,   493,   494,   497,
      498,   499,   500,   501,   504,   505,   506,   507,   508,   509,
      510,   517,   517,   518,   519,   520,   521,   523,   523,   524,
-     525,   526,   527,   529,   529,   530,   531,   531,   546,   559,
-     579,   592,   606,   606,   608,   609,   610,   611,   613,   613,
-     615,   615,   618,   618,   620,   620,   622,   622,   624,   624,
-     626,   626,   628,   628,   630,   630,   632,   632,   634,   634,
-     636,   637,   638
+     525,   526,   527,   529,   529,   530,   531,   531,   553,   566,
+     586,   599,   613,   613,   615,   616,   617,   618,   620,   620,
+     622,   622,   625,   625,   627,   627,   629,   629,   631,   631,
+     633,   633,   635,   635,   637,   637,   639,   639,   641,   641,
+     643,   644,   645
 };
 #endif
 
@@ -2043,9 +2043,9 @@ yyreduce:
 #line 371 "sintatico.y"
     {
 insert(getPointerTbl(&tblProc,nombreFuncion),(yyvsp[(3) - (6)].string),(yyvsp[(3) - (6)].string),tipoOp,generarDireccion(tipoOp,2),dimensiones[0], dimensiones[1]);
-printf("\n\ndimencion cero %s cant %i, dim uno cant %i\n",(yyvsp[(3) - (6)].string), dimensiones[0].cantidad, dimensiones[1].cantidad);
+//printf("\n\ndimencion cero %s cant %i, dim uno cant %i\n",$3, dimensiones[0].cantidad, dimensiones[1].cantidad);
 struct DimensionArreglo dim =  getDimension1(getPointerTbl(&tblProc,nombreFuncion),(yyvsp[(3) - (6)].string));
-printf("\n\ndimencion cero %s cant %i\n",(yyvsp[(3) - (6)].string), dim.cantidad);
+//printf("\n\ndimencion cero %s cant %i\n",$3, dim.cantidad);
 
 			direccionAux=m0;			
 			if(esArreglo==1) {
@@ -2407,8 +2407,15 @@ printf("\n\ndimencion cero %s cant %i\n",(yyvsp[(3) - (6)].string), dim.cantidad
 
 /* Line 1806 of yacc.c  */
 #line 531 "sintatico.y"
-    {		int direccion= getDirection(getPointerTbl(&tblProc,nombreFuncion),(yyvsp[(1) - (1)].string));
+    {		//Checar tipo y direccion en tabla local y global		
+			int direccion= getDirection(getPointerTbl(&tblProc,nombreFuncion),(yyvsp[(1) - (1)].string));
+			if(direccion==-1)
+				direccion= getDirection(&tablaGlobal,(yyvsp[(1) - (1)].string));
+
 			int tipo = getType(getPointerTbl(&tblProc,nombreFuncion),(yyvsp[(1) - (1)].string));
+			if(tipo==0)
+				tipo= getType(&tablaGlobal,(yyvsp[(1) - (1)].string));
+
 			if (direccion == -1) 
 				printf("\nVariable %s no declarada", (yyvsp[(1) - (1)].string));
 			else{
@@ -2422,7 +2429,7 @@ printf("\n\ndimencion cero %s cant %i\n",(yyvsp[(3) - (6)].string), dim.cantidad
   case 138:
 
 /* Line 1806 of yacc.c  */
-#line 546 "sintatico.y"
+#line 553 "sintatico.y"
     {if(hacerPush==1) {
 							//Generar direccion en tabla de constantes si no existe	
 							int direccion= getDirection(&tablaConstantes,(yyvsp[(1) - (1)].string));
@@ -2441,7 +2448,7 @@ printf("\n\ndimencion cero %s cant %i\n",(yyvsp[(3) - (6)].string), dim.cantidad
   case 139:
 
 /* Line 1806 of yacc.c  */
-#line 559 "sintatico.y"
+#line 566 "sintatico.y"
     {if(hacerPush==1) {
 							//Generar direccion en tabla de constantes si no existe	
 						   	int direccion= getDirection(&tablaConstantes,(yyvsp[(1) - (1)].string));
@@ -2452,10 +2459,10 @@ printf("\n\ndimencion cero %s cant %i\n",(yyvsp[(3) - (6)].string), dim.cantidad
 						   if(insert(&tablaConstantes,(yyvsp[(1) - (1)].string),(yyvsp[(1) - (1)].string),1,direccion,dimensiones[0], dimensiones[1])!= -1){
 							  contadorConstantes++;
 
-							printf("\ndimension[0] del entero %s:%i \n", (yyvsp[(1) - (1)].string), dimensiones[0].cantidad);
+							//printf("\ndimension[0] del entero %s:%i \n", $1, dimensiones[0].cantidad);
 						
 						struct DimensionArreglo dim =  getDimension1(getPointerTbl(&tblProc,nombreFuncion),(yyvsp[(1) - (1)].string));
-							printf("\ndimension[0] del entero %s:%i \n", (yyvsp[(1) - (1)].string), dim.cantidad);
+							//printf("\ndimension[0] del entero %s:%i \n", $1, dim.cantidad);
 							  char integer_string[32];
 							  sprintf(integer_string, "%d/", direccion);
 							  strcat(strDirecciones, integer_string); 
@@ -2467,7 +2474,7 @@ printf("\n\ndimencion cero %s cant %i\n",(yyvsp[(3) - (6)].string), dim.cantidad
   case 140:
 
 /* Line 1806 of yacc.c  */
-#line 579 "sintatico.y"
+#line 586 "sintatico.y"
     {if(hacerPush==1) {
 							//Generar direccion en tabla de constantes si no existe	
 						  	int direccion= getDirection(&tablaConstantes,(yyvsp[(1) - (1)].string));
@@ -2486,7 +2493,7 @@ printf("\n\ndimencion cero %s cant %i\n",(yyvsp[(3) - (6)].string), dim.cantidad
   case 141:
 
 /* Line 1806 of yacc.c  */
-#line 592 "sintatico.y"
+#line 599 "sintatico.y"
     {if(hacerPush==1) {
 							//Generar direccion en tabla de constantes si no existe	
 						  	int direccion= getDirection(&tablaConstantes,(yyvsp[(1) - (1)].string));
@@ -2505,91 +2512,91 @@ printf("\n\ndimencion cero %s cant %i\n",(yyvsp[(3) - (6)].string), dim.cantidad
   case 142:
 
 /* Line 1806 of yacc.c  */
-#line 606 "sintatico.y"
+#line 613 "sintatico.y"
     {generarDibujarFigura();}
     break;
 
   case 148:
 
 /* Line 1806 of yacc.c  */
-#line 613 "sintatico.y"
+#line 620 "sintatico.y"
     {generarBorrarFigura();}
     break;
 
   case 150:
 
 /* Line 1806 of yacc.c  */
-#line 615 "sintatico.y"
+#line 622 "sintatico.y"
     {generarHablarFigura();}
     break;
 
   case 152:
 
 /* Line 1806 of yacc.c  */
-#line 618 "sintatico.y"
+#line 625 "sintatico.y"
     {generarMoverFigura();}
     break;
 
   case 154:
 
 /* Line 1806 of yacc.c  */
-#line 620 "sintatico.y"
+#line 627 "sintatico.y"
     {/* generarObtenerPosicion();*/ }
     break;
 
   case 156:
 
 /* Line 1806 of yacc.c  */
-#line 622 "sintatico.y"
+#line 629 "sintatico.y"
     {generarGirarD();}
     break;
 
   case 158:
 
 /* Line 1806 of yacc.c  */
-#line 624 "sintatico.y"
+#line 631 "sintatico.y"
     {generarGirarI();}
     break;
 
   case 160:
 
 /* Line 1806 of yacc.c  */
-#line 626 "sintatico.y"
+#line 633 "sintatico.y"
     {generarObtenerAltura();}
     break;
 
   case 162:
 
 /* Line 1806 of yacc.c  */
-#line 628 "sintatico.y"
+#line 635 "sintatico.y"
     {generarObtenerAnchura();}
     break;
 
   case 164:
 
 /* Line 1806 of yacc.c  */
-#line 630 "sintatico.y"
+#line 637 "sintatico.y"
     {generarCambiarAltura();}
     break;
 
   case 166:
 
 /* Line 1806 of yacc.c  */
-#line 632 "sintatico.y"
+#line 639 "sintatico.y"
     {generarCambiarAnchura();}
     break;
 
   case 168:
 
 /* Line 1806 of yacc.c  */
-#line 634 "sintatico.y"
+#line 641 "sintatico.y"
     {generarColorFondo();}
     break;
 
 
 
 /* Line 1806 of yacc.c  */
-#line 2593 "sintatico.tab.c"
+#line 2600 "sintatico.tab.c"
       default: break;
     }
   /* User semantic actions sometimes alter yychar, and that requires
@@ -2820,7 +2827,7 @@ yyreturn:
 
 
 /* Line 2067 of yacc.c  */
-#line 640 "sintatico.y"
+#line 647 "sintatico.y"
 
 
 int generarTipo(char *operando){
@@ -3028,6 +3035,8 @@ void checarOperando2(){
 			
 				semanticaValida = checarSemantica(numOp ,operador1->tipo, operador2->tipo);
 				res = generarDireccion(semanticaValida,3); //3:direccion temporal
+
+				printf("\nSEMANTICA VALIDA %i, RES: %i\n, tipo op1 %i, tipo op2 %i", semanticaValida, res, operador1->tipo, operador2->tipo);
 
 				insert(&tablaTemporal,nombreT,nombreT,semanticaValida,res,dimensiones[0], dimensiones[1]);
 
@@ -3357,11 +3366,11 @@ void generarDimension1(){
 
 	dimensionArreglo d = getDimension1(getPointerTbl(&tblProc,nombreFuncion),id->valor);
 
-	printf("\nd.cantidad %i\n", d.cantidad);	
+	//printf("\nd.cantidad %i\n", d.cantidad);	
 
 	int limInf=0;
 	int limSup= d.cantidad -1;
-	printf("\n---Direcciiones: op1 %i, id %i ---Valores: op1 %s, id %s, limSup %i",operador1->direccion, id->direccion, operador1->valor,idDelArreglo,limSup);	
+	//printf("\n---Direcciiones: op1 %i, id %i ---Valores: op1 %s, id %s, limSup %i",operador1->direccion, id->direccion, operador1->valor,idDelArreglo,limSup);	
 	generarCuadruplo(numeroVerifica,operador1->direccion,limInf,limSup);// param=23
 
 	//verificar si hay otra dimension
@@ -3577,7 +3586,7 @@ void dimensionesArreglos1(int cantidadElementos){
 
 	dimensionArreglo dimensionNueva = {numeroDimension,cantidadElementos,0};
 	dimensiones[0] = dimensionNueva;
-	printf("\nDIMENSION 1 !!! %i\n", cantidadElementos);
+	//printf("\nDIMENSION 1 !!! %i\n", cantidadElementos);
 }
 
 void dimensionesArreglos2(int cantidadElementos){
@@ -3587,7 +3596,7 @@ void dimensionesArreglos2(int cantidadElementos){
 	r = r * cantidadElementos;
 	m0=r;
 
-	printf("\nDIMENSION 2 !!! %i\n", cantidadElementos);
+	//printf("\nDIMENSION 2 !!! %i\n", cantidadElementos);
 
 	dimensionArreglo dimensionNueva = {numeroDimension,cantidadElementos,0};
 	dimensiones[1] = dimensionNueva;
