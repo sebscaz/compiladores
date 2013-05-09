@@ -111,6 +111,17 @@ int contBoolG=0, contBoolL=0, contBoolC=0, contBoolT=0;
 
 //pila de Ejecucion
 stack<int> pilaEjecucion;
+//std::stack< int, std::vector< int > > pilaLocalEntera;
+stack< vector < int > > pilaLocalEntera;
+stack< vector < float > > pilaLocalFotante;
+stack< vector < string > > pilaLocalString;
+stack< vector < string > > pilaLocalBoolean;
+
+//Temporales
+stack< vector < int > > pilaTemporalEntera;
+stack< vector < float > > pilaTemporalFotante;
+stack< vector < string > > pilaTemporalString;
+stack< vector < string > > pilaTemporalBoolean;
 
 //Vector de contadores
 //vector<int> contCuadruplos();
@@ -419,7 +430,7 @@ void hacerOperacion(int operacion, string op1, string op2 , string temp){
     
     else if (operacion==10){
          
-            cout<<"= ASIG op:"<<operacion <<" op1 "<<op1ValorReal<<" op2 "<<op2ValorReal<<" temp " << temp <<" Resultado: " <<resultadoFloat<<"\n";
+            cout<<"= ASIG op:"<<operacion <<" op1 "<<op1ValorReal<<" se guardara en"<<" temp " << temp <<" Resultado: " <<"\n";
      
       		//Asignar valor si op1 es una constante
 			if(op1dir >= 13000 && op1dir <= 13999){
@@ -452,6 +463,8 @@ void hacerOperacion(int operacion, string op1, string op2 , string temp){
 					string op1ValorRealString= getValorVectorBoolean(op1, op1dir, base1);
 					generarMemoria(atoi(temp.c_str()),  op1ValorRealString);
 			}
+			
+		
            
     }
     
@@ -460,7 +473,7 @@ void hacerOperacion(int operacion, string op1, string op2 , string temp){
        
         
              //Realizar suma dirBase + (s1*m1)                    
-        	resultadoInt = op1dir + op2dir;
+        	resultadoInt =  getValorVectorInt(op1, op1dir, base1) + op2dir;
         
         	//Meter valor del temporal en memoria, hay que convertir a string el resultado
             generarMemoria(atoi(temp.c_str()), static_cast<ostringstream*>( &(ostringstream() << resultadoInt) )->str());
@@ -663,73 +676,75 @@ cout<<"num de cuadruplos del archivo"<<numCuadruplos<<"\n";
 
 /*
 //Imprimir matriz
-for(int x=0;x<numCuadruplos;x++)  // loop 3 times for three lines
+for(int x=0;x<=numCuadruplos;x++)  // loop 3 times for three lines
     {
         for(int y=0;y<5;y++)  // loop for the three elements on the line
         {
-            //cout<<cuadruplos[x][y]<<",";  // display the current element out of the array
+            cout<<cuadruplos[x][y]<<",";  // display the current element out of the array
         }
     cout<<endl;  // when the inner loop is done, go to a new line
     }
 */
 int i=0;
 
+
 while (i<numCuadruplos){
       i++;
      
-     //cout<<"---Numero i "<<i<<", num cuadruplo  "<<cuadruplos[i][0]<<", op  "<<cuadruplos[i][1]<<", op1  "<<cuadruplos[i][2]<<"\n";
-      /*Empieza el Switch*/
+     cout<<"---Numero i "<<i<<", num cuadruplo  "<<cuadruplos[i][0]<<", op  "<<cuadruplos[i][1]<<", op1  "<<cuadruplos[i][2]<<"\n";
+    
+      //Empieza el Switch
                 switch(atoi(cuadruplos[i][1].c_str())){
 
 
-              		case 0 /*Suma*/:{ //instrucciones
+              		case 0 :{ //Suma instrucciones
               		        cout<<i<<"<<<<cuadruplo \n";
               		
          		       hacerOperacion(0, cuadruplos[i][2], cuadruplos[i][3] ,cuadruplos[i][4]);
                     }
                 	break;
 
-                	case 1/*Resta*/:{//instrucciones
+                	case 1:{//resta instrucciones
                 	 cout<<i<<"<<<<cuadruplo \n";
                     	 hacerOperacion(1, cuadruplos[i][2], cuadruplos[i][3] ,cuadruplos[i][4]);
                     }
                 	break;
 
-                	case 2/*multiplicación*/:{//instrucciones
+                	case 2:{// multipliacion instrucciones
                 	 cout<<i<<"<<<<cuadruplo \n";
                          hacerOperacion(2, cuadruplos[i][2], cuadruplos[i][3] ,cuadruplos[i][4]);
                     }
                 	break;
 
-                	case 3/*división*/:{//instrucciones
+                	case 3:{// division  instrucciones
                 	 cout<<i<<"<<<<cuadruplo \n";
                 	       hacerOperacion(3, cuadruplos[i][2], cuadruplos[i][3] ,cuadruplos[i][4]);
                     }
                 	break;
 
-                	case 4 /*==*/://instrucciones
+                	case 4 ://==  instrucciones
                 	break;
 
-                	case 5 /* !=*/://instrucciones
+                	case 5 :// !=  instrucciones
                 	break;
 
-                	case 6: { /*> *///instrucciones
+                	case 6: { /// >  instrucciones
                     
                           hacerOperacion(6, cuadruplos[i][2], cuadruplos[i][3] ,cuadruplos[i][4]);
                     
                     }
                 	break;
 
-                	case 7 /*<*/://instrucciones
+                	case 7 ://<  instrucciones
                 	break;
 
-                	case 8 /*AND*/://instrucciones
+                	case 8 :// and  instrucciones
                 	break;
 
-                	case 9 /*OR*/://instrucciones
+                	case 9 ://or  instrucciones
                 	break;
 
-                	case 10 /*=*/://instrucciones
+                	case 10 ://=  instrucciones
                    cout<<i<<"<<<<cuadruplo \n";
                     // cout<<"\n ASIGNACION >"<<cuadruplos[i][2]<<" ->" <<cuadruplos[i][4] <<"\n";
                             
@@ -738,7 +753,7 @@ while (i<numCuadruplos){
 
                 	break;
 
-                	case 11 /*GOTO*/://instrucciones
+                	case 11 :// gootoo   instrucciones
                    //  dirGoto = atoi(l.c_str());
                     cout<<i<<"<<<<cuadruplo \n";
                    cout<<"\n Goto >"<<cuadruplos[i][4]<<"\n";
@@ -748,7 +763,7 @@ while (i<numCuadruplos){
                 	break;
 
 
-                	case 12 /*GOTOF*/://instrucciones
+                	case 12 ://gotoooF   instrucciones
                 
                     	
              	   cout<<"\n Goto Falso >"<<cuadruplos[i][4]<<"\n";
@@ -759,18 +774,15 @@ while (i<numCuadruplos){
                 	
                 	
 
-                	case 13 /*GOTOV*/://instrucciones
+                	case 13 :// gotoooT   instrucciones
                 	break;
 
-                	case 14 /*GOTOSUB*/://instrucciones
-
-
-                	break;
+                
 
                 	case 19://ver
                         break;
 
-                	case 20 /*ERA*/://instrucciones
+                	case 20 ://ERAA  ERAAA E EE E  instrucciones
                     //salvar la base actual previa a la llamada
                     
                     
@@ -780,7 +792,16 @@ while (i<numCuadruplos){
 
                 	break;
 
-                	case 21 /*gosub*/://instrucciones
+                	case 21 :// gpooSUb   instrucciones
+                	
+                	
+                	//Guardar la memoria local actual en una pila
+                	pilaLocalEntera.push(enterosLocales);
+                	pilaLocalFotante.push(flotantesLocales);
+                	pilaLocalString.push(stringLocales);
+                	pilaLocalBoolean.push(booleanoLocales);
+                	
+                	
                 	     //Meter la direccion de retorno en la pila de ejecución
                 	     
                 	     cout<<"\n prewhaat  >"<<enterosConstantes[1]<<"\n";
@@ -796,11 +817,11 @@ while (i<numCuadruplos){
                 	    cout<<"\n GO SUB >"<<cuadruplos[i][2]<<"\n";
                          i=atoi(cuadruplos[i][2].c_str());
 
-                          cout<<"\n whaat  >"<<enterosConstantes[1]<<"\n";
+                          
 
                 	break;
 
-                	case 22 /*RET*/: //instrucciones
+                	case 22 : // ret instrucciones
                 	    //actualizar la base local(previa a la llamada)
                 	    //destruir el registro de activación del proc d ememoria local
                 	    //Recuperar la dirección de rerono y transeferir el control de ejeciucpin
@@ -811,7 +832,7 @@ while (i<numCuadruplos){
                 	    
                 	break;
 
-                	case 23 /*param*/://instrucciones
+                	case 23 ://param    instrucciones
                 	cout<<"\n supeerwhaat  >"<<enterosConstantes[1]<<"\n";
                 	
                           //cout<<i<<"<<<<cuadruplo \n";
@@ -820,44 +841,59 @@ while (i<numCuadruplos){
 
                 	break;
 
-                	case 24 /*Return*/: //instrucciones
+                	case 24 : //rtetuurnn instrucciones
                 	break;
 
-                	case 25 /*read*/://instrucciones
+                	case 25 :// read  instrucciones
                 	 //cout<<i<<"<<<<cuadruplo \n";
                 	 //cout<<"READ\n";
                 	break;
 
-                	case 26 /*PRINT*/://instrucciones
+                	case 26 ://print   instrucciones
                 	 cout<<i<<"<<<<cuadruplo \n";
                     hacerPrint(cuadruplos[i][2]);
                 	break;
 
-                	case 30 /*END*/: //instrucciones
+                	case 30 : //end 
                 	
                 	 cout<<i<<"<<<<cuadruplo \n";
                 	 cout<<"END\n";
                 	break;
                 	
                 	
-                		case 40 /*sumaVector*/: //instrucciones
+                		case 40 : //instrucciones suma vecto
                 	 hacerOperacion(40, cuadruplos[i][2], cuadruplos[i][3] ,cuadruplos[i][4]);
                 	 
                 	 cout<<"SUMA VECTOR\n";
                 	break;
                 	
-                		case 42 /*sumaVector*/: //instrucciones
+                		case 42 : //instrucciones
                 	 hacerOperacion(42, cuadruplos[i][2], cuadruplos[i][3] ,cuadruplos[i][4]);
                 	 
                 	 cout<<"Multiplica S1*m1 \n";
                 	break;
 
-                }/*Termina el switch*/
+                }///termina swuitx
+                
+                
 
       
       
       
-      }
+      }//termina whilw
+      
+      
+      //pruebas
+    
+    /*  pilaLocalEntera.push(enterosLocales);
+      vector < int > local = pilaLocalEntera.top();
+       cout<<"0 " <<local[1]<<"\n";
+      cout<<"1  " <<local[2]<<"\n";
+       cout<<"2  " <<local[3]<<"\n";
+        cout<<",,, " <<enterosLocales[1]<<"\n";
+      cout<<",,,  " <<enterosLocales[2]<<"\n";
+       cout<<",,,  " <<enterosLocales[3]<<"\n";
+      */
 
 	 int acabar;
 	cin>>acabar;
