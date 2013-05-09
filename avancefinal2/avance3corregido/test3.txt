@@ -15,6 +15,12 @@ programa test3 {
 	principal(){
 		crear entero num1;
 		crear entero num2;
+		crear entero arreglo[3];
+
+		arreglo[0]=1;
+		arreglo[1]=1;
+		arreglo[2]=3;
+
 		num1 = 10;
 		num2 = 3;
 		suma(1+1,num2);

@@ -15,8 +15,9 @@ programa test3 {
 	principal(){
 		crear entero num1;
 		crear entero num2;
+		crear entero areglo2[10];
 		num1 = 10;
 		num2 = 3;
-		suma(num1,num2);
+		suma(1+1,num2);
 	}
 }
