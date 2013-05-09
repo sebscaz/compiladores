@@ -113,13 +113,13 @@ int contBoolG=0, contBoolL=0, contBoolC=0, contBoolT=0;
 stack<int> pilaEjecucion;
 //std::stack< int, std::vector< int > > pilaLocalEntera;
 stack< vector < int > > pilaLocalEntera;
-stack< vector < float > > pilaLocalFotante;
+stack< vector < float > > pilaLocalFlotante;
 stack< vector < string > > pilaLocalString;
 stack< vector < string > > pilaLocalBoolean;
 
 //Temporales
 stack< vector < int > > pilaTemporalEntera;
-stack< vector < float > > pilaTemporalFotante;
+stack< vector < float > > pilaTemporalFlotante;
 stack< vector < string > > pilaTemporalString;
 stack< vector < string > > pilaTemporalBoolean;
 
@@ -797,9 +797,14 @@ while (i<numCuadruplos){
                 	
                 	//Guardar la memoria local actual en una pila
                 	pilaLocalEntera.push(enterosLocales);
-                	pilaLocalFotante.push(flotantesLocales);
+                	pilaLocalFlotante.push(flotantesLocales);
                 	pilaLocalString.push(stringLocales);
                 	pilaLocalBoolean.push(booleanoLocales);
+                   	//Guardar la memoria Temporal en pila
+                	pilaTemporalEntera.push(enterosTemporales);
+                	pilaTemporalFlotante.push(flotantesTemporales);
+                	pilaTemporalString.push(stringTemporales);
+                	pilaTemporalBoolean.push(booleanoTemporales);
                 	
                 	
                 	     //Meter la direccion de retorno en la pila de ejecución
@@ -823,6 +828,18 @@ while (i<numCuadruplos){
 
                 	case 22 : // ret instrucciones
                 	    //actualizar la base local(previa a la llamada)
+                	    enterosLocales= pilaLocalEntera.top();
+                	    flotantesLocales=pilaLocalFlotante.top();
+                	    stringLocales=pilaLocalString.top();
+                        booleanoLocales=pilaLocalBoolean.top();
+                        
+                        enterosTemporales=pilaTemporalEntera.top();
+                        flotantesTemporales=pilaTemporalFlotante.top();
+                        stringTemporales=pilaTemporalString.top();
+                        booleanoTemporales=pilaTemporalBoolean.top();
+                        
+                	    
+                	    
                 	    //destruir el registro de activación del proc d ememoria local
                 	    //Recuperar la dirección de rerono y transeferir el control de ejeciucpin
                 	   
