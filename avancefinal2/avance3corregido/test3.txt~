@@ -25,15 +25,16 @@ programa test3 {
 		crear entero num1;
 		crear entero num2;
 		crear entero matriz[2][2];
-		crear entero arreglo[3];
 
+		matriz[0][0]=1;
+		matriz[0][1]=1;
+		matriz[1][0]=1;
 		matriz[1][1]=1;
-		arreglo[0]=1;
-		arreglo[1]=1;
-		arreglo[2]=3;
+		
 
+		imprimir(matriz[1][1]);
 		num1 = 10;
-		num2 = 1;
+		num2 = 3;
 		suma(1+1,num2);
 		resta(1+1,num2);
 	}

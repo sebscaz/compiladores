@@ -493,8 +493,14 @@ LLAMARFUNCION: id {	strcpy(nombreFuncion, $1);
 			
 		} parentesisa LLAMARFUNCION2 parentesisc ptocoma 
 			{
-			push(&pilaOperadores, $1, getType(&tablaGlobal,$1), getDirection(&tablaGlobal,$1););
 			generarGoSub();
+			char nombreT[10];
+			sprintf(nombreT, "t%i", contT++);
+
+			int res = generarDireccion(getType(&tablaGlobal,$1),3); //3:direccion temporal
+			generarCuadruplo(10,getDirection(&tablaGlobal,$1),-1,res);
+
+			push(&pilaOperadores, $1, getType(&tablaGlobal,$1), res);
 			} ;
 LLAMARFUNCION2: EXP {generarParametro();} LLAMARFUNCION3;
 LLAMARFUNCION3: coma {apuntadorParametro++;} LLAMARFUNCION2
@@ -1098,8 +1104,12 @@ void llenarMain(){
 }
 
 void generarRetorno(){
+
+
 	int numeroRet=22;
 	generarCuadruplo(numeroRet ,-1, -1, -1);
+
+
 }
 
 void generarEra(int tamano){
@@ -1158,7 +1168,8 @@ void generarReturn(){
 	
 	pop(&pilaOperadores);
 	
-	generarCuadruplo(numeroReturn,regresar->direccion,-1,-1);// param=23
+	generarCuadruplo(numeroReturn,regresar->direccion,-1,getDirection(&tablaGlobal,nombreFuncion));// param=23
+	
 }
 
 void generarEnd(){

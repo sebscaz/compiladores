@@ -18,9 +18,8 @@ programa test3 {
 		crear entero num2;
 		crear entero r;
 		
-		num1=1;
+		num1=3;
 		num2=2;
-		suma(1,2);
-		r = suma(num1,num2);;
+		r = (suma(num2,num2);) + (suma(num2,num2););
 	}
 }

@@ -409,7 +409,6 @@ ASIGNACION: id 		{ strcpy(idDelArreglo, $1);
 	    ASIGNACION3 ptocoma {checarOperando3();} ;
 
 ASIGNACION3: LECTURA
-		| LLAMARFUNCION
 		| EXP;
 ASIGNACION2: {numeroDimension=1;}  ARREGLOSASIG  {hacerPush=1;} 
 	|/*vacio*/;
@@ -493,8 +492,14 @@ LLAMARFUNCION: id {	strcpy(nombreFuncion, $1);
 			
 		} parentesisa LLAMARFUNCION2 parentesisc ptocoma 
 			{
-			push(&pilaOperadores, $1, getType(&tablaGlobal,$1), getDirection(&tablaGlobal,$1));
 			generarGoSub();
+			char nombreT[10];
+			sprintf(nombreT, "t%i", contT++);
+
+			int res = generarDireccion(getType(&tablaGlobal,$1),3); //3:direccion temporal
+			generarCuadruplo(10,getDirection(&tablaGlobal,$1),-1,res);
+
+			push(&pilaOperadores, $1, getType(&tablaGlobal,$1), res);
 			} ;
 LLAMARFUNCION2: EXP {generarParametro();} LLAMARFUNCION3;
 LLAMARFUNCION3: coma {apuntadorParametro++;} LLAMARFUNCION2
@@ -535,6 +540,7 @@ TERMINO3: multiplicacion 	{push(&pilaOperando,$1,-1, -1);}
 
 FACTOR:  parentesisa  { push(&pilaOperando,$1,-1,-1); } EXPRESION parentesisc {pop(&pilaOperando);} /*se queita el fondo falso*/
 	| VARCTE
+	| LLAMARFUNCION
 	| id  {		//Checar tipo y direccion en tabla local y global		
 			int direccion= getDirection(getPointerTbl(&tblProc,nombreFuncion),$1);
 			if(direccion==-1)
@@ -1098,8 +1104,12 @@ void llenarMain(){
 }
 
 void generarRetorno(){
+
+
 	int numeroRet=22;
 	generarCuadruplo(numeroRet ,-1, -1, -1);
+
+
 }
 
 void generarEra(int tamano){
@@ -1158,7 +1168,8 @@ void generarReturn(){
 	
 	pop(&pilaOperadores);
 	
-	generarCuadruplo(numeroReturn,regresar->direccion,-1,-1);// param=23
+	generarCuadruplo(numeroReturn,regresar->direccion,-1,getDirection(&tablaGlobal,nombreFuncion));// param=23
+	
 }
 
 void generarEnd(){
