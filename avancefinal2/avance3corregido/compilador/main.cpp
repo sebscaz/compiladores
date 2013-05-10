@@ -100,7 +100,8 @@ int getBase(int direccion){
      return base;
 
 }
-
+int esRetorno=0;
+int esMatriz=0;
 /* Contadores de Variables*/
 int contIntG=0, contIntL=0, contIntT=0, contIntC=0;
 int contFloatG=0, contFloatL=0, contFloatT=0, contFloatC=0;
@@ -123,6 +124,9 @@ stack< vector < float > > pilaTemporalFlotante;
 stack< vector < string > > pilaTemporalString;
 stack< vector < string > > pilaTemporalBoolean;
 
+
+vector<int> funciones(50);
+stack<int> pilaFunciones;
 //Vector de contadores
 //vector<int> contCuadruplos();
 
@@ -196,8 +200,8 @@ string getValorVectorBoolean(string operando, int direccion, int base){
 void generarVectores(){
 
     enterosGlobales.resize(contIntG);
-    enterosLocales.resize(contIntL);
-    enterosTemporales.resize(contIntT);
+    enterosLocales.resize(20);
+    enterosTemporales.resize(20);
     enterosConstantes.resize(contIntC);
 
     flotantesGlobales.resize(contFloatG);
@@ -220,7 +224,7 @@ void generarVectores(){
 void generarMemoria(int direccion, string valor){
     //cout<<"\n"<<direccion<<"\n";
     //Almacenar enteros
-    //cout<<"\n --INTERSUME---  >"<<enterosConstantes[1]<<"\n";
+    cout<<"--GenerarMemora---  >"<<direccion<<" "<<valor<<"\n";
     
      if(direccion >= 10000 && direccion <= 10999){
           enterosGlobales[direccion-10000]=atoi(valor.c_str());
@@ -291,7 +295,7 @@ void hacerOperacion(int operacion, string op1, string op2 , string temp){
     int op1mapeo, op2mapeo;		 //posicion en el vector
     float op1ValorReal, op2ValorReal;	//Almacenar el valor real del operando, en forma de float y despues se convierte a int si es necesario
     string op1ValorRealString, op2ValorRealString;
-
+    int valorRetorno;
     int resultadoInt;
     float resultadoFloat;
 
@@ -347,7 +351,8 @@ void hacerOperacion(int operacion, string op1, string op2 , string temp){
         	//Meter valor del temporal en memoria, hay que convertir a string el resultado
             generarMemoria(atoi(temp.c_str()), static_cast<ostringstream*>( &(ostringstream() << resultadoInt) )->str());
            // cout<<"\n --PRESUMA3---  >"<<enterosConstantes[1]<<"\n";
-         	cout<<"sumaInt "<<"op1 "<<op1ValorReal<<" op2 "<<op2ValorReal<<" temp " << temp <<" Resultado: " <<resultadoInt<<"\n";
+         	//
+          cout<<"sumaInt "<<"op1 "<<op1ValorReal<<" op2 "<<op2ValorReal<<" temp " << temp <<" Resultado: " <<resultadoInt<<"\n";
         } else if (checarRango(temp)==2){
             resultadoFloat = op1ValorReal + op2ValorReal;
             //Meter valor del temporal en memoria, hay que convertir a string el resultado
@@ -431,11 +436,30 @@ void hacerOperacion(int operacion, string op1, string op2 , string temp){
     }
     
     else if (operacion==10){
-         
-            cout<<"= ASIG op:"<<operacion <<" op1 "<<op1ValorReal<<" se guardara en"<<" temp " << temp <<" Resultado: " <<"\n";
+         /*
+             if(esMatriz==1){
+    
+                    cout <<"\nAntes Asifg temp: "<< temp <<", tempString "<< atoi(temp.c_str())<<"\n";
+                    int tempdir= getValorVectorInt(temp, atoi(temp.c_str()), 12000);
+                    cout << "tempdir:" << tempdir << "\n";
+                   temp = static_cast<ostringstream*>( &(ostringstream() << tempdir) )->str();
+                   /*op1dir = getValorVectorInt(static_cast<ostringstream*>( &(ostringstream() << direccionMatriz) )->str(), direccionMatriz, base1);
+                   op1 =  static_cast<ostringstream*>( &(ostringstream() << op1dir) )->str();
+                   cout <<"\n Despues Asig op1dir: "<< op1dir <<", op1: \n"<< op1;
+                   */
+   /* }*/
+                    cout<<"= ASIG op:"<<operacion <<" op1 "<<op1ValorReal<<" se guardara en"<<" temp "<<temp  <<" Resultado: " <<"\n";
+   
+         if (esRetorno==1){
+                     valorRetorno=pilaFunciones.top();  
+                           
+                    generarMemoria(atoi(temp.c_str()), static_cast<ostringstream*>( &(ostringstream() << valorRetorno) )->str());       
+                     esRetorno=0;    
+         }
+            
      
       		//Asignar valor si op1 es una constante
-			if(op1dir >= 13000 && op1dir <= 13999){
+			 else if(op1dir >= 13000 && op1dir <= 13999 ){
 				generarMemoria(atoi(temp.c_str()), static_cast<ostringstream*>( &(ostringstream() << op1ValorReal) )->str());
 			}
 			else if(op1dir >= 23000 && op1dir <= 23999){
@@ -466,6 +490,7 @@ void hacerOperacion(int operacion, string op1, string op2 , string temp){
 					generarMemoria(atoi(temp.c_str()),  op1ValorRealString);
 			}
 			
+			//esMatriz=0;
 		
            
     }
@@ -477,27 +502,46 @@ void hacerOperacion(int operacion, string op1, string op2 , string temp){
     
 }
 
-void hacerPrint(string op1){
+void hacerPrint(int operacion, string op1, string op2 , string temp){
 
-    int base1;			 //varaible para mapear direccion;
-    int op1dir;
+    int base1, baseInception;			 //varaible para mapear direccion;
+    int op1dir=0;
 
     op1dir = atoi(op1.c_str());
     base1 = getBase(op1dir);
 
 
-cout<<"op1-----"<< op1;
+    cout<<"op1-----"<< op1;
 
-                	    //ChecarRango
-                	       if (checarRango(op1)==1)  {	//es int
-                                 cout<< "Print "<< getValorVectorInt(op1, op1dir, base1)<<"\n";
-                            }
-                            else if (checarRango(op1)==2){	//es float
-                                 cout<<"Print " <<getValorVectorFloat(op1, op1dir, base1)<<"\n";
-                            }
-                             else if (checarRango(op1)==3){	//es float
-                                 cout<<"Print "<< getValorVectorString(op1, op1dir, base1)<<"\n";
-                            }
+    if(esMatriz==1){
+    
+                    cout <<"\nAntes temp: "<< op1 <<", op1:"<< op1;
+                   // int direccionMatriz 
+                   
+                    op1dir= getValorVectorInt(op1, atoi(op1.c_str()), 12000);
+                    base1=getBase(op1dir);
+                    cout <<"\nDirecon matiz: "<< op1dir <<", base:"<< base1;
+                    /*
+                    base1=getBase(direccionMatriz);
+                      
+                   op1dir = getValorVectorInt(static_cast<ostringstream*>( &(ostringstream() << direccionMatriz) )->str(), direccionMatriz, base1);
+                  //temp =  static_cast<ostringstream*>( &(ostringstream() << temp) )->str();*/
+                   cout <<"\n Despues temp: "<< op1dir <<", op1:"<< op1dir;
+                   
+    }
+    
+    //ChecarRango
+   if (checarRango(op1)==1)  {	//es int
+         cout<< "\nPrint "<< getValorVectorInt(static_cast<ostringstream*>( &(ostringstream() << op1dir) )->str(), op1dir, base1)<<"\n";
+    }
+    else if (checarRango(op1)==2){	//es float
+         cout<<"\nPrint " <<getValorVectorFloat(static_cast<ostringstream*>( &(ostringstream() << op1dir) )->str(), op1dir, base1)<<"\n";
+    }
+     else if (checarRango(op1)==3){	//es float
+         cout<<"\nPrint "<< getValorVectorString(static_cast<ostringstream*>( &(ostringstream() << op1dir) )->str(), op1dir, base1)<<"\n";
+    }
+    
+    esMatriz=0;
 }
 
 
@@ -523,7 +567,8 @@ void sumaVector(int operacion, string op1, string op2 , string temp){
         
         	//Meter valor del temporal en memoria, hay que convertir a string el resultado
             generarMemoria(atoi(temp.c_str()), static_cast<ostringstream*>( &(ostringstream() << resultadoInt) )->str());
-
+           	generarMemoria(resultadoInt, static_cast<ostringstream*>( &(ostringstream() << 0) )->str());
+			
     
 
 }
@@ -545,7 +590,7 @@ void multiplicaVector(int operacion, string op1, string op2 , string temp){
         
                     //Realizar la operacion s1*m1                 
         	resultadoInt =  getValorVectorInt(op1, op1dir, base1) * op2dir;
-        	cout << " suma vector REsultado "<< resultadoInt<<"\n";
+        	cout << " multplica vector REsultado "<< resultadoInt<<"\n";
         
         	//Meter valor del temporal en memoria, hay que convertir a string el resultado
            generarMemoria(atoi(temp.c_str()), static_cast<ostringstream*>( &(ostringstream() << resultadoInt) )->str());
@@ -567,14 +612,32 @@ void verifica(int operacion, string op1, string op2 , string temp){
       base1 = getBase(op1dir);
         
     if (getValorVectorInt(op1, op1dir, base1)<=tempInt){
-    cout<<"Verifica Correcto!! \n";
+    //cout<<"Verifica Correcto!! \n";
     }
     else cout<<"El valor es mayot al numero de casillas asignadas \n";
 
     
 
 }
+void retorno(string op1){
 
+    int base1;			 //varaible para mapear direccion;
+    int op1dir	;		 //almacena en forma de entero la direccion virtual
+    int resultadoInt;
+    
+
+    op1dir = atoi(op1.c_str());
+    base1 = getBase(op1dir);
+        
+    resultadoInt=getValorVectorInt(op1, op1dir, base1);
+    
+    cout<<"Meter a la pila de funciones "<<resultadoInt<< "\n ";
+    pilaFunciones.push(resultadoInt);
+    esRetorno=1;
+
+    
+
+}
 
 int main(){
 
@@ -708,7 +771,7 @@ int i=0;
 while (i<numCuadruplos){
       i++;
      
-     cout<<"---Numero i "<<i<<", num cuadruplo  "<<cuadruplos[i][0]<<", op  "<<cuadruplos[i][1]<<", op1  "<<cuadruplos[i][2]<<"\n";
+     cout<<"---Numero i "<<i<<", num cuadruplo  "<<cuadruplos[i][0]<<", op  "<<cuadruplos[i][1]<<", op1  "<<cuadruplos[i][2]<<", temp  "<<cuadruplos[i][3]<<"\n";
     
       //Empieza el Switch
                 switch(atoi(cuadruplos[i][1].c_str())){
@@ -881,6 +944,10 @@ while (i<numCuadruplos){
                 	break;
 
                 	case 24 : //rtetuurnn instrucciones
+                	
+                	retorno( cuadruplos[i][2]);
+                	
+                	
                 	break;
 
                 	case 25 :// read  instrucciones
@@ -891,7 +958,7 @@ while (i<numCuadruplos){
 
                 	case 26 ://print   instrucciones
                 //	 cout<<i<<"<<<<cuadruplo \n";
-                    hacerPrint(cuadruplos[i][2]);
+                       // hacerPrint(26, cuadruplos[i][2], cuadruplos[i][3] ,cuadruplos[i][4]);
                 	break;
 
                    case 27 :// VERifica  instrucciones
@@ -909,6 +976,7 @@ while (i<numCuadruplos){
                 	
                 	
                 		case 40 : //instrucciones suma vecto
+           		     //esMatriz=1;
                 	 sumaVector(40, cuadruplos[i][2], cuadruplos[i][3] ,cuadruplos[i][4]);
                 	 
                 	 //cout<<"SUMA VECTOR\n";
