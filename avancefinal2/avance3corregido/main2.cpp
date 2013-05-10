@@ -426,29 +426,11 @@ void hacerOperacion(int operacion, string op1, string op2 , string temp){
             cout<<"mayor op:"<<operacion <<" op1 "<<op1ValorReal<<" op2 "<<op2ValorReal<<" temp " << temp <<" Resultado: " <<resultadoFloat<<"\n";
      
             if(op1ValorReal  > op2ValorReal){
-                              generarMemoria(atoi(temp.c_str()), "v");
+                              //generarMemoria(atoi(temp.c_str()), "v");
                               }
             else{
                               printf("what");
-                              generarMemoria(atoi(temp.c_str()), "f"); 
-                              }
-           
-    }
-    
-        else if (operacion==7){
-         
-            //resultadoFloat = op1ValorReal / op2ValorReal;
-            //Meter valor del temporal en memoria, hay que convertir a string el resultado
-            //generarMemoria(atoi(temp.c_str()), static_cast<ostringstream*>( &(ostringstream() << resultadoFloat) )->str());
-        	
-            cout<<"mayor op:"<<operacion <<" op1 "<<op1ValorReal<<" op2 "<<op2ValorReal<<" temp " << temp <<" Resultado: " <<resultadoFloat<<"\n";
-     
-            if(op1ValorReal  < op2ValorReal){
-                              generarMemoria(atoi(temp.c_str()), "v");
-                              }
-            else{
-                              printf("what");
-                              generarMemoria(atoi(temp.c_str()), "f"); 
+                              //generarMemoria(atoi(temp.c_str()), "f"); 
                               }
            
     }
@@ -711,9 +693,6 @@ int main(){
 	int numCuadruplos=0;
 	 string cuadruplos[100][5];
 	 int dirRetorno;
-	  int base1;			 //varaible para mapear direccion;
-      int op1dir	;		 //almacena en forma de entero la direccion virtual
-       string resultadoString;
 
     string linea;
     int numLinea=0;
@@ -858,21 +837,24 @@ while (i<numCuadruplos){
                     }
                 	break;
 
-                	case 4 ://==  instrucciones
+                	case 4 :{ //: instrucciones
+				   hacerOperacion(4, cuadruplos[i][2], cuadruplos[i][3] ,cuadruplos[i][4]);
+			}
                 	break;
 
-                	case 5 :// !=  instrucciones
+                	case 5 :{// !  instrucciones
+				   hacerOperacion(5, cuadruplos[i][2], cuadruplos[i][3] ,cuadruplos[i][4]);			
+			}
                 	break;
 
                 	case 6: { /// >  instrucciones
                     
-                          hacerOperacion(6, cuadruplos[i][2], cuadruplos[i][3] ,cuadruplos[i][4]);
+                         	 hacerOperacion(6, cuadruplos[i][2], cuadruplos[i][3] ,cuadruplos[i][4]);
                     
                     }
                 	break;
 
                 	case 7 ://<  instrucciones
-                	      hacerOperacion(7, cuadruplos[i][2], cuadruplos[i][3] ,cuadruplos[i][4]);
                 	break;
 
                 	case 8 :// and  instrucciones
@@ -903,15 +885,9 @@ while (i<numCuadruplos){
                 	case 12 ://gotoooF   instrucciones
                 
                     	
-                       op1dir = atoi(cuadruplos[i][2].c_str());
-                       base1 = getBase(op1dir);
-                       resultadoString=getValorVectorBoolean(cuadruplos[i][2], op1dir, base1);
-             	       cout<<"\n Goto Falso >"<<cuadruplos[i][4]<<"\n";
-                 	   
-                 	   //Checar si es falso o verdadero
-                 	    if (resultadoString=="f")
-                       i=atoi(cuadruplos[i][4].c_str());
-                    	else cout<<" Verdadero\n";
+             	   cout<<"\n Goto Falso >"<<cuadruplos[i][4]<<"\n";
+             	    //cout<<i<<"<<<<cuadruplo \n";
+                  // i=atoi(cuadruplos[i][4].c_str())-1;
                 	
                 	break;
                 	
