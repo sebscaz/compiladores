@@ -29,8 +29,11 @@ programa test3 {
 		varglobal=1;
 		num1 = 10;
 		num2 = 3;
-		r = (suma(1+1,num2);) + (resta(8,2););
-		imprimir(r);
+		r = (suma(1+1,num2);) + (resta(num1,num2););
+		
+		si(num2>num1){
+			imprimir(r);
+		}
 		
 	}
 }

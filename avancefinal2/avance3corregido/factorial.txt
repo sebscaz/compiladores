@@ -1,0 +1,32 @@
+programa test2 {
+	prototipo factorial(1);
+
+	crear entero varglobal;
+	varglobal=1;
+
+	funcion entero factorial(entero x){
+
+		crear entero z;
+		z=1;
+
+		si(x : z){
+			imprimir(z);
+			regresar z
+		}
+		no{
+			regresar x * factorial(x-1);
+		}
+	}
+
+	principal(){
+		crear entero numeroInicial;
+		crear entero respuesta;
+
+		numeroInicial = 5;
+		respuesta = 0;
+
+		varglobal=1;
+		respuesta = factorial(numeroInicial);;
+		imprimir(respuesta);
+	}
+}

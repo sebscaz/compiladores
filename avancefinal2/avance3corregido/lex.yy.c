@@ -996,7 +996,7 @@ YY_RULE_SETUP
 case 18:
 YY_RULE_SETUP
 #line 50 "lexico.l"
-{printf("_igual\n"); return(diferente);}
+{printf("_diferente\n"); yylval.string = strdup(yytext); return(diferente);}
 	YY_BREAK
 case 19:
 YY_RULE_SETUP
@@ -1086,7 +1086,7 @@ YY_RULE_SETUP
 case 36:
 YY_RULE_SETUP
 #line 70 "lexico.l"
-{printf("_dos puntos\n"); return(dospuntos);}
+{printf("_dos puntos\n"); yylval.string = strdup(yytext); return(dospuntos);}
 	YY_BREAK
 case 37:
 YY_RULE_SETUP

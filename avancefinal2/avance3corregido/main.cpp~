@@ -849,7 +849,7 @@ while (i<numCuadruplos){
 
                 	case 6: { /// >  instrucciones
                     
-                         	 hacerOperacion(6, cuadruplos[i][2], cuadruplos[i][3] ,cuadruplos[i][4]);
+                          hacerOperacion(6, cuadruplos[i][2], cuadruplos[i][3] ,cuadruplos[i][4]);
                     
                     }
                 	break;

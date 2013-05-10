@@ -721,8 +721,8 @@ int main(){
             else if (numLinea==13) contStringC= atoi(linea.c_str());
             else if (numLinea==14) contBoolG= atoi(linea.c_str());
             else if (numLinea==15) contBoolL= atoi(linea.c_str());
-            else if (numLinea==16) contIntT= atoi(linea.c_str());
-            else if (numLinea==17) {contIntC= atoi(linea.c_str()); generarVectores();}
+            else if (numLinea==16) contBoolT= atoi(linea.c_str());
+            else if (numLinea==17) {contBoolC= atoi(linea.c_str()); generarVectores();}
 
 			//Constantes
 			else if (numLinea<=numeroConstantes + 17 && numLinea>17){

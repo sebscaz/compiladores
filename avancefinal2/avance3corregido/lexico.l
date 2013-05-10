@@ -47,7 +47,7 @@ ctebooleano    [v | f]
 "regresar"	{printf("_Palabra reservada regresar\n"); return(regresar);}
 
 "="         {printf("_igual\n"); yylval.string = strdup(yytext);  return(igual);}
-"!"         {printf("_igual\n"); return(diferente);}
+"!"         {printf("_diferente\n"); yylval.string = strdup(yytext); return(diferente);}
 "+"         {printf("_mas\n"); yylval.string = strdup(yytext); return(mas);}
 "-"         {printf("_menos\n"); yylval.string = strdup(yytext); return(menos);}
 "*"         {printf("_multiplicacion\n"); yylval.string = strdup(yytext); return(multiplicacion);}
@@ -67,7 +67,7 @@ ctebooleano    [v | f]
 "decimal"		{printf("_Palabra reservada decimal\n"); yylval.string = strdup(yytext); return(decimal);}
 
 ";"         {printf("_punto y coma\n");  return(ptocoma);}
-":"         {printf("_dos puntos\n"); return(dospuntos);}
+":"         {printf("_dos puntos\n"); yylval.string = strdup(yytext); return(dospuntos);}
 "."         {printf("_punto\n"); return(punto);}
 ","         {printf("_coma\n"); return(coma);}
 
