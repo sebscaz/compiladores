@@ -13,15 +13,24 @@ programa test3 {
 		regresar resultado
 	}
 
+	funcion entero resta(entero x, entero y){
+		crear entero resultado;
+		
+		resultado =1;
+		resultado = x + y;
+		regresar resultado
+	}
+
 	principal(){
 		crear entero num1;
 		crear entero num2;
 		crear entero r;
-		
+
 		varglobal=1;
-		num1=3;
-		num2=2;
-		r = (suma(num2,num2);) + 1;
+		num1 = 10;
+		num2 = 3;
+		r = (suma(1+1,num2);) + (resta(8,2););
 		imprimir(r);
+		
 	}
 }
