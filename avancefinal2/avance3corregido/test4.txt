@@ -23,5 +23,6 @@ programa test3 {
 		num2=2;
 		r = (suma(num2,num2);) + (suma(num2,num2););
 		imprimir(r);
+		dibujarFigura();
 	}
 }

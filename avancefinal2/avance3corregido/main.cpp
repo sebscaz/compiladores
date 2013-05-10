@@ -1,3 +1,69 @@
+#ifdef __APPLE__
+#include <GLUT/glut.h>
+#else
+#include <GL/glut.h>
+#endif
+#include <stdlib.h>
+
+int x;
+//Método Reshape
+static void resize(int width, int height)
+{
+	glViewport(0, 0, width, height);
+	glMatrixMode(GL_MODELVIEW); //Definir cobre qué matriz es la que quiero trabajar en este momento.
+	glLoadIdentity();
+}
+void dibujar_triangulo(){
+	//Definir forma de triángulo sin relleno
+	glBegin(GL_TRIANGLES);
+	glVertex2f(0,0);
+	glVertex2f(0.2, 0);
+	glVertex2f(0.1, 0.5);
+	glEnd();
+}
+
+void dibujar_linea(){
+	//Definir forma de triángulo sin relleno
+	glBegin(GL_LINES);
+	glVertex2f(0,0);
+	glVertex2f(0.2, 0);
+	// glVertex2f(0.1, 0.5);
+	glEnd();
+	}
+	//Método Display
+	static void display(void)
+	{
+	//Pintar el fondo.
+	glClear(GL_COLOR_BUFFER_BIT);
+	glClearColor(0.0,0.7,0.95,1);
+	glLoadIdentity();
+	//Comenzar a pintar cada uno de los triángulos.
+	glColor3ub(255, 255, 0);
+	dibujar_triangulo(); /* solid lines */
+	//glEnable(GL_LINE_STIPPLE); /* dashed lines */
+	glLineStipple(1, 0xF0F0);
+	//glLoadIdentity(); //No es muy necesario!! porque sólo dibuja!
+	glLoadIdentity(); 
+	glutSwapBuffers(); 
+}
+
+static void display1(void)
+{
+	//Pintar el fondo.
+	glClear(GL_COLOR_BUFFER_BIT);
+	glClearColor(0.0,0.7,0.95,1);
+	glLoadIdentity();
+	//Comenzar a pintar cada uno de los triángulos.
+	glColor3ub(255, 0, 0);
+	dibujar_linea(); /* solid lines */
+	//glEnable(GL_LINE_STIPPLE); /* dashed lines */
+	glLineStipple(1, 0xF0F0);
+	//glLoadIdentity(); //No es muy necesario!! porque sólo dibuja!
+	glLoadIdentity(); 
+	glutSwapBuffers(); 
+}
+
+
 #include <iostream>
 #include <vector>
 #include <fstream>
@@ -219,6 +285,28 @@ void generarVectores(){
     booleanoTemporales.resize(contBoolT);
     booleanoConstantes.resize(contBoolC);
 
+/*
+    enterosGlobales[0]=0;
+    enterosLocales[0]=0;
+    enterosTemporales[0]=0;
+    enterosConstantes[0]=0;
+
+    flotantesGlobales[0]=0;
+    flotantesLocales[0]=0;
+    flotantesTemporales[0]=0;
+    flotantesConstantes[0]=0;
+
+    stringGlobales[0]=0;
+    stringLocales[0]=0;
+    stringTemporales[0]=0;
+    stringConstantes[0]=0;
+
+    booleanoGlobales[0]=0;
+    booleanoLocales[0]=0;
+    booleanoTemporales[0]=0;
+    booleanoConstantes[0]=0;
+*/
+   
 }
 
 void generarMemoria(int direccion, string valor){
@@ -416,7 +504,7 @@ void hacerOperacion(int operacion, string op1, string op2 , string temp){
         */
     }
 
-    // MAYOR
+    // IGUAL IGUAL
     else if (operacion==4){
          
             //resultadoFloat = op1ValorReal / op2ValorReal;
@@ -434,8 +522,9 @@ void hacerOperacion(int operacion, string op1, string op2 , string temp){
                               }
            
     }
-    
-        else if (operacion==5){
+
+    // DIFERENTE
+    else if (operacion==5){
          
             //resultadoFloat = op1ValorReal / op2ValorReal;
             //Meter valor del temporal en memoria, hay que convertir a string el resultado
@@ -452,7 +541,7 @@ void hacerOperacion(int operacion, string op1, string op2 , string temp){
                               }
            
     }
-    
+
 
     // MAYOR
     else if (operacion==6){
@@ -551,11 +640,6 @@ void hacerOperacion(int operacion, string op1, string op2 , string temp){
 		
            
     }
-    
-       
-    
-         
-    
     
 }
 
@@ -730,7 +814,7 @@ void param(string op1, string param){
 
 }
 
-int main(){
+int main(int argc, char *argv[]){
 
    //Lector del archivos de cuiadruplos
    // system("analizador.exe pruebalenguaje"); // no estoy tan seguro como funecione este
@@ -859,13 +943,13 @@ for(int x=0;x<=numCuadruplos;x++)  // loop 3 times for three lines
     cout<<endl;  // when the inner loop is done, go to a new line
     }
 */
-int i=0;
+int i=1;
 
 
 while (i<numCuadruplos){
-      i++;
      
-     cout<<"---Numero i "<<i<<", num cuadruplo  "<<cuadruplos[i][0]<<", op  "<<cuadruplos[i][1]<<", op1  "<<cuadruplos[i][2]<<", op2  "<<cuadruplos[i][3]<<", temp  "<<cuadruplos[i][4]<<"\n";
+     
+     cout<<"---Numero i "<<i<<",  cuadruplo  "<<cuadruplos[i][0]<<", op  "<<cuadruplos[i][1]<<", op1  "<<cuadruplos[i][2]<<", op2  "<<cuadruplos[i][3]<<", temp  "<<cuadruplos[i][4]<<"\n";
     
       //Empieza el Switch
                 switch(atoi(cuadruplos[i][1].c_str())){
@@ -896,10 +980,14 @@ while (i<numCuadruplos){
                     }
                 	break;
 
-                	case 4 ://==  instrucciones
+                	case 4 :{//==  instrucciones
+				  hacerOperacion(4, cuadruplos[i][2], cuadruplos[i][3] ,cuadruplos[i][4]);
+			}
                 	break;
 
-                	case 5 :// !=  instrucciones
+                	case 5 :{// !=  instrucciones
+				  hacerOperacion(5, cuadruplos[i][2], cuadruplos[i][3] ,cuadruplos[i][4]);
+			}
                 	break;
 
                 	case 6: { /// >  instrucciones
@@ -960,11 +1048,6 @@ while (i<numCuadruplos){
 
                 
 
-                	case 19://ver
-                	
-                	//Verificar que el valor sea el correcto 
-                	
-                        break;
 
                 	case 20 ://ERAA  ERAAA E EE E  instrucciones
                     //salvar la base actual previa a la llamada
@@ -1023,6 +1106,17 @@ while (i<numCuadruplos){
                         flotantesTemporales=pilaTemporalFlotante.top();
                         stringTemporales=pilaTemporalString.top();
                         booleanoTemporales=pilaTemporalBoolean.top();
+
+
+			pilaLocalEntera.pop();
+                	pilaLocalFlotante.pop();
+                	pilaLocalString.pop();
+                        pilaLocalBoolean.pop();
+
+                        pilaTemporalEntera.pop();
+                        pilaTemporalFlotante.pop();
+                        pilaTemporalString.pop();
+                        pilaTemporalBoolean.pop();
                         
                         cout<<"Casilla num1 = "<<enterosLocales[1] <<"\n";
                         cout<<"Casilla num1 = "<<enterosTemporales[1] <<"\n";
@@ -1033,7 +1127,7 @@ while (i<numCuadruplos){
                 	   
                         // cout<<"\n RET >"<<pilaEjecucion.top();
                 	     i= pilaEjecucion.top();//Regresa a donde estaba 
-                	    
+                	      pilaEjecucion.pop();
                 	    
                 	break;
 
@@ -1079,7 +1173,7 @@ while (i<numCuadruplos){
                 	break;
                 	
                 	
-                		case 40 : //instrucciones suma vecto
+                	case 40 : //instrucciones suma vecto
            		     //esMatriz=1;
                 	 sumaVector(40, cuadruplos[i][2], cuadruplos[i][3] ,cuadruplos[i][4]);
                 	 
@@ -1092,12 +1186,37 @@ while (i<numCuadruplos){
                 	// cout<<"\nMultiplicacion "<<41<<" ,"<<cuadruplos[i][2]<<" ,"<< cuadruplos[i][3]<<" ,"<<cuadruplos[i][4];
                 	break;
 
+			case 60 : //prueba triangulo
+			
+			glutInit(&argc, argv);
+			glutInitWindowSize(640,480);
+			glutInitWindowPosition(10,10);
+			glutInitDisplayMode(GLUT_RGB | GLUT_DOUBLE);
+			glutCreateWindow("Triángulo");
+			glutReshapeFunc(resize);
+			glutDisplayFunc(display);
+			glutMainLoop();
+			// cout<<"\nMultiplicacion "<<41<<" ,"<<cuadruplos[i][2]<<" ,"<< cuadruplos[i][3]<<" ,"<<cuadruplos[i][4];
+			
+			break;
+
+			case 61 : //prueba linea
+			glutInit(&argc, argv);
+			glutInitWindowSize(640,480);
+			glutInitWindowPosition(10,10);
+			glutInitDisplayMode(GLUT_RGB | GLUT_DOUBLE);
+			glutCreateWindow("Línea");
+			glutReshapeFunc(resize);
+			glutDisplayFunc(display1);
+			glutMainLoop();
+			// cout<<"\nMultiplicacion "<<41<<" ,"<<cuadruplos[i][2]<<" ,"<< cuadruplos[i][3]<<" ,"<<cuadruplos[i][4];
+			break;
                 }///termina swuitx
                 
                 
 
       
-      
+       i++;
       
       }//termina whilw
       
@@ -1147,4 +1266,3 @@ while (i<numCuadruplos){
 
     return 0;
 } 
-

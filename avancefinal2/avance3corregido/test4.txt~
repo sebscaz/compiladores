@@ -21,7 +21,7 @@ programa test3 {
 		varglobal=1;
 		num1=3;
 		num2=2;
-		r = (suma(num2,num2);) + 1;
+		r = (suma(num2,num2);) + (suma(num2,num2););
 		imprimir(r);
 	}
 }

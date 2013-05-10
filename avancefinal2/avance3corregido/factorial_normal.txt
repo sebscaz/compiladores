@@ -8,29 +8,48 @@ programa test2 {
 
 		crear entero dos;
 		crear entero uno;
+		crear entero y;
+		crear entero respuesta;
 
 		dos=2;
 		uno=1;
+		y = x + 1;
+		respuesta = 1;
 
-		imprimir(x);
 		si(x < dos){
-			imprimir(uno);
 			regresar uno
 		}
-		no{
-			regresar x * (factorial(x-1);)
+	
+		mientras(dos < y ) hacer {
+			respuesta = respuesta * dos;
+			dos = dos + 1;
 		}
+
+		regresar respuesta
 	}
 
 	principal(){
 		crear entero numeroInicial;
 		crear entero respuesta;
+		crear entero dos;
+		crear entero uno;
+		crear entero y;
 
 		numeroInicial = 5;
 		respuesta = 0;
+		dos=2;
+		uno=1;
+		y = x + 1;
 
-		varglobal=1;
-		respuesta = (factorial(numeroInicial););
+
+		si(x < dos){
+			regresar uno
+		}
+	
+		mientras(dos < y ) hacer {
+			imprimir(y);
+		}
+
 		imprimir(respuesta);
 	}
 }

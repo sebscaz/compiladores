@@ -1,0 +1,56 @@
+programa test {
+
+	prototipo fibonacci(1);
+
+	crear entero varglobal;
+	varglobal=1;
+
+	funcion entero fibonacci(entero x){
+
+		crear entero cero;
+		crear entero uno;
+		crear entero f1;
+		crear entero f2;
+		crear entero f3;
+
+		cero=0;
+		uno=1;
+		f1=0;
+		f2=0;
+		f3=0;
+
+
+		si(x : cero){
+			regresar 0
+		}
+		no{
+			f1 = (fibonacci(x-1););
+			f2 = (fibonacci(x-2););
+			f3 = f1 + f2;
+			imprimir(f3);
+			regresar f3
+		}
+
+		si(x : uno){
+			regresar 1
+		}
+		no{
+			f1 = (fibonacci(x-1););
+			f2 = (fibonacci(x-2););
+			f3 = f1 + f2;
+			imprimir(f3);
+			regresar f3
+		}
+	}
+
+	principal(){
+		crear entero numeroInicial;
+		crear entero respuesta;
+
+		numeroInicial = 5;
+		respuesta=0;
+
+		varglobal =1;
+		fibonacci(x-1);
+	}
+}

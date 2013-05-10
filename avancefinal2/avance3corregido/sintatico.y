@@ -422,7 +422,7 @@ ESCRITURA: imprimir parentesisa EXP parentesisc ptocoma {generarImprimir();};
 
 LECTURA: leer parentesisa parentesisc {generarLectura();};
 
-REGRESAR: regresar EXP;
+REGRESAR: regresar EXP {generarReturn();} ;
 
 CONDICION: si parentesisa SUPEREXPRESION parentesisc {secuenciaIf1();}  llavea BLOQUE llavec CONDICION2 {secuenciaIf2();};
 
@@ -462,7 +462,7 @@ CREARFUNCION: funcion CREARFUNCION2 id {
 					 
 					setCuadruploInicial(&tblProc,nombreFuncion,contS);
 					 }
-					BLOQUE  {generarReturn();} llavec {generarRetorno();}
+					BLOQUE  llavec {generarRetorno();}
 ;
 
 CREARFUNCION2: TIPO
@@ -623,12 +623,7 @@ VARCTE: ctetexto			{if(hacerPush==1) {
 						  }
 					}};
 		
-DIBUJARFIGURA: dibujarFigura parentesisa FIGURA coma id {generarDibujarFigura();} parentesisc ptocoma;
-
-FIGURA: perro
-		|persona
-		|gato
-		|carro;
+DIBUJARFIGURA: dibujarFigura parentesisa parentesisc ptocoma {generarDibujarFigura();} ;
 
 BORRARFIGURA: borrarFigura parentesisa id {generarBorrarFigura();} parentesisc ptocoma;
 
@@ -1027,17 +1022,22 @@ void secuenciaElse(){
 }
 void secuenciaWhile1(){
 	
-	push(&pilaSaltos, "t", -1, contS-1);
+	printf("entra\n");
+	//push(&pilaSaltos, "t", -1, contS-1);
+	push(&pilaSaltos, "t", -1, contS);
+	printf("sale\n");
 	
 }
 void secuenciaWhile2(){
 	
+
 	ptr aux= malloc (sizeof(p_Nodo)); 
 	aux->tipo = pilaTipos->tipo;
 
 	if(aux->tipo != 4)//dif de boolean
 		printf("Error semantico!!");
 	else{	
+		printf("enrtra1\n");
 		ptr resultado= malloc (sizeof(p_Nodo)); 
 		resultado->direccion = pilaOperadores->direccion;
 		pop(&pilaOperadores);  //ultima Dirección de la pila, la cual tiene el resultado del estatuto
@@ -1045,7 +1045,7 @@ void secuenciaWhile2(){
 		generarCuadruplo(12, resultado->direccion, -1, -1); //12 : GoToF
 		push(&pilaSaltos, "t", -1, contS-1);
 		}
-	
+	printf("enrtra2\n");
 }
 
 void secuenciaWhile3(){
@@ -1315,12 +1315,21 @@ void generarVerifica(){
 
 void generarDibujarFigura()
 {
-	int numDibujaFigura=40;
+	int numDibujaFigura=60;
 	
-	//generaCuadruplo(numDibujaFigura,dirID ,numPersonaje ,-1);
+	generarCuadruplo(numDibujaFigura,-1 ,-1 ,-1);
 	
 
 }
+/*
+void generarDibujarFigura()
+{
+	int numDibujaFigura=60;
+	
+	generaCuadruplo(numDibujaFigura,-1 ,-1 ,-1);
+	
+
+}*/
 
 void generarBorrarFigura(){
 

@@ -31,9 +31,9 @@ programa test3 {
 		num2 = 3;
 		r = (suma(1+1,num2);) + (resta(num1,num2););
 		
-		si(num2>num1){
+		si(num2<num1){
 			imprimir(r);
 		}
-		
+		dibujarFigura();
 	}
 }
