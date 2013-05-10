@@ -457,6 +457,7 @@ void hacerOperacion(int operacion, string op1, string op2 , string temp){
                      esRetorno=0;    
          }
             
+			
      
       		//Asignar valor si op1 es una constante
 			 else if(op1dir >= 13000 && op1dir <= 13999 ){
@@ -619,7 +620,7 @@ void verifica(int operacion, string op1, string op2 , string temp){
     
 
 }
-void retorno(string op1){
+void retorno(string op1, string temp){
 
     int base1;			 //varaible para mapear direccion;
     int op1dir	;		 //almacena en forma de entero la direccion virtual
@@ -630,11 +631,45 @@ void retorno(string op1){
     base1 = getBase(op1dir);
         
     resultadoInt=getValorVectorInt(op1, op1dir, base1);
-    
+    generarMemoria(atoi(temp.c_str()), static_cast<ostringstream*>( &(ostringstream() << resultadoInt) )->str());
+
     cout<<"Meter a la pila de funciones "<<resultadoInt<< "\n ";
     pilaFunciones.push(resultadoInt);
     esRetorno=1;
 
+    
+}
+
+void param(string op1, string param){
+
+    int base1;			 //varaible para mapear direccion;
+    int op1dir	;		 //almacena en forma de entero la direccion virtual
+    int resultadoInt;
+    float resultadoFloat;
+    string resultadoString;
+    int numParam=atoi(param.c_str());
+        
+    op1dir = atoi(op1.c_str());
+    base1 = getBase(op1dir);
+        
+     
+
+
+         //ChecarRango
+    if (checarRango(op1)==1)  {	//es int
+          resultadoInt=getValorVectorInt(op1, op1dir, base1);
+          
+          enterosLocales[numParam]=resultadoInt;
+          
+    }
+    else if (checarRango(op1)==2){	//es float
+        resultadoFloat=getValorVectorFloat(op1,op1dir,base1);
+        flotantesLocales[numParam]=resultadoFloat;
+    }
+     else if (checarRango(op1)==3){	//es striing
+       resultadoString= getValorVectorString(op1,op1dir,base1);
+       stringLocales[numParam]=resultadoString;
+    }
     
 
 }
@@ -771,7 +806,7 @@ int i=0;
 while (i<numCuadruplos){
       i++;
      
-     cout<<"---Numero i "<<i<<", num cuadruplo  "<<cuadruplos[i][0]<<", op  "<<cuadruplos[i][1]<<", op1  "<<cuadruplos[i][2]<<", temp  "<<cuadruplos[i][3]<<"\n";
+     cout<<"---Numero i "<<i<<", num cuadruplo  "<<cuadruplos[i][0]<<", op  "<<cuadruplos[i][1]<<", op1  "<<cuadruplos[i][2]<<", op2  "<<cuadruplos[i][3]<<", temp  "<<cuadruplos[i][4]<<"\n";
     
       //Empieza el Switch
                 switch(atoi(cuadruplos[i][1].c_str())){
@@ -923,6 +958,8 @@ while (i<numCuadruplos){
                         stringTemporales=pilaTemporalString.top();
                         booleanoTemporales=pilaTemporalBoolean.top();
                         
+                        cout<<"Casilla num1 = "<<enterosLocales[1] <<"\n";
+                        cout<<"Casilla num1 = "<<enterosTemporales[1] <<"\n";
                 	    
                 	    
                 	    //destruir el registro de activación del proc d ememoria local
@@ -938,15 +975,16 @@ while (i<numCuadruplos){
                 //	cout<<"\n supeerwhaat  >"<<enterosConstantes[1]<<"\n";
                 	
                           //cout<<i<<"<<<<cuadruplo \n";
-                          //cout<<"PARAM\n";
+                          cout<<"PARAM\n";
                 	    //Meter los valores al amemoria local
+                	  param(cuadruplos[i][2],cuadruplos[i][4]);
+                	    
 
                 	break;
 
                 	case 24 : //rtetuurnn instrucciones
                 	
-                	retorno( cuadruplos[i][2]);
-                	
+                	retorno( cuadruplos[i][2], cuadruplos[i][4]);
                 	
                 	break;
 
@@ -958,7 +996,7 @@ while (i<numCuadruplos){
 
                 	case 26 ://print   instrucciones
                 //	 cout<<i<<"<<<<cuadruplo \n";
-                       // hacerPrint(26, cuadruplos[i][2], cuadruplos[i][3] ,cuadruplos[i][4]);
+                       hacerPrint(26, cuadruplos[i][2], cuadruplos[i][3] ,cuadruplos[i][4]);
                 	break;
 
                    case 27 :// VERifica  instrucciones
